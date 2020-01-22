@@ -1,0 +1,62 @@
+##### PATH CONFIGURATIONS ######
+#
+# Make a copy of this file and save it in the root of the repository
+# with a name ending in ".config". Then modify as necessary.
+#
+# The repository is configured to ignore all .config files, with the
+# exception of default.config (which should never be modified).
+#
+# To use a configuration file with make, specify it in the 'make' command via
+# "make <target> CONFIG=<name>", where '<name>' is the first part of the
+# file name (before the .config). For example, "make library CONFIG=foo"
+# would build the library (release target) using "foo.config".
+#
+# To use a configuration file with CMake directly, specify it by passing the
+# argument "-DCONFIG_FILENAME=<name>", where '<name>' is the first part of the
+# file name (before the .config). For example, passing the argument
+# "-DCONFIG_FILENAME=foo" would build using "foo.config".
+
+##### THIRD-PARTY DEPENDENCIES #####
+#
+# This sets the path to eventpp.
+# The build system will look for `include/' at this location.
+#
+# The default for it is '${CMAKE_HOME_DIRECTORY}/../../libdeps/libs', which
+# assumes a copy of the lib-git repository in the same directory as this
+# repository folder.
+#
+# 'make eventpp' or 'make all' would need to be run in libdeps first.
+
+set(EVENTPP_DIR
+	${CMAKE_HOME_DIRECTORY}/../../libdeps/libs
+)
+
+##### LLVM LIBC++ #####
+#
+# This option asks the Clang compiler to use LLVM's libc++ library.
+# The build system will look for this library in the system paths.
+#
+# If you are not compiling with Clang, this option will be ignored.
+# NOTE: libc++ is already used by default on Mac.
+#
+# Set the option to either `true` or `false` below.
+
+set(LLVM false)
+
+
+##### LINKER (LD) #####
+#
+# This option asks the compiler to use the specified linker instead of the
+# default for your system. This assumes that the requested linker is
+# installed on your system.
+#
+# Valid options:
+#   -> "bfd" for the BFD linker
+#   -> "gold" for Gold linker
+#   -> "lld" for LLVM linker (only works on Clang)
+#
+# Uncomment the desired line below, or leave all commented to use default.
+
+# set(LLD "bfd")
+# set(LLD "gold")
+# set(LLD "lld")

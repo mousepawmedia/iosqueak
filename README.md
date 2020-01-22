@@ -18,6 +18,7 @@ Authors
 ----------------------------------------
 
 * Jason C. McDonald
+* Scott Taylor
 
 Dependencies
 ----------------------------------------
