@@ -124,7 +124,7 @@ These need to be swapped out for pawlib alternatives ASAP.*/
 #include "pawlib/onestring.hpp"
 
 #include "iosqueak/ioformat.hpp"
-#include "iosqueak/utils.hpp"
+#include "iosqueak/stringy.hpp"
 
 class pure_tril;
 class tril;
@@ -147,7 +147,7 @@ class channel
             IOVrb)> IOSignalVrb;
 
         /** Eventpp signal (callback list) for everything,
-             * transmitting the message, the verbosity, and the category. */
+          * transmitting the message, the verbosity, and the category. */
         typedef eventpp::CallbackList<void (std::string,
             IOVrb, IOCat)> IOSignalFull;
 
@@ -157,74 +157,74 @@ class channel
 
 
         /* NOTE: In the examples below, the verbosity-related signals must
-            * transmit what category the message is (since verbosity is
-            * inherent and assumed). The inverse is true of category-related
-            * signals. */
+         * transmit what category the message is (since verbosity is
+         * inherent and assumed). The inverse is true of category-related
+         * signals. */
 
         /** Emitted when a message with verbosity 0 (quiet) is broadcast.
-             * Callback must be of form 'void callback(string,
-             * IOCat){}'
-             */
+          * Callback must be of form 'void callback(string,
+          * IOCat){}'
+          */
         IOSignalCat signal_v_quiet;
 
         /** Emitted when a message with verbosity <= 1 (normal) is broadcast.
-             * Callback must be of form 'void callback(string,
-             * IOCat){}'
-             */
+          * Callback must be of form 'void callback(string,
+          * IOCat){}'
+          */
         IOSignalCat signal_v_normal;
 
         /** Emitted when a message with verbosity <=2 (chatty) is broadcast.
-             * Callback must be of form 'void callback(string,
-             * IOCat){}'
-             */
+          * Callback must be of form 'void callback(string,
+          * IOCat){}'
+          */
         IOSignalCat signal_v_chatty;
 
         /** Emitted when a message with verbosity <=3 (tmi) is broadcast.
-             * Callback must be of form 'void callback(string,
-             * IOCat){}'
-             */
+          * Callback must be of form 'void callback(string,
+          * IOCat){}'
+          */
         IOSignalCat signal_v_tmi;
 
         /** Emitted when a message with category "normal" is broadcast.
-             * Callback must be of form 'void callback(string,
-             * IOVrb){}'
-             */
+          * Callback must be of form 'void callback(string,
+          * IOVrb){}'
+          */
         IOSignalVrb signal_c_normal;
 
         /** Emitted when a message with category "warning" is broadcast.
-             * Callback must be of form 'void callback(string,
-             * IOVrb){}'
-             */
+          * Callback must be of form 'void callback(string,
+          * IOVrb){}'
+          */
         IOSignalVrb signal_c_warning;
 
         /** Emitted when a message with category "error" is broadcast.
-             * Callback must be of form 'void callback(string,
-             * IOVrb){}'
-             */
+          * Callback must be of form 'void callback(string,
+          * IOVrb){}'
+          */
         IOSignalVrb signal_c_error;
 
         /** Emitted when a message with category "debug" is broadcast.
-             * Callback must be of form 'void callback(string,
-             * IOVrb){}'
-             */
+          * Callback must be of form 'void callback(string,
+          * IOVrb){}'
+          */
         IOSignalVrb signal_c_debug;
 
         /** Emitted when a message with category "testing" is broadcast.
-             * Callback must be of form 'void callback(string,
-             * IOVrb){}'
-             */
+          * Callback must be of form 'void callback(string,
+          * IOVrb){}'
+          */
         IOSignalVrb signal_c_testing;
 
         /** Emitted when any message is broadcast.
-             * Callback must be of form 'void callback(string,
-             * IOVrb, IOCat){}'
-             */
+          * Callback must be of form 'void callback(string,
+          * IOVrb, IOCat){}'
+          */
         IOSignalFull signal_full;
 
         /** Emitted when any message is broadcast, but only transmits the
-             * message, and omits the verbosity and category.
-             * Callback must be of form 'void callback(string){}'
-             */
+          * message, and omits the verbosity and category.
+          * Callback must be of form 'void callback(string){}'
+          */
         IOSignalAll signal_all;
 
         // Overloaded stream insertion operators for Channel.

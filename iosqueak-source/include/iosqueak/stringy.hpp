@@ -67,10 +67,10 @@ using std::isnan;
 ////const double PRECISION = 0.00000000000001;
 ////const int MAX_NUMBER_STRING_SIZE = 32;
 
-class stdutils
+class stringy
 {
     public:
-        stdutils();
+        stringy();
 
         /** Efficiently split a std::string by tokens.
         * \param the string to split
@@ -188,7 +188,7 @@ class stdutils
 
         static void memdump(char*, const void*, unsigned int, bool=false, char=0);
 
-        ~stdutils();
+        ~stringy();
     protected:
     private:
 };

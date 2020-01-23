@@ -135,17 +135,21 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/../../lib/$<CONF
 include_directories(include)
 
 # CHANGEME: Include headers of dependencies.
+include_directories(${PAWLIB_DIR}/include)
 include_directories(${EVENTPP_DIR}/include)
 
 # CHANGEME: Include files to compile.
 add_library(${TARGET_NAME} STATIC
     include/iosqueak/channel.hpp
     include/iosqueak/ioformat.hpp
+    include/iosqueak/stringy.hpp
 
     src/channel.cpp
+    src/stringy.cpp
 )
 
 # CHANGEME: Link against dependencies.
+target_link_libraries(${TARGET_NAME} ${PAWLIB_DIR}/lib/libpawlib.a)
 
 if(COMPILERTYPE STREQUAL "clang")
     if(SAN STREQUAL "address")

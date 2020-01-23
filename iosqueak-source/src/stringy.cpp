@@ -1,11 +1,11 @@
-#include "iosqueak/stdutils.hpp"
+#include "iosqueak/stringy.hpp"
 
-stdutils::stdutils()
+stringy::stringy()
 {
     //ctor
 }
 
-void stdutils::stdsplit(std::string str, std::string splitBy, std::vector<std::string>& tokens)
+void stringy::stdsplit(std::string str, std::string splitBy, std::vector<std::string>& tokens)
 {
     /* Store the original string in the array, so we can loop the rest
         * of the algorithm. */
@@ -42,7 +42,7 @@ void stdutils::stdsplit(std::string str, std::string splitBy, std::vector<std::s
     }
 }
 
-char* stdutils::strrev(char* str)
+char* stringy::strrev(char* str)
 {
     if (str != NULL)
     {
@@ -67,11 +67,11 @@ char* stdutils::strrev(char* str)
 }
 
 template <typename T>
-int stdutils::intlen(T number, int base, bool count_neg)
+int stringy::intlen(T number, int base, bool count_neg)
 {
     if(base < 2 || base > 36)
     {
-        throw std::invalid_argument("stdutils::intlen: Invalid base. Must be between 2 and 36.");
+        throw std::invalid_argument("stringy::intlen: Invalid base. Must be between 2 and 36.");
     }
     int digits = 0;
     if (number < 0 && count_neg)
@@ -92,19 +92,19 @@ int stdutils::intlen(T number, int base, bool count_neg)
     return digits;
 }
 
-template int stdutils::intlen<char>(char, int, bool);
-template int stdutils::intlen<unsigned char>(unsigned char, int, bool);
-template int stdutils::intlen<int>(int, int, bool);
-template int stdutils::intlen<unsigned int>(unsigned int, int, bool);
-template int stdutils::intlen<short int>(short int, int, bool);
-template int stdutils::intlen<unsigned short int>(unsigned short int, int, bool);
-template int stdutils::intlen<long int>(long int, int, bool);
-template int stdutils::intlen<unsigned long int>(unsigned long int, int, bool);
-template int stdutils::intlen<long long int>(long long int, int, bool);
-template int stdutils::intlen<unsigned long long int>(unsigned long long int, int, bool);
+template int stringy::intlen<char>(char, int, bool);
+template int stringy::intlen<unsigned char>(unsigned char, int, bool);
+template int stringy::intlen<int>(int, int, bool);
+template int stringy::intlen<unsigned int>(unsigned int, int, bool);
+template int stringy::intlen<short int>(short int, int, bool);
+template int stringy::intlen<unsigned short int>(unsigned short int, int, bool);
+template int stringy::intlen<long int>(long int, int, bool);
+template int stringy::intlen<unsigned long int>(unsigned long int, int, bool);
+template int stringy::intlen<long long int>(long long int, int, bool);
+template int stringy::intlen<unsigned long long int>(unsigned long long int, int, bool);
 
 template <typename T>
-void stdutils::itoa(char* str, T val, int base, int len, bool use_caps)
+void stringy::itoa(char* str, T val, int base, int len, bool use_caps)
 {
     /*Adapted from comp.lang.c++, Re: Integer to Ustring
     Christian Gollwitzer <auriocus@gmx.de>
@@ -181,20 +181,20 @@ void stdutils::itoa(char* str, T val, int base, int len, bool use_caps)
     arev(str, 0, len-2);
 }
 
-template void stdutils::itoa<char>(char*, char, int, int, bool);
-template void stdutils::itoa<unsigned char>(char*, unsigned char, int, int, bool);
-template void stdutils::itoa<int>(char*, int, int, int, bool);
-template void stdutils::itoa<unsigned int>(char*, unsigned int, int, int, bool);
-template void stdutils::itoa<short int>(char*, short int, int, int, bool);
-template void stdutils::itoa<unsigned short int>(char*, unsigned short int, int, int, bool);
-template void stdutils::itoa<long int>(char*, long int, int, int, bool);
-template void stdutils::itoa<unsigned long int>(char*, unsigned long int, int, int, bool);
-template void stdutils::itoa<long long int>(char*, long long int, int, int, bool);
-template void stdutils::itoa<unsigned long long int>(char*, unsigned long long int, int, int, bool);
+template void stringy::itoa<char>(char*, char, int, int, bool);
+template void stringy::itoa<unsigned char>(char*, unsigned char, int, int, bool);
+template void stringy::itoa<int>(char*, int, int, int, bool);
+template void stringy::itoa<unsigned int>(char*, unsigned int, int, int, bool);
+template void stringy::itoa<short int>(char*, short int, int, int, bool);
+template void stringy::itoa<unsigned short int>(char*, unsigned short int, int, int, bool);
+template void stringy::itoa<long int>(char*, long int, int, int, bool);
+template void stringy::itoa<unsigned long int>(char*, unsigned long int, int, int, bool);
+template void stringy::itoa<long long int>(char*, long long int, int, int, bool);
+template void stringy::itoa<unsigned long long int>(char*, unsigned long long int, int, int, bool);
 
 
 template <typename T>
-int stdutils::floatlen(T val, int significand, int sci, bool count_sym)
+int stringy::floatlen(T val, int significand, int sci, bool count_sym)
 {
     int len = 0;
 
@@ -240,12 +240,12 @@ int stdutils::floatlen(T val, int significand, int sci, bool count_sym)
     //Return the finished maximum length.
     return len;
 }
-template int stdutils::floatlen<float>(float, int, int, bool);
-template int stdutils::floatlen<double>(double, int, int, bool);
-template int stdutils::floatlen<long double>(long double, int, int, bool);
+template int stringy::floatlen<float>(float, int, int, bool);
+template int stringy::floatlen<double>(double, int, int, bool);
+template int stringy::floatlen<long double>(long double, int, int, bool);
 
 
-void stdutils::ptrtoa(char* str, uintptr_t val, bool use_caps)
+void stringy::ptrtoa(char* str, uintptr_t val, bool use_caps)
 {
     /* 64-bits, plus sign and 0x.*/
     ////int len = 67;
@@ -313,7 +313,7 @@ void stdutils::ptrtoa(char* str, uintptr_t val, bool use_caps)
     delete[] temp;
 }
 
-void stdutils::btoa(char* str, unsigned int val, int len, bool use_caps)
+void stringy::btoa(char* str, unsigned int val, int len, bool use_caps)
 {
     len = (len == 0) ? intlen(val, 16, false) : len;
 
@@ -374,7 +374,7 @@ void stdutils::btoa(char* str, unsigned int val, int len, bool use_caps)
 }
 
 template <typename T>
-void stdutils::ftoa(char* str, T val, int significand, int sci)
+void stringy::ftoa(char* str, T val, int significand, int sci)
 {
     //If the value is not a number...
     if (isnan(val))
@@ -545,12 +545,12 @@ void stdutils::ftoa(char* str, T val, int significand, int sci)
         *(c) = '\0';
     }
 }
-template void stdutils::ftoa<float>(char*, float, int, int);
-template void stdutils::ftoa<double>(char*, double, int, int);
-template void stdutils::ftoa<long double>(char*, long double, int, int);
+template void stringy::ftoa<float>(char*, float, int, int);
+template void stringy::ftoa<double>(char*, double, int, int);
+template void stringy::ftoa<long double>(char*, long double, int, int);
 
 template <typename T>
-std::string stdutils::itos(T val, int base, bool use_caps)
+std::string stringy::itos(T val, int base, bool use_caps)
 {
     int len = intlen(val, base, true) + 1;
 
@@ -567,19 +567,19 @@ std::string stdutils::itos(T val, int base, bool use_caps)
     delete[] cstr;
     return str;
 }
-template std::string stdutils::itos<char>(char, int, bool);
-template std::string stdutils::itos<unsigned char>(unsigned char, int, bool);
-template std::string stdutils::itos<int>(int, int, bool);
-template std::string stdutils::itos<unsigned int>(unsigned int, int, bool);
-template std::string stdutils::itos<short int>(short int, int, bool);
-template std::string stdutils::itos<unsigned short int>(unsigned short int, int, bool);
-template std::string stdutils::itos<long int>(long int, int, bool);
-template std::string stdutils::itos<unsigned long int>(unsigned long int, int, bool);
-template std::string stdutils::itos<long long int>(long long int, int, bool);
-template std::string stdutils::itos<unsigned long long int>(unsigned long long int, int, bool);
+template std::string stringy::itos<char>(char, int, bool);
+template std::string stringy::itos<unsigned char>(unsigned char, int, bool);
+template std::string stringy::itos<int>(int, int, bool);
+template std::string stringy::itos<unsigned int>(unsigned int, int, bool);
+template std::string stringy::itos<short int>(short int, int, bool);
+template std::string stringy::itos<unsigned short int>(unsigned short int, int, bool);
+template std::string stringy::itos<long int>(long int, int, bool);
+template std::string stringy::itos<unsigned long int>(unsigned long int, int, bool);
+template std::string stringy::itos<long long int>(long long int, int, bool);
+template std::string stringy::itos<unsigned long long int>(unsigned long long int, int, bool);
 
 template <typename T>
-std::string stdutils::ftos(T val, int significand, int sci)
+std::string stringy::ftos(T val, int significand, int sci)
 {
     /* Get the estimated maximum number of characters in the float, plus
         * 1 for the null terminator.
@@ -606,11 +606,11 @@ std::string stdutils::ftos(T val, int significand, int sci)
     //Return the string.
     return str;
 }
-template std::string stdutils::ftos<float>(float, int, int);
-template std::string stdutils::ftos<double>(double, int, int);
-template std::string stdutils::ftos<long double>(long double, int, int);
+template std::string stringy::ftos<float>(float, int, int);
+template std::string stringy::ftos<double>(double, int, int);
+template std::string stringy::ftos<long double>(long double, int, int);
 
-std::string stdutils::ptrtos(uintptr_t val, bool use_caps)
+std::string stringy::ptrtos(uintptr_t val, bool use_caps)
 {
     //TODO: Allow for 32-bit systems as well.
     char cstr[67] = {'\0'};
@@ -619,7 +619,7 @@ std::string stdutils::ptrtos(uintptr_t val, bool use_caps)
     return str;
 }
 
-void stdutils::memdump(char* str, const void* mem, unsigned int bytes, bool use_caps, char memformat)
+void stringy::memdump(char* str, const void* mem, unsigned int bytes, bool use_caps, char memformat)
 {
     bool bytespacing = memformat & (1 << 0);
     bool wordspacing = memformat & (1 << 1);
@@ -647,7 +647,7 @@ void stdutils::memdump(char* str, const void* mem, unsigned int bytes, bool use_
     }
 }
 
-stdutils::~stdutils()
+stringy::~stringy()
 {
     //dtor
 }

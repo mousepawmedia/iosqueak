@@ -357,6 +357,4 @@ class IOFormat
         IOFormat& operator<<(const IOFormatTextAttr& rhs){fmt_text_attr = rhs; return *this;}
         IOFormat& operator<<(const IOFormatTextBG& rhs){fmt_text_bg = rhs; return *this;}
         IOFormat& operator<<(const IOFormatTextFG& rhs){fmt_text_fg = rhs; return *this;}
-
-
 };

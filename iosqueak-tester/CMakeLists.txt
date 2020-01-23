@@ -133,6 +133,7 @@ include_directories(include)
 
 # CHANGEME: Include headers of dependencies.
 include_directories(../iosqueak-source/include)
+include_directories(${PAWLIB_DIR}/include)
 include_directories(${EVENTPP_DIR}/include)
 
 # CHANGEME: Include files to compile.
@@ -142,6 +143,7 @@ add_executable(${TARGET_NAME}
 
 # CHANGEME: Link against dependencies.
 target_link_libraries(${TARGET_NAME} ${CMAKE_HOME_DIRECTORY}/../iosqueak-source/lib/$<CONFIG>/libiosqueak.a)
+target_link_libraries(${TARGET_NAME} ${PAWLIB_DIR}/lib/libpawlib.a)
 
 if(COMPILERTYPE STREQUAL "clang")
     if(SAN STREQUAL "address")

@@ -31,6 +31,25 @@ set(EVENTPP_DIR
 	${CMAKE_HOME_DIRECTORY}/../../libdeps/libs
 )
 
+##### PAWLIB MINIMAL #####
+#
+# This sets the path to PawLIB Minimal.
+# The build system will look for 'include/' at this location.
+# Because PawLIB depends on IOSqueak for the full library, we only depend
+# on the header-only library core.
+#
+# The default is '${CMAKE_HOME_DIRECTORY}/../../pawlib/pawlib', which
+# assumes a copy of the PawLIB git repository in the same directory as this
+# repository folder.
+#
+# 'make minimal' would need to be run in that repository to generate the
+# minimal version of the library.
+
+set(PAWLIB_DIR
+	${CMAKE_HOME_DIRECTORY}/../../pawlib/pawlib
+)
+
+
 ##### LLVM LIBC++ #####
 #
 # This option asks the Clang compiler to use LLVM's libc++ library.

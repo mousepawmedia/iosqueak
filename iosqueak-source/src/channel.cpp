@@ -416,13 +416,13 @@ channel& channel::resolve_integer(const T& rhs)
     //If we cannot parse because of `shutup()` settings, abort.
     if(!can_parse()){return *this;}
 
-    int len = stdutils::intlen(rhs, static_cast<int>(fmt.fmt_base), true) + 1;
+    int len = stringy::intlen(rhs, static_cast<int>(fmt.fmt_base), true) + 1;
 
     // Accepting defeat on VLAs - we'll just have to dynamically allocate.
     char* cstr = new char[len];
     std::fill_n(cstr, len, '\0');
 
-    stdutils::itoa(cstr, rhs, static_cast<int>(fmt.fmt_base), len, static_cast<bool>(fmt.fmt_numeral_case));
+    stringy::itoa(cstr, rhs, static_cast<int>(fmt.fmt_base), len, static_cast<bool>(fmt.fmt_numeral_case));
     inject(cstr);
 
     delete[] cstr;
@@ -446,17 +446,17 @@ channel& channel::resolve_float(const T& rhs)
     //If we cannot parse because of `shutup()` settings, abort.
     if(!can_parse()){return *this;}
 
-    /*char cstr[stdutils::floatlen(rhs, significands, sci, true) + 1];
+    /*char cstr[stringy::floatlen(rhs, significands, sci, true) + 1];
     cstr[0] = '\0';*/
 
     // Accepting defeat on VLAs - we'll just have to dynamically allocate.
-    uint32_t len = stdutils::floatlen(rhs, fmt.fmt_significands.significands,
+    uint32_t len = stringy::floatlen(rhs, fmt.fmt_significands.significands,
                                         static_cast<bool>(fmt.fmt_sci_notation), true) + 1;
     char* cstr = new char[len];
     std::fill_n(cstr, len, '\0');
 
     //Convert the float to a cstring, and dump into cstr.
-    stdutils::ftoa(cstr, rhs, fmt.fmt_significands.significands, static_cast<bool>(fmt.fmt_sci_notation));
+    stringy::ftoa(cstr, rhs, fmt.fmt_significands.significands, static_cast<bool>(fmt.fmt_sci_notation));
     inject(cstr);
 
     delete[] cstr;
@@ -475,18 +475,18 @@ bool channel::apply_attributes()
     {
         //TODO: We will need to switch formats. For now, just ANSI.
         format = "\033[";
-        format.append(stdutils::itos(static_cast<int>(fmt.fmt_text_attr)));
+        format.append(stringy::itos(static_cast<int>(fmt.fmt_text_attr)));
 
         if(fmt.fmt_text_bg != IOFormatTextBG::none)
         {
             format.append(";");
-            format.append(stdutils::itos(static_cast<int>(fmt.fmt_text_bg)));
+            format.append(stringy::itos(static_cast<int>(fmt.fmt_text_bg)));
         }
 
         if(fmt.fmt_text_fg != IOFormatTextFG::none)
         {
             format.append(";");
-            format.append(stdutils::itos(static_cast<int>(fmt.fmt_text_fg)));
+            format.append(stringy::itos(static_cast<int>(fmt.fmt_text_fg)));
         }
 
         format.append("m");
@@ -576,7 +576,7 @@ void channel::inject(const void* ptr, unsigned int len, bool dump)
     if(!dump)
     {
         uintptr_t address = reinterpret_cast<uintptr_t>(ptr);
-        inject(stdutils::ptrtos(address, static_cast<bool>(fmt.fmt_numeral_case)).c_str());
+        inject(stringy::ptrtos(address, static_cast<bool>(fmt.fmt_numeral_case)).c_str());
     }
     else if(dump)
     {
@@ -617,7 +617,7 @@ void channel::inject(const void* ptr, unsigned int len, bool dump)
         char* mem = new char[memsize];
         std::fill_n(mem, memsize, '\0');
 
-        stdutils::memdump(mem, ptr, len, false, static_cast<int>(fmt.fmt_mem_sep));
+        stringy::memdump(mem, ptr, len, false, static_cast<int>(fmt.fmt_mem_sep));
         inject(mem);
     }
 }
