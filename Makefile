@@ -82,25 +82,30 @@ help:
 	$(ECHO) "  When unspecified, default.config will be used."
 	$(ECHO)
 	$(ECHO) "For other build options, see the 'make' command in 'docs/', 'iosqueak-source/', and 'iosqueak-tester/'."
+.PHONY: help
 
 clean:
 	$(MAKE) clean -C iosqueak-source
 	$(MAKE) clean -C iosqueak-tester
 	$(RM) tester_debug
 	$(RM) tester
+.PHONY: clean
 
 cleanall: clean
 	$(MAKE) clean -C docs
+.PHONY: cleanall
 
 cleandebug:
 	$(MAKE) cleandebug -C iosqueak-source
 	$(MAKE) cleandebug -C iosqueak-tester
 	$(RM) tester_debug
+.PHONY: cleandebug
 
 cleanrelease:
 	$(MAKE) cleanrelease -C iosqueak-source
 	$(MAKE) cleanrelease -C iosqueak-tester
 	$(RM) tester
+.PHONY: cleanrelease
 
 docs:
 	$(RM_DIR) docs/build/html
@@ -109,6 +114,7 @@ docs:
 	$(ECHO) "<<<<<<< FINISHED >>>>>>>"
 	$(ECHO) "View docs at 'docs/build/html/index.html'."
 	$(ECHO) "-------------"
+.PHONY: docs
 
 docs_pdf:
 	$(MAKE) latexpdf -C docs
@@ -116,20 +122,21 @@ docs_pdf:
 	$(ECHO) "<<<<<<< FINISHED >>>>>>>"
 	$(ECHO) "View docs at 'docs/build/latex/IOSqueak.pdf'."
 	$(ECHO) "-------------"
+.PHONY: docs_pdf
 
 iosqueak:
-	$(MAKE) release -C iosqueak-source
 	$(ECHO) "-------------"
 	$(ECHO) "<<<<<<< FINISHED >>>>>>>"
 	$(ECHO) "IOSqueak is in 'iosqueak-source/lib/Release'."
 	$(ECHO) "-------------"
+.PHONY: iosqueak
 
 iosqueak_debug:
-	$(MAKE) debug -C iosqueak-source
 	$(ECHO) "-------------"
 	$(ECHO) "<<<<<<< FINISHED >>>>>>>"
 	$(ECHO)  on "IOSqueak is in 'iosqueak-source/lib/Debug'."
 	$(ECHO) "-------------"
+.PHONY: iosqueak_debug
 
 ready: iosqueak
 	$(RM_DIR) iosqueak
@@ -137,14 +144,14 @@ ready: iosqueak
 	$(MK_DIR) iosqueak
 	$(ECHO) "Copying IOSqueak..."
 	$(CP_DIR) iosqueak-source/include/ iosqueak/include/
-	$(CP_DIR) iosqueak-source/lib/Release/ iosqueak/lib/
 	$(ECHO) "Copying README and LICENSE..."
 	$(CP) README.md iosqueak/README.md
 	$(CP) LICENSE.md iosqueak/LICENSE.md
 	$(ECHO) "-------------"
 	$(ECHO) "<<<<<<< FINISHED >>>>>>>"
-	$(ECHO) "The libraries are in 'iosqueak'."
+	$(ECHO) "The library is in 'iosqueak'."
 	$(ECHO) "-------------"
+.PHONY: ready
 
 tester: iosqueak
 	$(MAKE) release -C iosqueak-tester
@@ -155,7 +162,7 @@ tester: iosqueak
 	$(ECHO) "IOSqueak Tester is in 'iosqueak-tester/bin/Release'."
 	$(ECHO) "The link './tester' has been created for convenience."
 	$(ECHO) "-------------"
-
+.PHONY: tester
 
 tester_debug: iosqueak_debug
 	$(MAKE) debug -C iosqueak-tester
@@ -166,9 +173,10 @@ tester_debug: iosqueak_debug
 	$(ECHO) "IOSqueak Tester is in 'iosqueak-tester/bin/Debug'."
 	$(ECHO) "The link './tester_debug' has been created for convenience."
 	$(ECHO) "-------------"
+.PHONY: tester_debug
 
 all: docs tester
+.PHONY: all
 
 allfresh: cleanall all
-
-.PHONY: all allfresh clean cleanall cleandebug cleanrelease docs docs_pdf iosqueak iosqueak_debug ready tester tester_debug
+.PHONY: allfresh

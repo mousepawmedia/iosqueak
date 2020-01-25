@@ -272,18 +272,6 @@ enum class IOVrb
     tmi = 3
 };
 
-template<typename T>
-T operator|(const T& lhs, const T& rhs);
-
-template<typename T>
-T operator&(const T& lhs, const T& rhs);
-
-template<typename T>
-T operator^(const T& lhs, const T& rhs);
-
-template<typename T>
-T operator~(const T& rhs);
-
 class IOFormat
 {
     friend channel;
@@ -358,3 +346,42 @@ class IOFormat
         IOFormat& operator<<(const IOFormatTextBG& rhs){fmt_text_bg = rhs; return *this;}
         IOFormat& operator<<(const IOFormatTextFG& rhs){fmt_text_fg = rhs; return *this;}
 };
+
+template<typename T>
+T operator&(const T& lhs, const T& rhs)
+{
+    return static_cast<T>
+        (static_cast<int>(lhs) & static_cast<int>(rhs));
+}
+template<> IOCat operator&<IOCat>(const IOCat&, const IOCat&);
+template<> IOCtrl operator&<IOCtrl>(const IOCtrl&, const IOCtrl&);
+template<> IOFormatMemSep operator&<IOFormatMemSep>(const IOFormatMemSep&, const IOFormatMemSep&);
+
+template<typename T>
+T operator|(const T& lhs, const T& rhs)
+{
+    return static_cast<T>
+        (static_cast<int>(lhs) | static_cast<int>(rhs));
+}
+template<> IOCat operator|<IOCat>(const IOCat&, const IOCat&);
+template<> IOCtrl operator|<IOCtrl>(const IOCtrl&, const IOCtrl&);
+template<> IOFormatMemSep operator|<IOFormatMemSep>(const IOFormatMemSep&, const IOFormatMemSep&);
+
+template<typename T>
+T operator^(const T& lhs, const T& rhs)
+{
+    return static_cast<T>
+        (static_cast<int>(lhs) ^ static_cast<int>(rhs));
+}
+template<> IOCat operator^<IOCat>(const IOCat&, const IOCat&);
+template<> IOCtrl operator^<IOCtrl>(const IOCtrl&, const IOCtrl&);
+template<> IOFormatMemSep operator^<IOFormatMemSep>(const IOFormatMemSep&, const IOFormatMemSep&);
+
+template<typename T>
+T operator~(const T& rhs)
+{
+    return static_cast<T>(~static_cast<int>(rhs));
+}
+template<> IOCat operator~<IOCat>(const IOCat&);
+template<> IOCtrl operator~<IOCtrl>(const IOCtrl&);
+template<> IOFormatMemSep operator~<IOFormatMemSep>(const IOFormatMemSep&);

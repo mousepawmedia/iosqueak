@@ -142,7 +142,6 @@ add_executable(${TARGET_NAME}
 )
 
 # CHANGEME: Link against dependencies.
-target_link_libraries(${TARGET_NAME} ${CMAKE_HOME_DIRECTORY}/../iosqueak-source/lib/$<CONFIG>/libiosqueak.a)
 target_link_libraries(${TARGET_NAME} ${PAWLIB_DIR}/lib/libpawlib.a)
 
 if(COMPILERTYPE STREQUAL "clang")
