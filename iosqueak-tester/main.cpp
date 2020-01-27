@@ -50,7 +50,6 @@
   */
 void test_code()
 {
-    channel out;
     out << "Hello, world!" << IOCtrl::endl;
 }
 

@@ -1235,6 +1235,6 @@ protected:
 };
 
 ///Global external (static) instance of channel.
-//extern channel out;
+inline channel out;
 
 #endif // IOSQUEAK_BROADCAST_HPP

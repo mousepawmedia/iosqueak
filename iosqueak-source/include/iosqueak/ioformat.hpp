@@ -373,6 +373,8 @@ T operator^(const T& lhs, const T& rhs)
     return static_cast<T>
         (static_cast<int>(lhs) ^ static_cast<int>(rhs));
 }
+// The following linter error is from misparsing of the file.
+// cppcheck-suppress internalAstError
 template<> IOCat operator^<IOCat>(const IOCat&, const IOCat&);
 template<> IOCtrl operator^<IOCtrl>(const IOCtrl&, const IOCtrl&);
 template<> IOFormatMemSep operator^<IOFormatMemSep>(const IOFormatMemSep&, const IOFormatMemSep&);
