@@ -5,9 +5,7 @@
         "statusBar.foreground": "#15202b"
     },
     "peacock.color": "#f9e64f",
-    "restructuredtext.confPath": "",
-    "python.linting.flake8Enabled": true,
-    "python.linting.enabled": true,
+    "restructuredtext.confPath": "${workspaceFolder}/docs/source",
     "files.associations": {
         "ostream": "cpp",
         "array": "cpp",

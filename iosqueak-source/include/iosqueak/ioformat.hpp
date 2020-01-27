@@ -1,3 +1,95 @@
+/** IOFormat [IOSqueak]
+  * Version: 2.0.0
+  *
+  * Control and formatting flags for input and output.
+  *
+  * Author: Jason C. McDonald
+  */
+
+/* LICENSE (BSD-3-Clause)
+ * Copyright (c) 2016-2020 MousePaw Media.
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ * this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ * this list of conditions and the following disclaimer in the documentation
+ * and/or other materials provided with the distribution.
+ *
+ * 3. Neither the name of the copyright holder nor the names of its contributors
+ * may be used to endorse or promote products derived from this software without
+ * specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
+ * THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * CONTRIBUTING
+ * See https://www.mousepawmedia.com/developers for information
+ * on how to contribute to our projects.
+ */
+
+/* WHAT IS IOCHANNEL?
+ * Channel is intended both as a replacement and wrapper for `std::iostream` and
+ * `stdio.h/printf`. It allows for messages and errors to be output to multiple
+ * sources simultaneously and asynchronously using signals. New
+ * messages from any source are added to the back of the queue, and arbitrary
+ * outputs can read them asynchronously from the front, either destructively or
+ * non-destructively.
+ *
+ * Each output is also able to individually timing, as well as which messages it is
+ * interested in and how it reads them, without interfering with the behavior
+ * of other outputs.
+ *
+ * EXTERNAL OUTPUTS
+ * An external output waits for a signal to be dispatched before it collects its
+ * messages. Different signals are dispatched for different levels of verbosity
+ * and categories.
+ *
+ * INTERNAL OUTPUTS
+ * Optionally, channel can output to the terminal automatically via either
+ * `std::iostream` or `stdio.h/printf`. This output can be controlled externally.
+ * For example, a developer might choose to create pseudocommands in their
+ * command-line that allow them to change verbosity on-the-fly while the program
+ * is running.
+ *
+ * VERBOSITY
+ * The concept of verbosity allows for developers to write and leave all manner
+ * of useful output data, including debug information, detailed error messages,
+ * and outright snark. Verbosity can be toggled globally for a channel,
+ * or on a connection-by-connection basis.
+ *
+ * Verbosity ranges from 0 (only essential messages) to 3 (literally all messages).
+ *
+ * CATEGORY
+ * Messages can be assigned a category, which makes it easier to different messages
+ * to be sent to different outputs, or otherwise be handled differently. At the
+ * moment, the categories are...
+ * - Normal Messages
+ * - Warnings
+ * - Errors
+ * - Debug Output
+ *
+ * CROSS-PLATFORM FORMATTING
+ * Channel offers coloring and basic formatting on both UNIX and Windows systems
+ * via the same interface.
+ */
+
+#ifndef IOSQUEAK_IOFORMAT_HPP
+#define IOSQUEAK_IOFORMAT_HPP
+
 class channel;
 
 /** The category of the message. */
@@ -387,3 +479,5 @@ T operator~(const T& rhs)
 template<> IOCat operator~<IOCat>(const IOCat&);
 template<> IOCtrl operator~<IOCtrl>(const IOCtrl&);
 template<> IOFormatMemSep operator~<IOFormatMemSep>(const IOFormatMemSep&);
+
+#endif //IOSQUEAK_IOFORMAT_HPP
