@@ -1,10 +1,10 @@
 /** IOSqueak Tester
-  * Version: 2.0
-  *
-  * Allows running tests and custom code for IOSqueak.
-  *
-  * Author(s): Jason C. McDonald
-  */
+ * Version: 2.0
+ *
+ * Allows running tests and custom code for IOSqueak.
+ *
+ * Author(s): Jason C. McDonald
+ */
 
 /* LICENSE (BSD-3-Clause)
  * Copyright (c) 2016-2019 MousePaw Media.
@@ -45,12 +45,15 @@
 #include "iosqueak/channel.hpp"
 
 /** Temporary test code goes in this function ONLY.
-  * All test code that is needed long term should be
-  * moved to a dedicated Goldilocks Test and TestSuite.
-  */
+ * All test code that is needed long term should be
+ * moved to a dedicated Goldilocks Test and TestSuite.
+ */
 void test_code()
 {
-    out << "Hello, world!" << IOCtrl::endl;
+    int value = 42;
+    out << IOFormatPtr::value << &value << IOCtrl::endl;
+
+    out << IOFormatPtr::address << reinterpret_cast<void*>(test_code) << IOCtrl::endl;
 }
 
 /////// WARNING: DO NOT ALTER BELOW THIS POINT! ///////
@@ -86,7 +89,7 @@ int main(int argc, char* argv[])
     //     ioc << IOFormatTextAttr::bold << IOFormatTextFG::blue
     //         << "===== PawLIB Tester =====\n" << IOCtrl::endl;
 
-         test_code();
+            test_code();
 
     //     // Shift control to the interactive console.
     //     shell->interactive();

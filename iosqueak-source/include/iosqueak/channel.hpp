@@ -41,52 +41,6 @@
  * on how to contribute to our projects.
  */
 
-/* WHAT IS IOCHANNEL?
- * Channel is intended both as a replacement and wrapper for `std::iostream` and
- * `stdio.h/printf`. It allows for messages and errors to be output to multiple
- * sources simultaneously and asynchronously using signals. New
- * messages from any source are added to the back of the queue, and arbitrary
- * outputs can read them asynchronously from the front, either destructively or
- * non-destructively.
- *
- * Each output is also able to individually timing, as well as which messages it is
- * interested in and how it reads them, without interfering with the behavior
- * of other outputs.
- *
- * EXTERNAL OUTPUTS
- * An external output waits for a signal to be dispatched before it collects its
- * messages. Different signals are dispatched for different levels of verbosity
- * and categories.
- *
- * INTERNAL OUTPUTS
- * Optionally, channel can output to the terminal automatically via either
- * `std::iostream` or `stdio.h/printf`. This output can be controlled externally.
- * For example, a developer might choose to create pseudocommands in their
- * command-line that allow them to change verbosity on-the-fly while the program
- * is running.
- *
- * VERBOSITY
- * The concept of verbosity allows for developers to write and leave all manner
- * of useful output data, including debug information, detailed error messages,
- * and outright snark. Verbosity can be toggled globally for a channel,
- * or on a connection-by-connection basis.
- *
- * Verbosity ranges from 0 (only essential messages) to 3 (literally all messages).
- *
- * CATEGORY
- * Messages can be assigned a category, which makes it easier to different messages
- * to be sent to different outputs, or otherwise be handled differently. At the
- * moment, the categories are...
- * - Normal Messages
- * - Warnings
- * - Errors
- * - Debug Output
- *
- * CROSS-PLATFORM FORMATTING
- * Channel offers coloring and basic formatting on both UNIX and Windows systems
- * via the same interface.
- */
-
 #ifndef IOSQUEAK_CHANNEL_HPP
 #define IOSQUEAK_CHANNEL_HPP
 
@@ -105,6 +59,7 @@
 
 //Needed for checking types.
 #include <typeinfo>
+#include <type_traits>
 
 //Needed for handling passed-in exceptions.
 #include <exception>
@@ -685,6 +640,7 @@ protected:
 
     /** Resolves any common pointer. This can handle
      * all atomic and numeric C and C++ types.
+     * Since this is the least specialized version, it's the fallback.
      * \param the pointer to resolve
      */
     template<typename T>
@@ -718,21 +674,6 @@ protected:
         }
         return *this;
     }
-
-    template<> channel& resolve_pointer<bool>(const bool*);
-    template<> channel& resolve_pointer<unsigned char>(const unsigned char*);
-    template<> channel& resolve_pointer<int>(const int*);
-    template<> channel& resolve_pointer<unsigned int>(const unsigned int*);
-    template<> channel& resolve_pointer<short int>(const short int*);
-    template<> channel& resolve_pointer<unsigned short int>(const unsigned short int*);
-    template<> channel& resolve_pointer<long int>(const long int*);
-    template<> channel& resolve_pointer<unsigned long int>(const unsigned long int*);
-    template<> channel& resolve_pointer<long long int>(const long long int*);
-    template<> channel& resolve_pointer<unsigned long long int>(const unsigned long long int*);
-    template<> channel& resolve_pointer<float>(const float*);
-    template<> channel& resolve_pointer<double>(const double*);
-    template<> channel& resolve_pointer<long double>(const long double*);
-    template<> channel& resolve_pointer<std::string>(const std::string*);
 
     /** Resolves a void pointer, which allows
      * for raw data dumps from any pointer
@@ -812,6 +753,10 @@ protected:
     template<typename T>
     channel& resolve_integer(const T& rhs)
     {
+        // Only accept floating point types; else, compiler error
+        static_assert(std::is_integral<T>::value,
+            "resolve_integer() only accepts integral types.");
+
         //If we cannot parse because of `shutup()` settings, abort.
         if(!can_parse()){return *this;}
 
@@ -829,23 +774,16 @@ protected:
         return *this;
     }
 
-    template<> channel& resolve_integer<char>(const char&);
-    template<> channel& resolve_integer<unsigned char>(const unsigned char&);
-    template<> channel& resolve_integer<int>(const int&);
-    template<> channel& resolve_integer<unsigned int>(const unsigned int&);
-    template<> channel& resolve_integer<short int>(const short int&);
-    template<> channel& resolve_integer<unsigned short int>(const unsigned short int&);
-    template<> channel& resolve_integer<long int>(const long int&);
-    template<> channel& resolve_integer<unsigned long int>(const unsigned long int&);
-    template<> channel& resolve_integer<long long int>(const long long int&);
-    template<> channel& resolve_integer<unsigned long long int>(const unsigned long long int&);
-
     /** Resolves any floating point number variable.
      * \param the floating point variable to resolve
      */
     template<typename T>
     channel& resolve_float(const T& rhs)
     {
+        // Only accept floating point types; else, compiler error
+        static_assert(std::is_floating_point<T>::value,
+            "resolve_float() only accepts floating point types.");
+
         //If we cannot parse because of `shutup()` settings, abort.
         if(!can_parse()){return *this;}
 
@@ -866,10 +804,6 @@ protected:
 
         return *this;
     }
-
-    template<> channel& resolve_float<float>(const float&);
-    template<> channel& resolve_float<double>(const double&);
-    template<> channel& resolve_float<long double>(const long double&);
 
     //The string containing the format.
     std::string format = "";

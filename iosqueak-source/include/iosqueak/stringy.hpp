@@ -74,7 +74,7 @@ namespace stringy
     * \param the character or string to split by
     * \param the vector to store the tokens in
     */
-    void stdsplit(std::string str, std::string splitBy, std::vector<std::string>& tokens)
+    inline void stdsplit(std::string str, std::string splitBy, std::vector<std::string>& tokens)
     {
         /* Store the original string in the array, so we can loop the rest
             * of the algorithm. */
@@ -116,7 +116,7 @@ namespace stringy
     * \param the C-string to reverse.
     * \param the reversed C-string
     */
-    char* strrev(char* str)
+    inline char* strrev(char* str)
     {
         if (str != NULL)
         {
@@ -142,7 +142,7 @@ namespace stringy
     //TODO: Move this to onestring!
 
     template<typename T>
-    void arev(T* arr, size_t start, size_t end)
+    inline void arev(T* arr, size_t start, size_t end)
     {
         T tmp;
         while(start < end)
@@ -163,7 +163,7 @@ namespace stringy
      * \param whether to count the symbols (ignored if unsigned)
      * \return the number of digits in the integer*/
     template<typename T>
-    int intlen(T number, int base, bool count_neg)
+    inline int intlen(T number, int base, bool count_neg)
     {
         if(base < 2 || base > 36)
         {
@@ -211,7 +211,7 @@ namespace stringy
      * \param whether to count the symbols
      * \return the number of digits in the float*/
     template<typename T>
-    int floatlen(T val, int significand, int sci, bool count_sym)
+    inline int floatlen(T val, int significand, int sci, bool count_sym)
     {
         int len = 0;
 
@@ -272,7 +272,7 @@ namespace stringy
      * calculated.
      * \param whether to use capital letters for base > 10*/
     template<typename T>
-    void itoa(char* str, T val, int base, int len, bool use_caps)
+    inline void itoa(char* str, T val, int base, int len, bool use_caps)
     {
         /*Adapted from comp.lang.c++, Re: Integer to Ustring
         Christian Gollwitzer <auriocus@gmx.de>
@@ -368,7 +368,7 @@ namespace stringy
      * terminator. If 0 or omitted, this will be automatically
      * calculated.
      * \param whether to use capital letters for base > 10*/
-    void btoa(char* str, unsigned int val, int len=0, bool use_caps=false)
+    inline void btoa(char* str, unsigned int val, int len=0, bool use_caps=false)
     {
         len = (len == 0) ? intlen(val, 16, false) : len;
 
@@ -435,7 +435,7 @@ namespace stringy
      * \param whether to use scientific notation. 0=none, 1=automatic,
      * 2=force scientific notation.*/
     template<typename T>
-    void ftoa(char* str, T val, int significand=14, int sci=1)
+    inline void ftoa(char* str, T val, int significand=14, int sci=1)
     {
         //If the value is not a number...
         if (isnan(val))
@@ -616,7 +616,7 @@ namespace stringy
      * \param the C-string to write to
      * \param the pointer integer to convert
          * \param whether to use capital letters for base > 10*/
-    void ptrtoa(char* str, uintptr_t val, bool use_caps)
+    inline void ptrtoa(char* str, uintptr_t val, bool use_caps)
     {
         /* 64-bits, plus sign and 0x.*/
         ////int len = 67;
@@ -691,7 +691,7 @@ namespace stringy
      * \param whether to use capital letters for base > 10
      * \return the string representing the integer.*/
     template<typename T>
-    std::string itos(T val, int base=10, bool use_caps=false)
+    inline std::string itos(T val, int base=10, bool use_caps=false)
     {
         int len = intlen(val, base, true) + 1;
 
@@ -726,7 +726,7 @@ namespace stringy
      * 2=force scientific notation.
      * \return the string representing the integer.*/
     template<typename T>
-    std::string ftos(T val, int significand=14, int sci=1)
+    inline std::string ftos(T val, int significand=14, int sci=1)
     {
         /* Get the estimated maximum number of characters in the float, plus
             * 1 for the null terminator.
@@ -762,7 +762,7 @@ namespace stringy
      * \param whether to use capital letters for base > 10
      * \return the string representing the pointer.*/
     //std::string ptrtos(uintptr_t);
-    std::string ptrtos(uintptr_t val, bool use_caps=false)
+    inline std::string ptrtos(uintptr_t val, bool use_caps=false)
     {
         //TODO: Allow for 32-bit systems as well.
         char cstr[67] = {'\0'};
@@ -771,7 +771,7 @@ namespace stringy
         return str;
     }
 
-    void memdump(char* str, const void* mem, unsigned int bytes, bool use_caps=false, char memformat=0)
+    inline void memdump(char* str, const void* mem, unsigned int bytes, bool use_caps=false, char memformat=0)
     {
         bool bytespacing = memformat & (1 << 0);
         bool wordspacing = memformat & (1 << 1);
