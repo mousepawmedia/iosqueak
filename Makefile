@@ -85,7 +85,6 @@ help:
 .PHONY: help
 
 clean:
-	$(MAKE) clean -C iosqueak-source
 	$(MAKE) clean -C iosqueak-tester
 	$(RM) tester_debug
 	$(RM) tester
@@ -96,13 +95,11 @@ cleanall: clean
 .PHONY: cleanall
 
 cleandebug:
-	$(MAKE) cleandebug -C iosqueak-source
 	$(MAKE) cleandebug -C iosqueak-tester
 	$(RM) tester_debug
 .PHONY: cleandebug
 
 cleanrelease:
-	$(MAKE) cleanrelease -C iosqueak-source
 	$(MAKE) cleanrelease -C iosqueak-tester
 	$(RM) tester
 .PHONY: cleanrelease
@@ -127,14 +124,14 @@ docs_pdf:
 iosqueak:
 	$(ECHO) "-------------"
 	$(ECHO) "<<<<<<< FINISHED >>>>>>>"
-	$(ECHO) "IOSqueak is in 'iosqueak-source/lib/Release'."
+	$(ECHO) "IOSqueak is in 'iosqueak-source/include'."
 	$(ECHO) "-------------"
 .PHONY: iosqueak
 
 iosqueak_debug:
 	$(ECHO) "-------------"
 	$(ECHO) "<<<<<<< FINISHED >>>>>>>"
-	$(ECHO)  on "IOSqueak is in 'iosqueak-source/lib/Debug'."
+	$(ECHO)  on "IOSqueak is in 'iosqueak-source/include'."
 	$(ECHO) "-------------"
 .PHONY: iosqueak_debug
 

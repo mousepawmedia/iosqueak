@@ -7,7 +7,7 @@
  */
 
 /* LICENSE (BSD-3-Clause)
- * Copyright (c) 2016-2019 MousePaw Media.
+ * Copyright (c) 2016-2020 MousePaw Media.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -41,8 +41,18 @@
  * on how to contribute to our projects.
  */
 
-// #include "goldilocks/shell.hpp"
+#include <iostream>
+#include <string>
+
+//#include "pawlib/goldilocks_shell.hpp"
+
 #include "iosqueak/channel.hpp"
+#include "iosqueak/stringify.hpp"
+#include "iosqueak/tools/memlens.hpp"
+
+//#include "test_stringify_numbers.hpp"
+
+void dummy_func(int, int, bool) { return; }
 
 /** Temporary test code goes in this function ONLY.
  * All test code that is needed long term should be
@@ -50,54 +60,95 @@
  */
 void test_code()
 {
-    int value = 42;
-    out << IOFormatPtr::value << &value << IOCtrl::endl;
+	/*
+	int value = 42;
+	out << IOFormatPtr::value << &value << IOCtrl::endl;
 
-    out << IOFormatPtr::address << reinterpret_cast<void*>(test_code) << IOCtrl::endl;
+	out << IOFormatPtr::address << reinterpret_cast<void*>(test_code) <<
+	IOCtrl::endl;
+	*/
+
+	std::cout << "Bool: " << stringify(true) << std::endl;
+	std::cout << "Char: " << stringify('c') << std::endl;
+	std::cout << "Integer: " << stringify(-12345) << std::endl;
+	std::cout << "Hex Integer: " << stringify(123, IOFormatBase::hex)
+			  << std::endl;
+	std::cout << "Float: " << stringify(123456789123456789.987654321)
+			  << std::endl;
+
+	long long val = 123456789123456789LL;
+
+	std::cout << "Nullptr: "
+			  << stringify(MemLens(nullptr), IOFormatPtr::address) << std::endl;
+	std::cout << "Value: " << stringify(&val, IOFormatPtr::value) << std::endl;
+	std::cout << "Address: " << stringify(&val, IOFormatPtr::address)
+			  << std::endl;
+	std::cout << "Type: " << stringify(&val, IOFormatPtr::pointer) << std::endl;
+	std::cout << "Memory: "
+			  << stringify(&val,
+						   IOFormatPtr::memory,
+						   IOFormatMemSep::all,
+						   IOFormatBase::hex)
+			  << std::endl;
+	// std::cout << "Pointer Value: " << stringify(MemLens(ptr),
+	// IOFormatPtr::value) << std::endl;
+
+	char test = 'c';
+	char* test_p = &test;
+	std::cout << "Type: " << stringify(typeid(test)) << std::endl;
+	std::cout << "Type*: " << stringify(typeid(&test_p)) << std::endl;
+
+	TypesMap::register_type<std::string>("std::string");
+	TypesMap::register_type<std::string>("std::string");
+	std::string str = "Hello, world!";
+	std::cout << "Type: " << stringify(typeid(str)) << std::endl;
+	std::cout << "String: " << stringify(str) << std::endl;
+
+	int ci = 42;
+	std::cout << "Const Type: " << stringify(typeid(&ci)) << std::endl;
+
+	std::cout << "Exception: "
+			  << stringify(std::runtime_error("Error text here!")) << std::endl;
+
+	std::cout << "Function: "
+			  << stringify("dummy_func", dummy_func, 42, 42, true) << std::endl;
 }
 
 /////// WARNING: DO NOT ALTER BELOW THIS POINT! ///////
 
 int main(int argc, char* argv[])
 {
-    (void)argc;
-    (void)argv;
-    // Return code.
-    int r = 0;
+	(void)argc;
+	(void)argv;
+	// Return code.
+	int r = 0;
 
-    //Set up signal handling.
-    // ioc.configure_echo(IOEchoMode::cout);
+	test_code();
 
-    // GoldilocksShell* shell = new GoldilocksShell(">> ");
-    // shell->register_suite<TestSuite_CoreTypes>("P-sB01");
-    // shell->register_suite<TestSuite_FlexArray>("P-sB10");
-    // shell->register_suite<TestSuite_FlexQueue>("P-sB12");
-    // shell->register_suite<TestSuite_FlexStack>("P-sB13");
-    // shell->register_suite<TestSuite_FlexBit>("P-sB15");
-    // shell->register_suite<TestSuite_Pool>("P-sB16");
-    // shell->register_suite<TestSuite_Pawsort>("P-sB30");
-    // shell->register_suite<TestSuite_Onestring>("P-sB40");
-    // shell->register_suite<TestSuite_Onechar>("P-sB41");
+	// Set up signal handling.
+	// ioc.configure_echo(IOEchoMode::cout);
 
-    // // If we got command-line arguments.
-    // if(argc > 1)
-    // {
-    //     r = shell->command(argc, argv);
-    // }
-    // else
-    // {
-    //     ioc << IOFormatTextAttr::bold << IOFormatTextFG::blue
-    //         << "===== PawLIB Tester =====\n" << IOCtrl::endl;
+	// GoldilocksShell* shell = new GoldilocksShell(">> ");
+	// shell->register_suite<TestSuite_CoreTypes>("I-sB13");
 
-            test_code();
+	// // If we got command-line arguments.
+	// if(argc > 1)
+	// {
+	//     r = shell->command(argc, argv);
+	// }
+	// else
+	// {
+	//     ioc << IOFormatTextAttr::bold << IOFormatTextFG::blue
+	//         << "===== IOSqueak Tester =====\n" << IOCtrl::endl;
 
-    //     // Shift control to the interactive console.
-    //     shell->interactive();
-    // }
+	// 	test_code();
 
-    // // Delete our GoldilocksShell.
-    // delete shell;
-    // shell = 0;
+	//     // Shift control to the interactive console.
+	//     shell->interactive();
+	// }
 
-    return r;
+	// // Delete our GoldilocksShell.
+	// delete shell;
+
+	return r;
 }

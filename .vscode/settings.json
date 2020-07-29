@@ -1,10 +1,11 @@
 {
     "workbench.colorCustomizations": {
-        "statusBar.background": "#f9e64f",
-        "statusBarItem.hoverBackground": "#f7df1e",
-        "statusBar.foreground": "#15202b"
+        "statusBar.background": "#de8787",
+        "statusBarItem.hoverBackground": "#d35f5f",
+        "statusBar.foreground": "#15202b",
+        "statusBar.border": "#de8787"
     },
-    "peacock.color": "#f9e64f",
+    "peacock.color": "#DE8787",
     "restructuredtext.confPath": "${workspaceFolder}/docs/source",
     "files.associations": {
         "ostream": "cpp",
@@ -53,6 +54,38 @@
         "thread": "cpp",
         "cinttypes": "cpp",
         "typeinfo": "cpp",
-        "bit": "cpp"
-    }
+        "bit": "cpp",
+        "cstring": "cpp",
+        "bitset": "cpp",
+        "complex": "cpp",
+        "condition_variable": "cpp",
+        "deque": "cpp",
+        "list": "cpp",
+        "map": "cpp",
+        "iostream": "cpp",
+        "mutex": "cpp",
+        "typeindex": "cpp",
+        "cuchar": "cpp",
+        "iomanip": "cpp",
+        "compare": "cpp",
+        "concepts": "cpp",
+        "stop_token": "cpp"
+    },
+    "cSpell.words": [
+        "decimal places",
+        "format",
+        "hpp",
+        "io",
+        "ioformat",
+        "iosqueak",
+        "lengthify",
+        "reversify"
+    ],
+    "cSpell.ignoreWords": [
+        "endc",
+        "itos",
+        "sendc",
+        "sendl"
+    ],
+    "astyle.astylerc": "${workspaceRoot}/astylerc"
 }

@@ -7,6 +7,8 @@
                 "/usr/local/include",
                 "${workspaceRoot}/../libdeps/libs/include",
                 "${workspaceRoot}/../pawlib/pawlib/include",
+                "${workspaceRoot}/iosqueak-source/include/iosqueak/stringify",
+                "${workspaceRoot}/iosqueak-source/include/iosqueak",
                 "${workspaceRoot}/iosqueak-source/include"
             ],
             "defines": [],
@@ -43,6 +45,7 @@
                 "/usr/include",
                 "${workspaceRoot}/../libdeps/libs/include",
                 "${workspaceRoot}/../pawlib/pawlib/include",
+                "${workspaceRoot}/iosqueak-source/include/iosqueak/stringify",
                 "${workspaceRoot}/iosqueak-source/include/iosqueak",
                 "${workspaceRoot}/iosqueak-source/include"
             ],
@@ -65,7 +68,7 @@
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": ""
             },
-            "compilerPath": "/usr/bin/clang-7",
+            "compilerPath": "/usr/bin/clang-9",
             "cStandard": "c11",
             "cppStandard": "c++17"
         },

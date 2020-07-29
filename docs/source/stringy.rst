@@ -114,7 +114,7 @@ Float to String [``ftos()``]
 We can convert any floating-point number data type (float, double, or long
 double) to a std::string using `ftos()`.
 
-We need to specify the number of significands - in our case, the number of
+We need to specify the number of decimal places - in our case, the number of
 digits after the decimal point - to work with. Because of the nature of floating
 point numbers, the conversion is *not* perfect, as we'll see shortly.
 
@@ -123,7 +123,7 @@ of which are required:
 
 * the number to convert,
 
-* the number of significands (default=14), and
+* the number of decimal places (default=14), and
 
 * whether to use scientific notation - 0=none, 1=automatic,
   and 2=force scientific notation (default=1).
@@ -142,8 +142,8 @@ of which are required:
     // OUTPUT: -65.78324
 
 As you can see, the output is off by 0.00001. Again, this is because of
-how floating point numbers work, and the number of significands we
-specified. If we were to raise the significands to the default 14, our output
+how floating point numbers work, and the number of decimal places we
+specified. If we were to raise the decimal places to the default 14, our output
 would actually have been "-65.78324891505623".
 
 Float to C-String [``ftoa()`` & ``floatlen()``]
@@ -152,7 +152,7 @@ Float to C-String [``ftoa()`` & ``floatlen()``]
 We can convert any floating-point data type (float, double, or long double)
 to a C-string using ``ftoa()`` and ``floatlen()``.
 
-In both functions, we need to specify the number of significands - in our case,
+In both functions, we need to specify the number of decimal places - in our case,
 the number of digits after the decimal point - to work with. Because of the
 nature of floating point numbers, the conversion is *not* perfect, as we'll
 see shortly.
@@ -163,7 +163,7 @@ is required:
 
 * the number to count the characters in,
 
-* the number of significands (default=14), and
+* the number of decimal places (default=14), and
 
 * whether to count the symbols (default=true)
 
@@ -174,7 +174,7 @@ of which are required:
 
 * the number to convert,
 
-* the number of significands (default=14), and
+* the number of decimal places (default=14), and
 
 * whether to use scientific notation - 0=none, 1=automatic,
   and 2=force scientific notation (default=1).
@@ -193,8 +193,8 @@ of which are required:
     // OUTPUT: -65.78324
 
 As you can see, the output is off by 0.00001. Again, this is because of
-how floating point numbers work, and the number of significands we
-specified. If we were to raise the significands to the default 14, our output
+how floating point numbers work, and the number of decimal places we
+specified. If we were to raise the decimal places to the default 14, our output
 would actually have been "-65.78324891505623".
 
 ..  NOTE:: It is generally going to be more practical to use ``ftos()`` instead.

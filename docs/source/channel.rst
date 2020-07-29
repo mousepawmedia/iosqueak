@@ -337,11 +337,11 @@ Float and Double
 
 Float and Double can only be output in base 10 directly. (Hexadecimal output is
 only possible through a pointer memory dump. See that section.) However, the
-significands (the number of digits after the decimal point) and use of
-scientific notation can be modified. By default, significands is 14, and use of
+decimal places (the number of digits after the decimal point) and use of
+scientific notation can be modified. By default, decimal places is 14, and use of
 scientific notation is automatic for very large and small numbers.
 
-Significands can be modified using the ``IOFormatSignificands(#)`` flag.
+Decimal places can be modified using the ``IOFormatDecimalPlaces(#)`` flag.
 Scientific notation can be turned on with ``IOFormatSciNotation::on``,
 and off using ``IOFormatSciNotation::none``. It can also be reset to automatic
 with ``IOFormatSciNotation::automatic``.
@@ -349,13 +349,13 @@ with ``IOFormatSciNotation::automatic``.
 ..  code-block:: c++
 
     float foo = 12345.12345678912345;
-    ioc << "Significands 5, no sci: " << IOFormatSignificands(5) << foo << IOCtrl::endl;
-    ioc << "Significands 10, sci: " << IOFormatSignificands(10)
+    ioc << "Decimal places 5, no sci: " << IOFormatDecimalPlaces(5) << foo << IOCtrl::endl;
+    ioc << "Decimal places 10, sci: " << IOFormatDecimalPlaces(10)
         << IOFormatSciNotation::on << foo << IOCtrl::endl;
 
     /*OUTPUT:
-    Significands 5, no sci: 12345.12304
-    Significands 10, sci: 1.2345123046e+4
+    Decimal places 5, no sci: 12345.12304
+    Decimal places 10, sci: 1.2345123046e+4
     */
 
 Both types work the same.
@@ -1031,18 +1031,18 @@ Scientific Notation Format (``IOFormatSciNotation::``)
 +----------------------------------+---------------------------------------+
 
 ..  WARNING:: ``IOFormatSciNotation::none`` has been known to cause truncation
-    in very large and very small values, regardless of significands.
+    in very large and very small values, regardless of decimal places.
 
 ..  index::
-    pair: significands; format
+    pair: decimal places; format
 
-..  _channel_flags_format_significands:
+..  _channel_flags_format_decimal_places:
 
-Significands(``IOFormatSignificands()``)
+Decimal places(``IOFormatDecimalPlaces()``)
 --------------------------------------------------------
 
-``IOFormatSignificands(n)`` where ``n`` is the significands, as an integer
-representing the number of significands.
+``IOFormatDecimalPlaces(n)`` where ``n`` is the decimal places, as an integer
+representing the number of decimal places.
 
 
 ..  index::
