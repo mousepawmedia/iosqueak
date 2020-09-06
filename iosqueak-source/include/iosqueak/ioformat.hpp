@@ -218,7 +218,7 @@ enum class IOFormatBaseNotation
 	none
 };
 
-enum class IOFormatBool
+enum class IOFormatBoolStyle
 {
 	lower = 0,
 	upper = 1,
@@ -298,12 +298,16 @@ enum class IOFormatTextAttr
 {
 	/// Turn of all attributes.
 	none = 0,
-	/// Bold text. (1)
+	/// Bold text.
 	bold = (1 << 0),
-	/// Underlined text. (4)
+	/// Underlined text.
 	underline = (1 << 1),
-	/// Inverted text colors, also known as "reverse video". (6)
-	invert = (1 << 2)
+	/// Blinking text.
+	blinking = (1 << 2),
+	/// Inverted text colors, also known as "reverse video".
+	invert = (1 << 3),
+	/// Invisible
+	invisible = (1 << 4),
 };
 
 /** The standard ANSI text background colors. */
@@ -352,16 +356,20 @@ enum class IOFormatTextFG
 	white = 37
 };
 
+enum class IOFormatStandard
+{
+	// No formatting.
+	none = 0,
+	// ANSI formatting.
+	ansi = 1
+};
+
 /**Indicate how many bytes to read from any pointer that isn't
  * recognized explicitly by channel, including void pointers.
  * This will not override the memory dump read size of built-in types.*/
 struct IOMemReadSize
 {
-	/**Indicate how many bytes to read from any pointer that isn't
-	 * recognized explicitly by channel, including void pointers.
-	 * This will not override the memory dump read size of built-in
-	 * types.
-	 * CAUTION: Misuse can cause SEGFAULT or other memory errors.
+	/**CAUTION: Misuse can cause SEGFAULT or other memory errors.
 	 * \param the number of bytes to read*/
 	explicit IOMemReadSize(unsigned int i) : readsize(i) {}
 	size_t readsize = 1;
@@ -393,7 +401,7 @@ class IOFormat
 private:
 	IOFormatBase fmt_base;
 	IOFormatBaseNotation fmt_base_notation;
-	IOFormatBool fmt_bool;
+	IOFormatBoolStyle fmt_bool_style;
 	IOFormatCharValue fmt_char_value;
 	IOFormatDecimalPlaces fmt_decimal_places;
 	IOFormatMemSep fmt_mem_sep;
@@ -401,6 +409,7 @@ private:
 	IOFormatPtr fmt_ptr;
 	IOFormatSciNotation fmt_sci_notation;
 	IOFormatSign fmt_sign;
+	IOFormatStandard fmt_standard;
 	IOFormatTextAttr fmt_text_attr;
 	IOFormatTextBG fmt_text_bg;
 	IOFormatTextFG fmt_text_fg;
@@ -409,32 +418,165 @@ public:
 	IOFormat()
 	: fmt_base(IOFormatBase::b10),
 	  fmt_base_notation(IOFormatBaseNotation::prefix),
-	  fmt_bool(IOFormatBool::lower), fmt_char_value(IOFormatCharValue::as_char),
+	  fmt_bool_style(IOFormatBoolStyle::lower),
+	  fmt_char_value(IOFormatCharValue::as_char),
 	  fmt_decimal_places(IOFormatDecimalPlaces(14)),
 	  fmt_mem_sep(IOFormatMemSep::all),
 	  fmt_numeral_case(IOFormatNumCase::upper), fmt_ptr(IOFormatPtr::value),
 	  fmt_sci_notation(IOFormatSciNotation::automatic),
 	  fmt_sign(IOFormatSign::automatic), fmt_text_attr(IOFormatTextAttr::none),
-	  fmt_text_bg(IOFormatTextBG::none), fmt_text_fg(IOFormatTextFG::none)
+	  fmt_standard(IOFormatStandard::ansi), fmt_text_bg(IOFormatTextBG::none),
+	  fmt_text_fg(IOFormatTextFG::none)
 	{
 	}
 
 	IOFormat(const IOFormat& cpy)
 	: fmt_base(cpy.fmt_base), fmt_base_notation(cpy.fmt_base_notation),
-	  fmt_bool(cpy.fmt_bool), fmt_char_value(cpy.fmt_char_value),
+	  fmt_bool_style(cpy.fmt_bool_style), fmt_char_value(cpy.fmt_char_value),
 	  fmt_decimal_places(cpy.fmt_decimal_places), fmt_mem_sep(cpy.fmt_mem_sep),
 	  fmt_numeral_case(cpy.fmt_numeral_case), fmt_ptr(cpy.fmt_ptr),
 	  fmt_sci_notation(cpy.fmt_sci_notation), fmt_sign(cpy.fmt_sign),
-	  fmt_text_attr(cpy.fmt_text_attr), fmt_text_bg(cpy.fmt_text_bg),
-	  fmt_text_fg(cpy.fmt_text_fg)
+	  fmt_standard(copy.fmt_standard), fmt_text_attr(cpy.fmt_text_attr),
+	  fmt_text_bg(cpy.fmt_text_bg), fmt_text_fg(cpy.fmt_text_fg)
 	{
+	}
+
+	const IOFormatBase& base() const { return fmt_base; }
+	const IOFormatBaseNotation& base_notation() const
+	{
+		return fmt_base_notation;
+	}
+	const IOFormatBoolStyle& bool_style() const { return fmt_bool_style; }
+	const IOFormatCharValue& char_value() const { return fmt_char_value; }
+	const IOFormatDecimalPlaces& decimal_places() const
+	{
+		return fmt_decimal_places;
+	}
+	const IOFormatMemSep& mem_sep() const { return fmt_mem_sep; }
+	const IOFormatNumCase& numeral_case() const { return fmt_numeral_case; }
+	const IOFormatPtr& ptr() const { return fmt_ptr; }
+	const IOFormatSciNotation& sci_notation() const { return fmt_sci_notation; }
+	const IOFormatSign& sign() const { return fmt_sign; }
+	const IOFormatTextAttr& text_attr() const { return fmt_text_attr; }
+	const std::string text_attr(IOFormatStandard& standard) const
+	{
+		if (standard == IOFormatStandard::ansi)
+		{
+			// TODO: Instead, treat as bitfield and combine.
+				case IOFormatTextAttr::none:
+					return "0";
+				case IOFormatTextAttr::bold:
+					return "1";
+				case IOFormatTextAttr::underline:
+					return "4";
+				case IOFormatTextAttr::blinking:
+					return "5";
+				case IOFormatTextAttr::invert:
+					return "6"
+				case IOFormatTextAttr::invisible:
+					return "8";
+			}
+		}
+		return "";
+	}
+
+	const IOFormatTextBG& text_bg() const { return fmt_text_bg; }
+	const std::string text_bg(IOFormatStandard& standard) const
+	{
+		if (standard == IOFormatStandard::ansi)
+		{
+			switch (fmt_text_bg)
+			{
+				case IOFormatTextBG::none:
+					return "0";
+				case IOFormatTextBG::black:
+					return "40";
+				case IOFormatTextBG::red:
+					return "41";
+				case IOFormatTextBG::green:
+					return "42";
+				case IOFormatTextBG::yellow:
+					return "43";
+				case IOFormatTextBG::blue:
+					return "44";
+				case IOFormatTextBG::magenta:
+					return "45";
+				case IOFormatTextBG::cyan:
+					return "46";
+				case IOFormatTextBG::white:
+					return "47";
+			}
+		}
+		return "";
+	}
+
+	const IOFormatTextFG& text_fg() const { return fmt_text_fg; }
+	const std::string text_fg(IOFormatStandard& standard) const
+	{
+		if (standard == IOFormatStandard::ansi)
+		{
+			switch (fmt_text_bg)
+			{
+				case IOFormatTextFG::none:
+					return "0";
+				case IOFormatTextFG::black:
+					return "30";
+				case IOFormatTextFG::red:
+					return "31";
+				case IOFormatTextFG::green:
+					return "32";
+				case IOFormatTextFG::yellow:
+					return "33";
+				case IOFormatTextFG::blue:
+					return "34";
+				case IOFormatTextFG::magenta:
+					return "35";
+				case IOFormatTextFG::cyan:
+					return "36";
+				case IOFormatTextFG::white:
+					return "37";
+			}
+		}
+		return "";
+	}
+
+	/* Generate a terminal format string (e.g. ANSI SGR) for the current
+	 * formatting flags.
+	 */
+	const std::string format_string(IOFormatStandard& standard) const
+	{
+		std::string format = "";
+		switch (standard)
+		{
+			case IOFormatStandard::none:
+				break;
+			case IOFormatStandard::ansi:
+				format += "\033[";
+				format += text_attr(standard);
+				if (fmt.fmt_text_bg != IOFormatTextBG::none)
+				{
+					format += ";" + text_bg(standard);
+				}
+
+				if (fmt.fmt_text_fg != IOFormatTextFG:none)
+				{
+					format += ";" + text_fg(standard);
+				}
+
+		}
+		return format;
+	}
+
+	const std::string format_string() const
+	{
+		return format_string(this->fmt_standard);
 	}
 
 	IOFormat& operator=(const IOFormat& cpy)
 	{
 		fmt_base = cpy.fmt_base;
 		fmt_base_notation = cpy.fmt_base_notation;
-		fmt_bool = cpy.fmt_bool;
+		fmt_bool_style = cpy.fmt_bool_style;
 		fmt_char_value = cpy.fmt_char_value;
 		fmt_decimal_places = cpy.fmt_decimal_places;
 		fmt_mem_sep = cpy.fmt_mem_sep;
@@ -442,6 +584,7 @@ public:
 		fmt_ptr = cpy.fmt_ptr;
 		fmt_sci_notation = cpy.fmt_sci_notation;
 		fmt_sign = cpy.fmt_sign;
+		fmt_standard = cpy.fmt_standard;
 		fmt_text_attr = cpy.fmt_text_attr;
 		fmt_text_bg = cpy.fmt_text_bg;
 		fmt_text_fg = cpy.fmt_text_fg;
@@ -458,9 +601,9 @@ public:
 		fmt_base_notation = rhs;
 		return *this;
 	}
-	IOFormat& operator<<(const IOFormatBool& rhs)
+	IOFormat& operator<<(const IOFormatBoolStyle& rhs)
 	{
-		fmt_bool = rhs;
+		fmt_bool_style = rhs;
 		return *this;
 	}
 	IOFormat& operator<<(const IOFormatCharValue& rhs)
@@ -498,6 +641,11 @@ public:
 		fmt_sign = rhs;
 		return *this;
 	}
+	IOFormat& operator<<(const IOFormatStandard& rhs)
+	{
+		fmt_standard = rhs;
+		return *this;
+	}
 	IOFormat& operator<<(const IOFormatTextAttr& rhs)
 	{
 		fmt_text_attr = rhs;
@@ -515,48 +663,128 @@ public:
 	}
 };
 
-// clang-format off
-
-template<typename T> T operator&(const T& lhs, const T& rhs)
+template<typename T>
+T flags_and(const T& lhs, const T& rhs)
 {
 	return static_cast<T>(static_cast<int>(lhs) & static_cast<int>(rhs));
 }
-template<> IOCat operator&<IOCat>(const IOCat&, const IOCat&);
-template<> IOCtrl operator&<IOCtrl>(const IOCtrl&, const IOCtrl&);
-template<> IOFormatMemSep operator&<IOFormatMemSep>(const IOFormatMemSep&, const IOFormatMemSep&);
-template<> IOFormatPtr operator&<IOFormatPtr>(const IOFormatPtr&, const IOFormatPtr&);
-template<> IOFormatTextAttr operator&<IOFormatTextAttr>(const IOFormatTextAttr&, const IOFormatTextAttr&);
 
-template<typename T> T operator|(const T& lhs, const T& rhs)
+template<typename T>
+T flags_or(const T& lhs, const T& rhs)
 {
 	return static_cast<T>(static_cast<int>(lhs) | static_cast<int>(rhs));
 }
-template<> IOCat operator|<IOCat>(const IOCat&, const IOCat&);
-template<> IOCtrl operator|<IOCtrl>(const IOCtrl&, const IOCtrl&);
-template<> IOFormatMemSep operator|<IOFormatMemSep>(const IOFormatMemSep&, const IOFormatMemSep&);
-template<> IOFormatPtr operator|<IOFormatPtr>(const IOFormatPtr&, const IOFormatPtr&);
-template<> IOFormatTextAttr operator|<IOFormatTextAttr>(const IOFormatTextAttr&, const IOFormatTextAttr&);
 
-template<typename T> T operator^(const T& lhs, const T& rhs)
+template<typename T>
+T flags_xor(const T& lhs, const T& rhs)
 {
 	return static_cast<T>(static_cast<int>(lhs) ^ static_cast<int>(rhs));
 }
-template<> IOCat operator^<IOCat>(const IOCat&, const IOCat&);
-template<> IOCtrl operator^<IOCtrl>(const IOCtrl&, const IOCtrl&);
-template<> IOFormatMemSep operator^<IOFormatMemSep>(const IOFormatMemSep&, const IOFormatMemSep&);
-template<> IOFormatPtr operator^<IOFormatPtr>(const IOFormatPtr&, const IOFormatPtr&);
-template<> IOFormatTextAttr operator^<IOFormatTextAttr>(const IOFormatTextAttr&, const IOFormatTextAttr&);
 
-template<typename T> T operator~(const T& rhs)
+template<typename T>
+T flags_twiddle(const T& rhs)
 {
 	return static_cast<T>(~static_cast<int>(rhs));
 }
-template<> IOCat operator~<IOCat>(const IOCat&);
-template<> IOCtrl operator~<IOCtrl>(const IOCtrl&);
-template<> IOFormatMemSep operator~<IOFormatMemSep>(const IOFormatMemSep&);
-template<> IOFormatPtr operator~<IOFormatPtr>(const IOFormatPtr&);
-template<> IOFormatTextAttr operator~<IOFormatTextAttr>(const IOFormatTextAttr&);
 
-// clang-format on
+inline IOCat operator&(const IOCat& lhs, const IOCat& rhs)
+{
+	return flags_and(lhs, rhs);
+}
+
+inline IOCat operator|(const IOCat& lhs, const IOCat& rhs)
+{
+	return flags_or(lhs, rhs);
+}
+
+inline IOCat operator^(const IOCat& lhs, const IOCat& rhs)
+{
+	return flags_xor(lhs, rhs);
+}
+
+inline IOCat operator~(const IOCat& lhs) { return flags_twiddle(lhs); }
+
+inline IOCtrl operator&(const IOCtrl& lhs, const IOCtrl& rhs)
+{
+	return flags_and(lhs, rhs);
+}
+
+inline IOCtrl operator|(const IOCtrl& lhs, const IOCtrl& rhs)
+{
+	return flags_or(lhs, rhs);
+}
+
+inline IOCtrl operator^(const IOCtrl& lhs, const IOCtrl& rhs)
+{
+	return flags_xor(lhs, rhs);
+}
+
+inline IOCtrl operator~(const IOCtrl& lhs) { return flags_twiddle(lhs); }
+
+inline IOFormatMemSep operator&(const IOFormatMemSep& lhs,
+								const IOFormatMemSep& rhs)
+{
+	return flags_and(lhs, rhs);
+}
+
+inline IOFormatMemSep operator|(const IOFormatMemSep& lhs,
+								const IOFormatMemSep& rhs)
+{
+	return flags_or(lhs, rhs);
+}
+
+inline IOFormatMemSep operator^(const IOFormatMemSep& lhs,
+								const IOFormatMemSep& rhs)
+{
+	return flags_xor(lhs, rhs);
+}
+
+inline IOFormatMemSep operator~(const IOFormatMemSep& lhs)
+{
+	return flags_twiddle(lhs);
+}
+
+inline IOFormatPtr operator&(const IOFormatPtr& lhs, const IOFormatPtr& rhs)
+{
+	return flags_and(lhs, rhs);
+}
+
+inline IOFormatPtr operator|(const IOFormatPtr& lhs, const IOFormatPtr& rhs)
+{
+	return flags_or(lhs, rhs);
+}
+
+inline IOFormatPtr operator^(const IOFormatPtr& lhs, const IOFormatPtr& rhs)
+{
+	return flags_xor(lhs, rhs);
+}
+
+inline IOFormatPtr operator~(const IOFormatPtr& lhs)
+{
+	return flags_twiddle(lhs);
+}
+
+inline IOFormatTextAttr operator&(const IOFormatTextAttr& lhs,
+								  const IOFormatTextAttr& rhs)
+{
+	return flags_and(lhs, rhs);
+}
+
+inline IOFormatTextAttr operator|(const IOFormatTextAttr& lhs,
+								  const IOFormatTextAttr& rhs)
+{
+	return flags_or(lhs, rhs);
+}
+
+inline IOFormatTextAttr operator^(const IOFormatTextAttr& lhs,
+								  const IOFormatTextAttr& rhs)
+{
+	return flags_xor(lhs, rhs);
+}
+
+inline IOFormatTextAttr operator~(const IOFormatTextAttr& lhs)
+{
+	return flags_twiddle(lhs);
+}
 
 #endif

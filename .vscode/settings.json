@@ -2,8 +2,7 @@
     "workbench.colorCustomizations": {
         "statusBar.background": "#de8787",
         "statusBarItem.hoverBackground": "#d35f5f",
-        "statusBar.foreground": "#15202b",
-        "statusBar.border": "#de8787"
+        "statusBar.foreground": "#15202b"
     },
     "peacock.color": "#DE8787",
     "restructuredtext.confPath": "${workspaceFolder}/docs/source",
