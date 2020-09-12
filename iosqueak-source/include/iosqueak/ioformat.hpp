@@ -296,64 +296,58 @@ enum class IOFormatSign
 /**The standard ANSI text attributes.*/
 enum class IOFormatTextAttr
 {
-	/// Turn of all attributes.
+	/// Turn off all attributes.
 	none = 0,
-	/// Bold text.
 	bold = (1 << 0),
-	/// Underlined text.
-	underline = (1 << 1),
-	/// Blinking text.
-	blinking = (1 << 2),
-	/// Inverted text colors, also known as "reverse video".
-	invert = (1 << 3),
-	/// Invisible
-	invisible = (1 << 4),
+	faint = (1 << 1),
+	italic = (1 << 2),
+	underline = (1 << 3),
+	blink_slow = (1 << 4),
+	blink_fast = (1 << 5),
+	// Invert is also Reverse Video
+	invert = (1 << 6),
+	invisible = (1 << 7),
+	strikethrough = (1 << 8),
+	double_underline = (1 << 9),
+	// Same option turns off bold and faint
+	no_bold = (1 << 10),
+	no_faint = (1 << 10),
+	no_italic = (1 << 11),
+	// Same option turns off both single and double underline
+	no_underline = (1 << 12),
+	no_slow_blink = (1 << 13),
+	no_fast_blink = (1 << 14),
+	no_invert = (1 << 15),
+	no_invisible = (1 << 16),
+	no_strikethorugh = (1 << 17)
 };
 
 /** The standard ANSI text background colors. */
 enum class IOFormatTextBG
 {
-	// None.
 	none = 0,
-	/// Black text background.
-	black = 40,
-	/// Red text background.
-	red = 41,
-	/// Green text background.
-	green = 42,
-	/// Yellow text background.
-	yellow = 43,
-	/// Blue text background.
-	blue = 44,
-	/// Magenta text background.
-	magenta = 45,
-	/// Cyan text background.
-	cyan = 46,
-	/// White text background.
-	white = 47
+	black = 1,
+	red = 2,
+	green = 3,
+	yellow = 4,
+	blue = 5,
+	magenta = 6,
+	cyan = 7,
+	white = 8
 };
 
 /** The standard ANSI text foreground colors. */
 enum class IOFormatTextFG
 {
-	// None.
 	none = 0,
-	/// Black text.
-	black = 30,
-	/// Red text.
-	red = 31,
-	/// Green text
-	green = 32,
-	/// Yellow text.
-	yellow = 33,
-	/// Blue text.
-	blue = 34,
-	/// Magenta text.
-	magenta = 35,
-	/// Cyan text.
-	cyan = 36,
-	/// White text.
-	white = 37
+	black = 1,
+	red = 2,
+	green = 3,
+	yellow = 4,
+	blue = 5,
+	magenta = 6,
+	cyan = 7,
+	white = 8
 };
 
 enum class IOFormatStandard
@@ -394,6 +388,136 @@ enum class IOVrb
 	tmi = 3
 };
 
+template<typename T>
+T flags_and(const T& lhs, const T& rhs)
+{
+	return static_cast<T>(static_cast<int>(lhs) & static_cast<int>(rhs));
+}
+
+template<typename T>
+T flags_or(const T& lhs, const T& rhs)
+{
+	return static_cast<T>(static_cast<int>(lhs) | static_cast<int>(rhs));
+}
+
+template<typename T>
+T flags_xor(const T& lhs, const T& rhs)
+{
+	return static_cast<T>(static_cast<int>(lhs) ^ static_cast<int>(rhs));
+}
+
+template<typename T>
+T flags_twiddle(const T& rhs)
+{
+	return static_cast<T>(~static_cast<int>(rhs));
+}
+
+template<typename T>
+bool flags_check(const T& field, const T& value)
+{
+	return static_cast<bool>(field & value);
+}
+
+inline IOCat operator&(const IOCat& lhs, const IOCat& rhs)
+{
+	return flags_and(lhs, rhs);
+}
+
+inline IOCat operator|(const IOCat& lhs, const IOCat& rhs)
+{
+	return flags_or(lhs, rhs);
+}
+
+inline IOCat operator^(const IOCat& lhs, const IOCat& rhs)
+{
+	return flags_xor(lhs, rhs);
+}
+
+inline IOCat operator~(const IOCat& lhs) { return flags_twiddle(lhs); }
+
+inline IOCtrl operator&(const IOCtrl& lhs, const IOCtrl& rhs)
+{
+	return flags_and(lhs, rhs);
+}
+
+inline IOCtrl operator|(const IOCtrl& lhs, const IOCtrl& rhs)
+{
+	return flags_or(lhs, rhs);
+}
+
+inline IOCtrl operator^(const IOCtrl& lhs, const IOCtrl& rhs)
+{
+	return flags_xor(lhs, rhs);
+}
+
+inline IOCtrl operator~(const IOCtrl& lhs) { return flags_twiddle(lhs); }
+
+inline IOFormatMemSep operator&(const IOFormatMemSep& lhs,
+								const IOFormatMemSep& rhs)
+{
+	return flags_and(lhs, rhs);
+}
+
+inline IOFormatMemSep operator|(const IOFormatMemSep& lhs,
+								const IOFormatMemSep& rhs)
+{
+	return flags_or(lhs, rhs);
+}
+
+inline IOFormatMemSep operator^(const IOFormatMemSep& lhs,
+								const IOFormatMemSep& rhs)
+{
+	return flags_xor(lhs, rhs);
+}
+
+inline IOFormatMemSep operator~(const IOFormatMemSep& lhs)
+{
+	return flags_twiddle(lhs);
+}
+
+inline IOFormatPtr operator&(const IOFormatPtr& lhs, const IOFormatPtr& rhs)
+{
+	return flags_and(lhs, rhs);
+}
+
+inline IOFormatPtr operator|(const IOFormatPtr& lhs, const IOFormatPtr& rhs)
+{
+	return flags_or(lhs, rhs);
+}
+
+inline IOFormatPtr operator^(const IOFormatPtr& lhs, const IOFormatPtr& rhs)
+{
+	return flags_xor(lhs, rhs);
+}
+
+inline IOFormatPtr operator~(const IOFormatPtr& lhs)
+{
+	return flags_twiddle(lhs);
+}
+
+inline IOFormatTextAttr operator&(const IOFormatTextAttr& lhs,
+								  const IOFormatTextAttr& rhs)
+{
+	return flags_and(lhs, rhs);
+}
+
+inline IOFormatTextAttr operator|(const IOFormatTextAttr& lhs,
+								  const IOFormatTextAttr& rhs)
+{
+	return flags_or(lhs, rhs);
+}
+
+inline IOFormatTextAttr operator^(const IOFormatTextAttr& lhs,
+								  const IOFormatTextAttr& rhs)
+{
+	return flags_xor(lhs, rhs);
+}
+
+inline IOFormatTextAttr operator~(const IOFormatTextAttr& lhs)
+{
+	return flags_twiddle(lhs);
+}
+
 class IOFormat
 {
 	friend channel;
@@ -424,8 +548,8 @@ public:
 	  fmt_mem_sep(IOFormatMemSep::all),
 	  fmt_numeral_case(IOFormatNumCase::upper), fmt_ptr(IOFormatPtr::value),
 	  fmt_sci_notation(IOFormatSciNotation::automatic),
-	  fmt_sign(IOFormatSign::automatic), fmt_text_attr(IOFormatTextAttr::none),
-	  fmt_standard(IOFormatStandard::ansi), fmt_text_bg(IOFormatTextBG::none),
+	  fmt_sign(IOFormatSign::automatic), fmt_standard(IOFormatStandard::ansi),
+	  fmt_text_attr(IOFormatTextAttr::none), fmt_text_bg(IOFormatTextBG::none),
 	  fmt_text_fg(IOFormatTextFG::none)
 	{
 	}
@@ -436,7 +560,7 @@ public:
 	  fmt_decimal_places(cpy.fmt_decimal_places), fmt_mem_sep(cpy.fmt_mem_sep),
 	  fmt_numeral_case(cpy.fmt_numeral_case), fmt_ptr(cpy.fmt_ptr),
 	  fmt_sci_notation(cpy.fmt_sci_notation), fmt_sign(cpy.fmt_sign),
-	  fmt_standard(copy.fmt_standard), fmt_text_attr(cpy.fmt_text_attr),
+	  fmt_standard(cpy.fmt_standard), fmt_text_attr(cpy.fmt_text_attr),
 	  fmt_text_bg(cpy.fmt_text_bg), fmt_text_fg(cpy.fmt_text_fg)
 	{
 	}
@@ -458,83 +582,150 @@ public:
 	const IOFormatSciNotation& sci_notation() const { return fmt_sci_notation; }
 	const IOFormatSign& sign() const { return fmt_sign; }
 	const IOFormatTextAttr& text_attr() const { return fmt_text_attr; }
-	const std::string text_attr(IOFormatStandard& standard) const
+	const std::string text_attr(const IOFormatStandard& standard) const
 	{
+		std::string str_text_attr = "";
+		// https://mudhalla.net/tintin/info/ansicolor/
 		if (standard == IOFormatStandard::ansi)
 		{
-			// TODO: Instead, treat as bitfield and combine.
-				case IOFormatTextAttr::none:
-					return "0";
-				case IOFormatTextAttr::bold:
-					return "1";
-				case IOFormatTextAttr::underline:
-					return "4";
-				case IOFormatTextAttr::blinking:
-					return "5";
-				case IOFormatTextAttr::invert:
-					return "6"
-				case IOFormatTextAttr::invisible:
-					return "8";
+			if (flags_check(fmt_text_attr, IOFormatTextAttr::none))
+			{
+				str_text_attr += ";0";
+			}
+			if (flags_check(fmt_text_attr, IOFormatTextAttr::bold))
+			{
+				str_text_attr += ";1";
+			}
+			if (flags_check(fmt_text_attr, IOFormatTextAttr::faint))
+			{
+				str_text_attr += ";2";
+			}
+			if (flags_check(fmt_text_attr, IOFormatTextAttr::italic))
+			{
+				str_text_attr += ";3";
+			}
+
+			if (flags_check(fmt_text_attr, IOFormatTextAttr::underline))
+			{
+				str_text_attr += ";4";
+			}
+			if (flags_check(fmt_text_attr, IOFormatTextAttr::blink_slow))
+			{
+				str_text_attr += ";5";
+			}
+			if (flags_check(fmt_text_attr, IOFormatTextAttr::blink_fast))
+			{
+				str_text_attr += ";6";
+			}
+			if (flags_check(fmt_text_attr, IOFormatTextAttr::invert))
+			{
+				str_text_attr += ";7";
+			}
+			if (flags_check(fmt_text_attr, IOFormatTextAttr::invisible))
+			{
+				str_text_attr += ";8";
+			}
+			if (flags_check(fmt_text_attr, IOFormatTextAttr::double_underline))
+			{
+				str_text_attr += ";9";
+			}
+			if (flags_check(fmt_text_attr, IOFormatTextAttr::strikethrough))
+			{
+				str_text_attr += ";21";
+			}
+
+			// After turning ON features, turn OFF other features.
+			if (flags_check(fmt_text_attr, IOFormatTextAttr::no_bold))
+			{
+				str_text_attr += ";22";
+			}
+			if (flags_check(fmt_text_attr, IOFormatTextAttr::no_italic))
+			{
+				str_text_attr += ";23";
+			}
+			if (flags_check(fmt_text_attr, IOFormatTextAttr::no_underline))
+			{
+				str_text_attr += ";24";
+			}
+			if (flags_check(fmt_text_attr, IOFormatTextAttr::no_slow_blink))
+			{
+				str_text_attr += ";25";
+			}
+			if (flags_check(fmt_text_attr, IOFormatTextAttr::no_fast_blink))
+			{
+				str_text_attr += ";26";
+			}
+			if (flags_check(fmt_text_attr, IOFormatTextAttr::no_invert))
+			{
+				str_text_attr += ";27";
+			}
+			if (flags_check(fmt_text_attr, IOFormatTextAttr::no_invisible))
+			{
+				str_text_attr += ";28";
+			}
+			if (flags_check(fmt_text_attr, IOFormatTextAttr::no_strikethorugh))
+			{
+				str_text_attr += ";28";
 			}
 		}
-		return "";
+		return str_text_attr;
 	}
 
 	const IOFormatTextBG& text_bg() const { return fmt_text_bg; }
-	const std::string text_bg(IOFormatStandard& standard) const
+	const std::string text_bg(const IOFormatStandard& standard) const
 	{
 		if (standard == IOFormatStandard::ansi)
 		{
 			switch (fmt_text_bg)
 			{
 				case IOFormatTextBG::none:
-					return "0";
+					return ";49";
 				case IOFormatTextBG::black:
-					return "40";
+					return ";40";
 				case IOFormatTextBG::red:
-					return "41";
+					return ";41";
 				case IOFormatTextBG::green:
-					return "42";
+					return ";42";
 				case IOFormatTextBG::yellow:
-					return "43";
+					return ";43";
 				case IOFormatTextBG::blue:
-					return "44";
+					return ";44";
 				case IOFormatTextBG::magenta:
-					return "45";
+					return ";45";
 				case IOFormatTextBG::cyan:
-					return "46";
+					return ";46";
 				case IOFormatTextBG::white:
-					return "47";
+					return ";47";
 			}
 		}
 		return "";
 	}
 
 	const IOFormatTextFG& text_fg() const { return fmt_text_fg; }
-	const std::string text_fg(IOFormatStandard& standard) const
+	const std::string text_fg(const IOFormatStandard& standard) const
 	{
 		if (standard == IOFormatStandard::ansi)
 		{
-			switch (fmt_text_bg)
+			switch (fmt_text_fg)
 			{
 				case IOFormatTextFG::none:
-					return "0";
+					return ";39";
 				case IOFormatTextFG::black:
-					return "30";
+					return ";30";
 				case IOFormatTextFG::red:
-					return "31";
+					return ";31";
 				case IOFormatTextFG::green:
-					return "32";
+					return ";32";
 				case IOFormatTextFG::yellow:
-					return "33";
+					return ";33";
 				case IOFormatTextFG::blue:
-					return "34";
+					return ";34";
 				case IOFormatTextFG::magenta:
-					return "35";
+					return ";35";
 				case IOFormatTextFG::cyan:
-					return "36";
+					return ";36";
 				case IOFormatTextFG::white:
-					return "37";
+					return ";37";
 			}
 		}
 		return "";
@@ -543,7 +734,7 @@ public:
 	/* Generate a terminal format string (e.g. ANSI SGR) for the current
 	 * formatting flags.
 	 */
-	const std::string format_string(IOFormatStandard& standard) const
+	const std::string format_string(const IOFormatStandard& standard) const
 	{
 		std::string format = "";
 		switch (standard)
@@ -553,12 +744,11 @@ public:
 			case IOFormatStandard::ansi:
 				format += "\033[";
 				format += text_attr(standard);
-				if (fmt.fmt_text_bg != IOFormatTextBG::none)
+				if (fmt_text_bg != IOFormatTextBG::none)
 				{
 					format += ";" + text_bg(standard);
 				}
-
-				if (fmt.fmt_text_fg != IOFormatTextFG:none)
+				if (fmt_text_fg != IOFormatTextFG::none)
 				{
 					format += ";" + text_fg(standard);
 				}
@@ -662,129 +852,5 @@ public:
 		return *this;
 	}
 };
-
-template<typename T>
-T flags_and(const T& lhs, const T& rhs)
-{
-	return static_cast<T>(static_cast<int>(lhs) & static_cast<int>(rhs));
-}
-
-template<typename T>
-T flags_or(const T& lhs, const T& rhs)
-{
-	return static_cast<T>(static_cast<int>(lhs) | static_cast<int>(rhs));
-}
-
-template<typename T>
-T flags_xor(const T& lhs, const T& rhs)
-{
-	return static_cast<T>(static_cast<int>(lhs) ^ static_cast<int>(rhs));
-}
-
-template<typename T>
-T flags_twiddle(const T& rhs)
-{
-	return static_cast<T>(~static_cast<int>(rhs));
-}
-
-inline IOCat operator&(const IOCat& lhs, const IOCat& rhs)
-{
-	return flags_and(lhs, rhs);
-}
-
-inline IOCat operator|(const IOCat& lhs, const IOCat& rhs)
-{
-	return flags_or(lhs, rhs);
-}
-
-inline IOCat operator^(const IOCat& lhs, const IOCat& rhs)
-{
-	return flags_xor(lhs, rhs);
-}
-
-inline IOCat operator~(const IOCat& lhs) { return flags_twiddle(lhs); }
-
-inline IOCtrl operator&(const IOCtrl& lhs, const IOCtrl& rhs)
-{
-	return flags_and(lhs, rhs);
-}
-
-inline IOCtrl operator|(const IOCtrl& lhs, const IOCtrl& rhs)
-{
-	return flags_or(lhs, rhs);
-}
-
-inline IOCtrl operator^(const IOCtrl& lhs, const IOCtrl& rhs)
-{
-	return flags_xor(lhs, rhs);
-}
-
-inline IOCtrl operator~(const IOCtrl& lhs) { return flags_twiddle(lhs); }
-
-inline IOFormatMemSep operator&(const IOFormatMemSep& lhs,
-								const IOFormatMemSep& rhs)
-{
-	return flags_and(lhs, rhs);
-}
-
-inline IOFormatMemSep operator|(const IOFormatMemSep& lhs,
-								const IOFormatMemSep& rhs)
-{
-	return flags_or(lhs, rhs);
-}
-
-inline IOFormatMemSep operator^(const IOFormatMemSep& lhs,
-								const IOFormatMemSep& rhs)
-{
-	return flags_xor(lhs, rhs);
-}
-
-inline IOFormatMemSep operator~(const IOFormatMemSep& lhs)
-{
-	return flags_twiddle(lhs);
-}
-
-inline IOFormatPtr operator&(const IOFormatPtr& lhs, const IOFormatPtr& rhs)
-{
-	return flags_and(lhs, rhs);
-}
-
-inline IOFormatPtr operator|(const IOFormatPtr& lhs, const IOFormatPtr& rhs)
-{
-	return flags_or(lhs, rhs);
-}
-
-inline IOFormatPtr operator^(const IOFormatPtr& lhs, const IOFormatPtr& rhs)
-{
-	return flags_xor(lhs, rhs);
-}
-
-inline IOFormatPtr operator~(const IOFormatPtr& lhs)
-{
-	return flags_twiddle(lhs);
-}
-
-inline IOFormatTextAttr operator&(const IOFormatTextAttr& lhs,
-								  const IOFormatTextAttr& rhs)
-{
-	return flags_and(lhs, rhs);
-}
-
-inline IOFormatTextAttr operator|(const IOFormatTextAttr& lhs,
-								  const IOFormatTextAttr& rhs)
-{
-	return flags_or(lhs, rhs);
-}
-
-inline IOFormatTextAttr operator^(const IOFormatTextAttr& lhs,
-								  const IOFormatTextAttr& rhs)
-{
-	return flags_xor(lhs, rhs);
-}
-
-inline IOFormatTextAttr operator~(const IOFormatTextAttr& lhs)
-{
-	return flags_twiddle(lhs);
-}
 
 #endif
