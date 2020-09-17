@@ -86,6 +86,7 @@ help:
 
 clean:
 	$(MAKE) clean -C iosqueak-tester
+	$(RM_DIR) iosqueak
 	$(RM) tester_debug
 	$(RM) tester
 .PHONY: clean

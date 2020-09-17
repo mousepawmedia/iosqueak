@@ -54,20 +54,8 @@
 
 void dummy_func(int, int, bool) { return; }
 
-/** Temporary test code goes in this function ONLY.
- * All test code that is needed long term should be
- * moved to a dedicated Goldilocks Test and TestSuite.
- */
-void test_code()
+void test_stringify()
 {
-	/*
-	int value = 42;
-	out << IOFormatPtr::value << &value << IOCtrl::endl;
-
-	out << IOFormatPtr::address << reinterpret_cast<void*>(test_code) <<
-	IOCtrl::endl;
-	*/
-
 	std::cout << "Bool: " << stringify(true) << std::endl;
 	std::cout << "Char: " << stringify('c') << std::endl;
 	std::cout << "Integer: " << stringify(-12345) << std::endl;
@@ -112,6 +100,21 @@ void test_code()
 
 	std::cout << "Function: "
 			  << stringify("dummy_func", dummy_func, 42, 42, true) << std::endl;
+}
+
+/** Temporary test code goes in this function ONLY.
+ * All test code that is needed long term should be
+ * moved to a dedicated Goldilocks Test and TestSuite.
+ */
+void test_code()
+{
+	int value = 42;
+	channel << value << IOCtrl::endl;
+	channel << IOFormatPtr::value << &value << IOCtrl::endl;
+
+	channel << IOFormatPtr::address
+		<< reinterpret_cast<void*>(test_code)
+		<< IOCtrl::endl;
 }
 
 /////// WARNING: DO NOT ALTER BELOW THIS POINT! ///////

@@ -291,8 +291,6 @@ enum class IOFormatSign
 	always = 1
 };
 
-// TODO: Create separate enum(s) [NOT enum classes] containing ANSI codes.
-
 /**The standard ANSI text attributes.*/
 enum class IOFormatTextAttr
 {
@@ -581,6 +579,7 @@ public:
 	const IOFormatPtr& ptr() const { return fmt_ptr; }
 	const IOFormatSciNotation& sci_notation() const { return fmt_sci_notation; }
 	const IOFormatSign& sign() const { return fmt_sign; }
+	const IOFormatStandard& standard() const { return fmt_standard; }
 	const IOFormatTextAttr& text_attr() const { return fmt_text_attr; }
 	const std::string text_attr(const IOFormatStandard& standard) const
 	{
@@ -760,6 +759,13 @@ public:
 	const std::string format_string() const
 	{
 		return format_string(this->fmt_standard);
+	}
+
+	void reset_attributes()
+	{
+		this->fmt_text_attr = IOFormatTextAttr::none;
+		this->fmt_text_fg = IOFormatTextFG::none;
+		this->fmt_text_bg = IOFormatTextBG::none;
 	}
 
 	IOFormat& operator=(const IOFormat& cpy)
