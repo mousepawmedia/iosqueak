@@ -93,7 +93,7 @@ size_t lengthify(
 	return lengthify_integral(val, base, sign, notation);
 }
 
-size_t lengthify(const bool& val, const IOFormatBoolStyle& fmt = IOFormatBoolStyle::lower)
+size_t lengthify(const bool& val, const IOFormatBool& fmt = IOFormatBool::lower)
 {
 	return lengthify_boolean(val, fmt);
 }
@@ -109,16 +109,6 @@ std::string stringify(const T& val)
 {
 	// See http://www.gotw.ca/publications/mill17.htm
 	return _StringifyImpl<T>::stringify(val);
-}
-
-/** Convert anything to a string.
- * \param the value to convert
- * \param the IOFormat object to pull from
- * \return the string equivalent of the value*/
-template<typename T>
-std::string stringify(const T& val, const IOFormat& fmt)
-{
-	return _StringifyImpl<T>::stringify(val, fmt);
 }
 
 /** Fallback **/
@@ -154,17 +144,6 @@ struct _StringifyImpl<T,
 	{
 		return ::stringify(val, IOFormatBase::dec);
 	}
-
-	static std::string stringify(const T& val, const IOFormat& fmt)
-	{
-		return ::stringify(
-			val,
-			fmt.base(),
-			fmt.sign(),
-			fmt.numeral_case(),
-			fmt.base_notation()
-		);
-	}
 };
 
 /* Stringify floating-point numbers. */
@@ -188,16 +167,6 @@ struct _StringifyImpl<
 	{
 		return ::stringify(val, IOFormatDecimalPlaces(14));
 	}
-
-	static std::string stringify(const T& val, const IOFormat& fmt)
-	{
-		return ::stringify(
-			val,
-			fmt.decimal_places(),
-			fmt.sci_notation(),
-			fmt.sign()
-		);
-	}
 };
 
 /* Stringify char */
@@ -216,20 +185,12 @@ struct _StringifyImpl<char>
 	{
 		return ::stringify(val, IOFormatCharValue::as_char);
 	}
-
-	static std::string stringify(const char& val, const IOFormat& fmt)
-	{
-		return ::stringify(
-			val,
-			fmt.char_value()
-		);
-	}
 };
 
 /* Stringify bool */
 
 std::string stringify(const bool& val,
-					  const IOFormatBoolStyle& fmt /*= IOFormatBoolStyle::lower*/)
+					  const IOFormatBool& fmt /*= IOFormatBool::lower*/)
 {
 	return stringify_boolean(val, fmt);
 }
@@ -239,15 +200,7 @@ struct _StringifyImpl<bool>
 {
 	static std::string stringify(const bool& val)
 	{
-		return ::stringify(val, IOFormatBoolStyle::lower);
-	}
-
-	static std::string stringify(const bool& val, const IOFormat& fmt)
-	{
-		return ::stringify(
-			val,
-			fmt.bool_style()
-		);
+		return ::stringify(val, IOFormatBool::lower);
 	}
 };
 
@@ -261,11 +214,6 @@ struct _StringifyImpl<
 	static std::string stringify(const T& except)
 	{
 		return ::stringify_exception(except);
-	}
-
-	static std::string stringify(const T& except, const IOFormat&)
-	{
-		return ::stringify(except);
 	}
 };
 
@@ -337,17 +285,6 @@ struct _StringifyImpl<MemLens>
 	{
 		return ::stringify(lens, IOFormatPtr::address);
 	}
-
-	static std::string stringify(const MemLens& lens, const IOFormat& fmt)
-	{
-		return ::stringify(
-			lens,
-			fmt.ptr(),
-			fmt.mem_sep(),
-			fmt.base(),
-			fmt.numeral_case()
-		);
-	}
 };
 
 /* Stringify raw pointers */
@@ -384,17 +321,6 @@ struct _StringifyImpl<T*>
 	static std::string stringify(const T* ptr)
 	{
 		return ::stringify(ptr, IOFormatPtr::address);
-	}
-
-	static std::string stringify(const T* ptr, const IOFormat& fmt)
-	{
-		return ::stringify(
-			ptr,
-			fmt.ptr(),
-			fmt.mem_sep(),
-			fmt.base(),
-			fmt.numeral_case()
-		);
 	}
 };
 
@@ -433,17 +359,6 @@ struct _StringifyImpl<std::shared_ptr<T>>
 	{
 		return ::stringify(ptr, IOFormatPtr::address);
 	}
-
-	static std::string stringify(const std::shared_ptr<T>& ptr, const IOFormat& fmt)
-	{
-		return ::stringify(
-			ptr,
-			fmt.ptr(),
-			fmt.mem_sep(),
-			fmt.base(),
-			fmt.numeral_case()
-		);
-	}
 };
 
 /* Stringify weak pointers */
@@ -481,17 +396,6 @@ struct _StringifyImpl<std::weak_ptr<T>>
 	{
 		return ::stringify(ptr, IOFormatPtr::address);
 	}
-
-	static std::string stringify(const std::weak_ptr<T>& ptr, const IOFormat& fmt)
-	{
-		return ::stringify(
-			ptr,
-			fmt.ptr(),
-			fmt.mem_sep(),
-			fmt.base(),
-			fmt.numeral_case()
-		);
-	}
 };
 
 /* Stringify types */
@@ -500,11 +404,6 @@ template<>
 struct _StringifyImpl<std::type_info>
 {
 	static std::string stringify(const std::type_info& type)
-	{
-		return ::stringify_type(type);
-	}
-
-	static std::string stringify(const std::type_info& type, const IOFormat&)
 	{
 		return ::stringify_type(type);
 	}
@@ -517,25 +416,15 @@ struct _StringifyImpl<std::type_index>
 	{
 		return ::stringify_type(type);
 	}
-
-	static std::string stringify(const std::type_index& type, const IOFormat&)
-	{
-		return ::stringify_type(type);
-	}
 };
 
-/* Stringify strings (pass as-is). */
+/* Stringify strings; wrap them in double quotes. */
 template<>
 struct _StringifyImpl<const char*>
 {
 	static std::string stringify(const char* str)
 	{
-		return str;
-	}
-
-	static std::string stringify(const char* str, const IOFormat&)
-	{
-		return str;
+		return std::string("\"") + str + std::string("\"");
 	}
 };
 
@@ -544,12 +433,7 @@ struct _StringifyImpl<std::string>
 {
 	static std::string stringify(const std::string& str)
 	{
-		return str;
-	}
-
-	static std::string stringify(const std::string& str, const IOFormat&)
-	{
-		return str;
+		return "\"" + str + "\"";
 	}
 };
 

@@ -218,7 +218,7 @@ enum class IOFormatBaseNotation
 	none
 };
 
-enum class IOFormatBoolStyle
+enum class IOFormatBool
 {
 	lower = 0,
 	upper = 1,
@@ -348,20 +348,16 @@ enum class IOFormatTextFG
 	white = 8
 };
 
-enum class IOFormatStandard
-{
-	// No formatting.
-	none = 0,
-	// ANSI formatting.
-	ansi = 1
-};
-
 /**Indicate how many bytes to read from any pointer that isn't
  * recognized explicitly by channel, including void pointers.
  * This will not override the memory dump read size of built-in types.*/
 struct IOMemReadSize
 {
-	/**CAUTION: Misuse can cause SEGFAULT or other memory errors.
+	/**Indicate how many bytes to read from any pointer that isn't
+	 * recognized explicitly by channel, including void pointers.
+	 * This will not override the memory dump read size of built-in
+	 * types.
+	 * CAUTION: Misuse can cause SEGFAULT or other memory errors.
 	 * \param the number of bytes to read*/
 	explicit IOMemReadSize(unsigned int i) : readsize(i) {}
 	size_t readsize = 1;
@@ -523,7 +519,7 @@ class IOFormat
 private:
 	IOFormatBase fmt_base;
 	IOFormatBaseNotation fmt_base_notation;
-	IOFormatBoolStyle fmt_bool_style;
+	IOFormatBool fmt_bool;
 	IOFormatCharValue fmt_char_value;
 	IOFormatDecimalPlaces fmt_decimal_places;
 	IOFormatMemSep fmt_mem_sep;
@@ -531,7 +527,6 @@ private:
 	IOFormatPtr fmt_ptr;
 	IOFormatSciNotation fmt_sci_notation;
 	IOFormatSign fmt_sign;
-	IOFormatStandard fmt_standard;
 	IOFormatTextAttr fmt_text_attr;
 	IOFormatTextBG fmt_text_bg;
 	IOFormatTextFG fmt_text_fg;
@@ -540,8 +535,7 @@ public:
 	IOFormat()
 	: fmt_base(IOFormatBase::b10),
 	  fmt_base_notation(IOFormatBaseNotation::prefix),
-	  fmt_bool_style(IOFormatBoolStyle::lower),
-	  fmt_char_value(IOFormatCharValue::as_char),
+	  fmt_bool(IOFormatBool::lower), fmt_char_value(IOFormatCharValue::as_char),
 	  fmt_decimal_places(IOFormatDecimalPlaces(14)),
 	  fmt_mem_sep(IOFormatMemSep::all),
 	  fmt_numeral_case(IOFormatNumCase::upper), fmt_ptr(IOFormatPtr::value),
@@ -554,7 +548,7 @@ public:
 
 	IOFormat(const IOFormat& cpy)
 	: fmt_base(cpy.fmt_base), fmt_base_notation(cpy.fmt_base_notation),
-	  fmt_bool_style(cpy.fmt_bool_style), fmt_char_value(cpy.fmt_char_value),
+	  fmt_bool(cpy.fmt_bool), fmt_char_value(cpy.fmt_char_value),
 	  fmt_decimal_places(cpy.fmt_decimal_places), fmt_mem_sep(cpy.fmt_mem_sep),
 	  fmt_numeral_case(cpy.fmt_numeral_case), fmt_ptr(cpy.fmt_ptr),
 	  fmt_sci_notation(cpy.fmt_sci_notation), fmt_sign(cpy.fmt_sign),
@@ -772,7 +766,7 @@ public:
 	{
 		fmt_base = cpy.fmt_base;
 		fmt_base_notation = cpy.fmt_base_notation;
-		fmt_bool_style = cpy.fmt_bool_style;
+		fmt_bool = cpy.fmt_bool;
 		fmt_char_value = cpy.fmt_char_value;
 		fmt_decimal_places = cpy.fmt_decimal_places;
 		fmt_mem_sep = cpy.fmt_mem_sep;
@@ -780,7 +774,6 @@ public:
 		fmt_ptr = cpy.fmt_ptr;
 		fmt_sci_notation = cpy.fmt_sci_notation;
 		fmt_sign = cpy.fmt_sign;
-		fmt_standard = cpy.fmt_standard;
 		fmt_text_attr = cpy.fmt_text_attr;
 		fmt_text_bg = cpy.fmt_text_bg;
 		fmt_text_fg = cpy.fmt_text_fg;
@@ -797,9 +790,9 @@ public:
 		fmt_base_notation = rhs;
 		return *this;
 	}
-	IOFormat& operator<<(const IOFormatBoolStyle& rhs)
+	IOFormat& operator<<(const IOFormatBool& rhs)
 	{
-		fmt_bool_style = rhs;
+		fmt_bool = rhs;
 		return *this;
 	}
 	IOFormat& operator<<(const IOFormatCharValue& rhs)
@@ -835,11 +828,6 @@ public:
 	IOFormat& operator<<(const IOFormatSign& rhs)
 	{
 		fmt_sign = rhs;
-		return *this;
-	}
-	IOFormat& operator<<(const IOFormatStandard& rhs)
-	{
-		fmt_standard = rhs;
 		return *this;
 	}
 	IOFormat& operator<<(const IOFormatTextAttr& rhs)

@@ -244,18 +244,18 @@ Output for boolean is pretty basic and boring.
     ioc << foo << IOCtrl::endl;
     //OUTPUT: "TRUE"
 
-The output style can be adjusted, however, using the ``IOFormatBoolStyle::`` flags.
+The output style can be adjusted, however, using the ``IOFormatBool::`` flags.
 
 ..  code-block:: c++
 
     bool foo = true;
-    ioc << IOFormatBoolStyle::lower << foo << IOCtrl::endl;
+    ioc << IOFormatBool::lower << foo << IOCtrl::endl;
     //OUTPUT: "true"
-    ioc << IOFormatBoolStyle::upper << foo << IOCtrl::endl;
+    ioc << IOFormatBool::upper << foo << IOCtrl::endl;
     //OUTPUT: "True"
-    ioc << IOFormatBoolStyle::caps << foo << IOCtrl::endl;
+    ioc << IOFormatBool::caps << foo << IOCtrl::endl;
     //OUTPUT: "TRUE"
-    ioc << IOFormatBoolStyle::numeral << foo << IOCtrl::endl;
+    ioc << IOFormatBool::numeral << foo << IOCtrl::endl;
     //OUTPUT: "1"
 
 ..  index::
@@ -924,21 +924,21 @@ Base/Radix Format (``IOFormatBase::``)
 
 ..  _channel_flags_format_bool:
 
-Boolean Format (``IOFormatBoolStyle::``)
+Boolean Format (``IOFormatBool::``)
 --------------------------------------------------------
 
 +-------------------------+-------------------------------+
 | Flag                    | Use                           |
 +=========================+===============================+
-| ``IOFormatBoolStyle::lower`` | Lowercase - "true" or "false" |
+| ``IOFormatBool::lower`` | Lowercase - "true" or "false" |
 +-------------------------+-------------------------------+
-| ``IOFormatBoolStyle::upper`` | Uppercase - "True" or "False" |
+| ``IOFormatBool::upper`` | Uppercase - "True" or "False" |
 +-------------------------+-------------------------------+
-| ``IOFormatBoolStyle::caps``  | All caps - "TRUE" or "FALSE"  |
+| ``IOFormatBool::caps``  | All caps - "TRUE" or "FALSE"  |
 +-------------------------+-------------------------------+
-| ``IOFormatBoolStyle::num``   | Binary numerals - "0" or "1"  |
+| ``IOFormatBool::num``   | Binary numerals - "0" or "1"  |
 +-------------------------+-------------------------------+
-| ``IOFormatBoolStyle::scott`` | "Yea" or "Nay"                |
+| ``IOFormatBool::scott`` | "Yea" or "Nay"                |
 +-------------------------+-------------------------------+
 
 ..  index::

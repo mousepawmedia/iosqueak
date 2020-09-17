@@ -50,16 +50,34 @@
 #include <iostream>
 #include <stdio.h>
 
-// Signals and callbacks.
-#include <string>
+// Needed for the `intptr_t` type
+#include <cstdint>
 
+// Needed for `ceil()`
+#include <cmath>
+
+// Bitset
+#include <bitset>
+
+// Needed for checking types.
+#include <type_traits>
+#include <typeinfo>
+
+// Needed for handling passed-in exceptions.
+#include <exception>
+
+// Signals and callbacks.
 #include "eventpp/callbacklist.h"
+
+/*We are only using std::string and std::queue temporarily.
+These need to be swapped out for pawlib alternatives ASAP.*/
+#include <string>
 
 // We use C's classes often.
 #include <cstdio>
 
 #include "iosqueak/ioformat.hpp"
-#include "iosqueak/stringify.hpp"
+#include "iosqueak/stringy.hpp"
 #include "pawlib/core_types.hpp"
 
 class Channel
@@ -377,14 +395,21 @@ public:
 	/// Signal for categories.
 	typedef eventpp::CallbackList<void(std::string, IOCat)> IOSignalCat;
 
-	/// Signal for verbosities.
+	/** Eventpp signal (callback list) for verbosities. */
 	typedef eventpp::CallbackList<void(std::string, IOVrb)> IOSignalVrb;
 
-	/// Signal for everything.
+	/** Eventpp signal (callback list) for everything,
+	 * transmitting the message, the verbosity, and the category. */
 	typedef eventpp::CallbackList<void(std::string, IOVrb, IOCat)> IOSignalFull;
 
-	/// Signal for everything, sans verbosity and category.
+	/** Eventpp signal (callback list) for everything,
+	 * transmitting only the message. */
 	typedef eventpp::CallbackList<void(std::string)> IOSignalAll;
+
+	/* NOTE: In the examples below, the verbosity-related signals must
+	 * transmit what category the message is (since verbosity is
+	 * inherent and assumed). The inverse is true of category-related
+	 * signals. */
 
 	/** Emitted when a message with verbosity 0 (quiet) is broadcast.
 	 * Callback must be of form 'void callback(string,
