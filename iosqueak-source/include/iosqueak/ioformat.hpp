@@ -1,7 +1,7 @@
 /** IOFormat [IOSqueak]
  * Version: 2.0.0
  *
- * Control and formatting flags for input and output.
+ * Formatting flags for stringify and channel output.
  *
  * Author: Jason C. McDonald
  */
@@ -41,119 +41,13 @@
  * on how to contribute to our projects.
  */
 
-/* WHAT IS IOCHANNEL?
- * Channel is intended both as a replacement and wrapper for `std::iostream` and
- * `stdio.h/printf`. It allows for messages and errors to be output to multiple
- * sources simultaneously and asynchronously using signals. New
- * messages from any source are added to the back of the queue, and arbitrary
- * outputs can read them asynchronously from the front, either destructively or
- * non-destructively.
- *
- * Each output is also able to individually timing, as well as which messages it
- * is interested in and how it reads them, without interfering with the behavior
- * of other outputs.
- *
- * EXTERNAL OUTPUTS
- * An external output waits for a signal to be dispatched before it collects its
- * messages. Different signals are dispatched for different levels of verbosity
- * and categories.
- *
- * INTERNAL OUTPUTS
- * Optionally, channel can output to the terminal automatically via either
- * `std::iostream` or `stdio.h/printf`. This output can be controlled
- * externally. For example, a developer might choose to create pseudocommands in
- * their command-line that allow them to change verbosity on-the-fly while the
- * program is running.
- *
- * VERBOSITY
- * The concept of verbosity allows for developers to write and leave all manner
- * of useful output data, including debug information, detailed error messages,
- * and outright snark. Verbosity can be toggled globally for a channel,
- * or on a connection-by-connection basis.
- *
- * Verbosity ranges from 0 (only essential messages) to 3 (literally all
- * messages).
- *
- * CATEGORY
- * Messages can be assigned a category, which makes it easier to different
- * messages to be sent to different outputs, or otherwise be handled
- * differently. At the moment, the categories are...
- * - Normal Messages
- * - Warnings
- * - Errors
- * - Debug Output
- *
- * CROSS-PLATFORM FORMATTING
- * Channel offers coloring and basic formatting on both UNIX and Windows systems
- * via the same interface.
- */
-
 #ifndef IOSQUEAK_IOFORMAT_HPP
 #define IOSQUEAK_IOFORMAT_HPP
 
-class channel;
+#include "iosqueak/utilities/bitfield.hpp"
 
-/** The category of the message. */
-enum class IOCat
-{
-	/// No category. Internal use only; no correlating signal.
-	none = 0,
-	/// The default value - anything that doesn't fit elsewhere.
-	normal = 1,
-	/// Warnings, but not necessarily errors.
-	warning = 2,
-	/// Error messages.
-	error = 4,
-	/// Debug messages, such as variable outputs.
-	debug = 8,
-	/// Testing messages that we may want shut off during benchmarking.
-	testing = 16,
-	/// All message categories. Internal use only; no correlating signal.
-	all = 31
-};
-
-/** Controls the output of the Channel. */
-enum class IOCtrl
-{
-	/// Send, keep formatting
-	send = 1,
-	clear = 2,
-	r = 4,
-	n = 8,
-	flush = 16,
-	/// Send with carriage return (\r), keep formatting
-	sendc = 1 | 4 | 16,
-	/// Send with line feed (\n), keep formatting
-	sendl = 1 | 8 | 16,
-	/// Send, clear formatting
-	end = 1 | 2,
-	/// End with carriage return (\r), clear formatting
-	endc = 1 | 2 | 4 | 16,
-	/// End with line feed (\n), clear formatting
-	endl = 1 | 2 | 8 | 16,
-};
-
-/** Basic cursor movement. */
-enum class IOCursor
-{
-	// Move cursor left ('\[1D]')
-	left,
-	// Move cursor right ('\[1C]')
-	right
-};
-
-enum class IOEchoMode
-{
-	/** Don't automatically output messages via the stdout echo. */
-	none = 0,
-	/** Output messages to stdout via C-style `printf`. */
-	printf = 1,
-	/** Output messages to stdout via C++-style `std::cout`. */
-	cout = 2
-};
-
-enum class IOFormatBase
-{
+/// Defines integer base (radix)
+enum class IOFormatBase {
 	bin = 2,
 	b2 = 2,
 	ter = 3,
@@ -207,8 +101,8 @@ enum class IOFormatBase
 	b36 = 36
 };
 
-enum class IOFormatBaseNotation
-{
+/// Indicates how base (radix) should be specified on an integer.
+enum class IOFormatBaseNotation {
 	/* Use prefix whenever possible: 0b (2), 0t (3), 0o (8), 0x (16), 0z (12)
 	 * and subscript for all other bases. */
 	prefix,
@@ -218,8 +112,8 @@ enum class IOFormatBaseNotation
 	none
 };
 
-enum class IOFormatBool
-{
+/// Defines how boolean values should be represented textually.
+enum class IOFormalBoolStyle {
 	lower = 0,
 	upper = 1,
 	caps = 2,
@@ -228,21 +122,18 @@ enum class IOFormatBool
 	scott = 5
 };
 
-enum class IOFormatCharValue
-{
-	as_char = 0,
-	as_int = 1
-};
+/// Defines whether char should be processes as a literal char or an integer.
+enum class IOFormatCharValue { as_char = 0, as_int = 1 };
 
-struct IOFormatDecimalPlaces
-{
+/// Defines how many decimal places should be shown in a floating-point number.
+struct IOFormatDecimalPlaces {
 	explicit IOFormatDecimalPlaces(unsigned int p) : places(p) {}
 
 	int places = 14;
 };
 
-enum class IOFormatMemSep
-{
+/// Defines how raw memory is formatted, in terms of spacing.
+enum class IOFormatMemSep {
 	/// Output as one long string.
 	none = 0,
 	/// Output with spaces between bytes.
@@ -253,28 +144,31 @@ enum class IOFormatMemSep
 	all = (1 << 0) | (1 << 1)
 };
 
-enum class IOFormatNumCase
-{
+// IOFormatMemSep is a bitfield, so it needs bitwise support.
+MAKE_BITFIELD(IOFormatMemSep);
+
+/// Define the desired case for digits above 9.
+enum class IOFormatNumCase {
 	/// Print all letter digits as lowercase.
 	lower = 0,
 	/// Print all letter digits as uppercase.
 	upper = 1
 };
 
-enum class IOFormatPtr
-{
+/// Define how a pointer should be interpreted.
+enum class IOFormatPtr {
 	/// Print the value at the address.
 	value = 0,
 	/// Print the actual memory address.
-	address = (1 << 0),
+	address = 1,
 	/// Display the pointer metadata.
-	pointer = (1 << 1),
+	pointer = 2,
 	/// Dump the hexadecimal representation of the memory at address.
-	memory = (1 << 2),
+	memory = 3,
 };
 
-enum class IOFormatSciNotation
-{
+/// Define whaether scientific notation should be used.
+enum class IOFormatSciNotation {
 	/// Turn off all scientific notation.
 	never = 0,
 	/// Automatically select the best option.
@@ -283,17 +177,21 @@ enum class IOFormatSciNotation
 	always = 2
 };
 
-enum class IOFormatSign
-{
+/// Defines whether to show the positive/negative sign on a number.
+enum class IOFormatSign {
 	/// Show only the negative sign (default).
 	automatic = 0,
 	/// Show positive or negative sign.
 	always = 1
 };
 
-/**The standard ANSI text attributes.*/
-enum class IOFormatTextAttr
-{
+/// Defines the standard used for displaying text attributes and colors.
+enum class IOFormatStandard { none = 0, ansi = 1 };
+
+/** Text attributes, based on ANSI control codes.
+ * Not all attributes will be recognized by all terminals.
+ */
+enum class IOFormatTextAttr {
 	/// Turn off all attributes.
 	none = 0,
 	bold = (1 << 0),
@@ -320,9 +218,11 @@ enum class IOFormatTextAttr
 	no_strikethorugh = (1 << 17)
 };
 
-/** The standard ANSI text background colors. */
-enum class IOFormatTextBG
-{
+// Interpret IOFormatTextAttr as a bitfield, for applying multiple attributes.
+MAKE_BITFIELD(IOFormatTextAttr);
+
+/// Define text background color, based on ANSI control codes.
+enum class IOFormatTextBG {
 	none = 0,
 	black = 1,
 	red = 2,
@@ -334,9 +234,8 @@ enum class IOFormatTextBG
 	white = 8
 };
 
-/** The standard ANSI text foreground colors. */
-enum class IOFormatTextFG
-{
+/// Define text background color, based on ANSI control codes.
+enum class IOFormatTextFG {
 	none = 0,
 	black = 1,
 	red = 2,
@@ -348,178 +247,13 @@ enum class IOFormatTextFG
 	white = 8
 };
 
-/**Indicate how many bytes to read from any pointer that isn't
- * recognized explicitly by channel, including void pointers.
- * This will not override the memory dump read size of built-in types.*/
-struct IOMemReadSize
-{
-	/**Indicate how many bytes to read from any pointer that isn't
-	 * recognized explicitly by channel, including void pointers.
-	 * This will not override the memory dump read size of built-in
-	 * types.
-	 * CAUTION: Misuse can cause SEGFAULT or other memory errors.
-	 * \param the number of bytes to read*/
-	explicit IOMemReadSize(unsigned int i) : readsize(i) {}
-	size_t readsize = 1;
-
-	void operator=(size_t rhs) { readsize = rhs; }
-};
-
-/** The level of verbosity necessary for the message to display. */
-enum class IOVrb
-{
-	/**Only essential messages and errors. For normal end-use.
-	Shipping default.*/
-	quiet = 0,
-	/**Common messages and errors. For common and normal end-user
-	testing.*/
-	normal = 1,
-	/**Most messages and errors. For detailed testing and
-	debugging.*/
-	chatty = 2,
-	/**Absolutely everything. For intense testing, detailed
-	debugging, and driving the developers crazy.*/
-	tmi = 3
-};
-
-template<typename T>
-T flags_and(const T& lhs, const T& rhs)
-{
-	return static_cast<T>(static_cast<int>(lhs) & static_cast<int>(rhs));
-}
-
-template<typename T>
-T flags_or(const T& lhs, const T& rhs)
-{
-	return static_cast<T>(static_cast<int>(lhs) | static_cast<int>(rhs));
-}
-
-template<typename T>
-T flags_xor(const T& lhs, const T& rhs)
-{
-	return static_cast<T>(static_cast<int>(lhs) ^ static_cast<int>(rhs));
-}
-
-template<typename T>
-T flags_twiddle(const T& rhs)
-{
-	return static_cast<T>(~static_cast<int>(rhs));
-}
-
-template<typename T>
-bool flags_check(const T& field, const T& value)
-{
-	return static_cast<bool>(field & value);
-}
-
-inline IOCat operator&(const IOCat& lhs, const IOCat& rhs)
-{
-	return flags_and(lhs, rhs);
-}
-
-inline IOCat operator|(const IOCat& lhs, const IOCat& rhs)
-{
-	return flags_or(lhs, rhs);
-}
-
-inline IOCat operator^(const IOCat& lhs, const IOCat& rhs)
-{
-	return flags_xor(lhs, rhs);
-}
-
-inline IOCat operator~(const IOCat& lhs) { return flags_twiddle(lhs); }
-
-inline IOCtrl operator&(const IOCtrl& lhs, const IOCtrl& rhs)
-{
-	return flags_and(lhs, rhs);
-}
-
-inline IOCtrl operator|(const IOCtrl& lhs, const IOCtrl& rhs)
-{
-	return flags_or(lhs, rhs);
-}
-
-inline IOCtrl operator^(const IOCtrl& lhs, const IOCtrl& rhs)
-{
-	return flags_xor(lhs, rhs);
-}
-
-inline IOCtrl operator~(const IOCtrl& lhs) { return flags_twiddle(lhs); }
-
-inline IOFormatMemSep operator&(const IOFormatMemSep& lhs,
-								const IOFormatMemSep& rhs)
-{
-	return flags_and(lhs, rhs);
-}
-
-inline IOFormatMemSep operator|(const IOFormatMemSep& lhs,
-								const IOFormatMemSep& rhs)
-{
-	return flags_or(lhs, rhs);
-}
-
-inline IOFormatMemSep operator^(const IOFormatMemSep& lhs,
-								const IOFormatMemSep& rhs)
-{
-	return flags_xor(lhs, rhs);
-}
-
-inline IOFormatMemSep operator~(const IOFormatMemSep& lhs)
-{
-	return flags_twiddle(lhs);
-}
-
-inline IOFormatPtr operator&(const IOFormatPtr& lhs, const IOFormatPtr& rhs)
-{
-	return flags_and(lhs, rhs);
-}
-
-inline IOFormatPtr operator|(const IOFormatPtr& lhs, const IOFormatPtr& rhs)
-{
-	return flags_or(lhs, rhs);
-}
-
-inline IOFormatPtr operator^(const IOFormatPtr& lhs, const IOFormatPtr& rhs)
-{
-	return flags_xor(lhs, rhs);
-}
-
-inline IOFormatPtr operator~(const IOFormatPtr& lhs)
-{
-	return flags_twiddle(lhs);
-}
-
-inline IOFormatTextAttr operator&(const IOFormatTextAttr& lhs,
-								  const IOFormatTextAttr& rhs)
-{
-	return flags_and(lhs, rhs);
-}
-
-inline IOFormatTextAttr operator|(const IOFormatTextAttr& lhs,
-								  const IOFormatTextAttr& rhs)
-{
-	return flags_or(lhs, rhs);
-}
-
-inline IOFormatTextAttr operator^(const IOFormatTextAttr& lhs,
-								  const IOFormatTextAttr& rhs)
-{
-	return flags_xor(lhs, rhs);
-}
-
-inline IOFormatTextAttr operator~(const IOFormatTextAttr& lhs)
-{
-	return flags_twiddle(lhs);
-}
-
+/// Stores a complete set of attributes and formatting flags.
 class IOFormat
 {
-	friend channel;
-
 private:
 	IOFormatBase fmt_base;
 	IOFormatBaseNotation fmt_base_notation;
-	IOFormatBool fmt_bool;
+	IOFormalBoolStyle fmt_bool_style;
 	IOFormatCharValue fmt_char_value;
 	IOFormatDecimalPlaces fmt_decimal_places;
 	IOFormatMemSep fmt_mem_sep;
@@ -527,15 +261,18 @@ private:
 	IOFormatPtr fmt_ptr;
 	IOFormatSciNotation fmt_sci_notation;
 	IOFormatSign fmt_sign;
+	IOFormatStandard fmt_standard;
 	IOFormatTextAttr fmt_text_attr;
 	IOFormatTextBG fmt_text_bg;
 	IOFormatTextFG fmt_text_fg;
 
 public:
+	/// Default constructor
 	IOFormat()
 	: fmt_base(IOFormatBase::b10),
 	  fmt_base_notation(IOFormatBaseNotation::prefix),
-	  fmt_bool(IOFormatBool::lower), fmt_char_value(IOFormatCharValue::as_char),
+	  fmt_bool_style(IOFormalBoolStyle::lower),
+	  fmt_char_value(IOFormatCharValue::as_char),
 	  fmt_decimal_places(IOFormatDecimalPlaces(14)),
 	  fmt_mem_sep(IOFormatMemSep::all),
 	  fmt_numeral_case(IOFormatNumCase::upper), fmt_ptr(IOFormatPtr::value),
@@ -546,9 +283,10 @@ public:
 	{
 	}
 
+	/// Copy constructor
 	IOFormat(const IOFormat& cpy)
 	: fmt_base(cpy.fmt_base), fmt_base_notation(cpy.fmt_base_notation),
-	  fmt_bool(cpy.fmt_bool), fmt_char_value(cpy.fmt_char_value),
+	  fmt_bool_style(cpy.fmt_bool_style), fmt_char_value(cpy.fmt_char_value),
 	  fmt_decimal_places(cpy.fmt_decimal_places), fmt_mem_sep(cpy.fmt_mem_sep),
 	  fmt_numeral_case(cpy.fmt_numeral_case), fmt_ptr(cpy.fmt_ptr),
 	  fmt_sci_notation(cpy.fmt_sci_notation), fmt_sign(cpy.fmt_sign),
@@ -557,120 +295,134 @@ public:
 	{
 	}
 
+	/// \return the current IOFormatBase flag
 	const IOFormatBase& base() const { return fmt_base; }
+
+	/// \return the current IOFormatBaseNotation flag
 	const IOFormatBaseNotation& base_notation() const
 	{
 		return fmt_base_notation;
 	}
-	const IOFormatBoolStyle& bool_style() const { return fmt_bool_style; }
+
+	/// \return the current IOFormalBoolStyle flag
+	const IOFormalBoolStyle& bool_style() const { return fmt_bool_style; }
+
+	/// \return the current IOFormatCharValue flag
 	const IOFormatCharValue& char_value() const { return fmt_char_value; }
+
+	/// \return the current IOFormatDecimalPlaces flag
 	const IOFormatDecimalPlaces& decimal_places() const
 	{
 		return fmt_decimal_places;
 	}
+
+	/// \return the current IOFormatMemSep flag
 	const IOFormatMemSep& mem_sep() const { return fmt_mem_sep; }
+
+	/// \return the current IOFormatNumCase flag
 	const IOFormatNumCase& numeral_case() const { return fmt_numeral_case; }
+
+	/// \return the current IOFormatPtr flag
 	const IOFormatPtr& ptr() const { return fmt_ptr; }
+
+	/// \return the current IOFormatSciNotation flag
 	const IOFormatSciNotation& sci_notation() const { return fmt_sci_notation; }
+
+	/// \return the current IOFormatSign flag
 	const IOFormatSign& sign() const { return fmt_sign; }
+
+	/// \return the current IOFormatStandard flag
 	const IOFormatStandard& standard() const { return fmt_standard; }
+
+	/// \return the current IOFormatTextAttr flag
 	const IOFormatTextAttr& text_attr() const { return fmt_text_attr; }
+
+	/** Returns the control codes for the text attributes.
+	 * \param standard: the attribute standard to use
+	 * \return a std::string specifying the text attributes.
+	 */
 	const std::string text_attr(const IOFormatStandard& standard) const
 	{
 		std::string str_text_attr = "";
 		// https://mudhalla.net/tintin/info/ansicolor/
-		if (standard == IOFormatStandard::ansi)
-		{
-			if (flags_check(fmt_text_attr, IOFormatTextAttr::none))
-			{
+		if (standard == IOFormatStandard::ansi) {
+			if (flags_check(fmt_text_attr, IOFormatTextAttr::none)) {
 				str_text_attr += ";0";
 			}
-			if (flags_check(fmt_text_attr, IOFormatTextAttr::bold))
-			{
+			if (flags_check(fmt_text_attr, IOFormatTextAttr::bold)) {
 				str_text_attr += ";1";
 			}
-			if (flags_check(fmt_text_attr, IOFormatTextAttr::faint))
-			{
+			if (flags_check(fmt_text_attr, IOFormatTextAttr::faint)) {
 				str_text_attr += ";2";
 			}
-			if (flags_check(fmt_text_attr, IOFormatTextAttr::italic))
-			{
+			if (flags_check(fmt_text_attr, IOFormatTextAttr::italic)) {
 				str_text_attr += ";3";
 			}
 
-			if (flags_check(fmt_text_attr, IOFormatTextAttr::underline))
-			{
+			if (flags_check(fmt_text_attr, IOFormatTextAttr::underline)) {
 				str_text_attr += ";4";
 			}
-			if (flags_check(fmt_text_attr, IOFormatTextAttr::blink_slow))
-			{
+			if (flags_check(fmt_text_attr, IOFormatTextAttr::blink_slow)) {
 				str_text_attr += ";5";
 			}
-			if (flags_check(fmt_text_attr, IOFormatTextAttr::blink_fast))
-			{
+			if (flags_check(fmt_text_attr, IOFormatTextAttr::blink_fast)) {
 				str_text_attr += ";6";
 			}
-			if (flags_check(fmt_text_attr, IOFormatTextAttr::invert))
-			{
+			if (flags_check(fmt_text_attr, IOFormatTextAttr::invert)) {
 				str_text_attr += ";7";
 			}
-			if (flags_check(fmt_text_attr, IOFormatTextAttr::invisible))
-			{
+			if (flags_check(fmt_text_attr, IOFormatTextAttr::invisible)) {
 				str_text_attr += ";8";
 			}
-			if (flags_check(fmt_text_attr, IOFormatTextAttr::double_underline))
-			{
+			if (flags_check(fmt_text_attr,
+							IOFormatTextAttr::double_underline)) {
 				str_text_attr += ";9";
 			}
-			if (flags_check(fmt_text_attr, IOFormatTextAttr::strikethrough))
-			{
+			if (flags_check(fmt_text_attr, IOFormatTextAttr::strikethrough)) {
 				str_text_attr += ";21";
 			}
 
 			// After turning ON features, turn OFF other features.
-			if (flags_check(fmt_text_attr, IOFormatTextAttr::no_bold))
-			{
+			if (flags_check(fmt_text_attr, IOFormatTextAttr::no_bold)) {
 				str_text_attr += ";22";
 			}
-			if (flags_check(fmt_text_attr, IOFormatTextAttr::no_italic))
-			{
+			if (flags_check(fmt_text_attr, IOFormatTextAttr::no_italic)) {
 				str_text_attr += ";23";
 			}
-			if (flags_check(fmt_text_attr, IOFormatTextAttr::no_underline))
-			{
+			if (flags_check(fmt_text_attr, IOFormatTextAttr::no_underline)) {
 				str_text_attr += ";24";
 			}
-			if (flags_check(fmt_text_attr, IOFormatTextAttr::no_slow_blink))
-			{
+			if (flags_check(fmt_text_attr, IOFormatTextAttr::no_slow_blink)) {
 				str_text_attr += ";25";
 			}
-			if (flags_check(fmt_text_attr, IOFormatTextAttr::no_fast_blink))
-			{
+			if (flags_check(fmt_text_attr, IOFormatTextAttr::no_fast_blink)) {
 				str_text_attr += ";26";
 			}
-			if (flags_check(fmt_text_attr, IOFormatTextAttr::no_invert))
-			{
+			if (flags_check(fmt_text_attr, IOFormatTextAttr::no_invert)) {
 				str_text_attr += ";27";
 			}
-			if (flags_check(fmt_text_attr, IOFormatTextAttr::no_invisible))
-			{
+			if (flags_check(fmt_text_attr, IOFormatTextAttr::no_invisible)) {
 				str_text_attr += ";28";
 			}
-			if (flags_check(fmt_text_attr, IOFormatTextAttr::no_strikethorugh))
-			{
+			if (flags_check(fmt_text_attr,
+							IOFormatTextAttr::no_strikethorugh)) {
 				str_text_attr += ";28";
 			}
 		}
 		return str_text_attr;
 	}
 
+	/// \return the current IOFormatTextBG flag
 	const IOFormatTextBG& text_bg() const { return fmt_text_bg; }
+
+	/** Returns the control codes for the text background color.
+	 * \param standard: the attribute standard to use
+	 * \return a std::string specifying the text background color.
+	 */
 	const std::string text_bg(const IOFormatStandard& standard) const
 	{
-		if (standard == IOFormatStandard::ansi)
-		{
-			switch (fmt_text_bg)
-			{
+		if (standard == IOFormatStandard::ansi) {
+			switch (fmt_text_bg) {
 				case IOFormatTextBG::none:
 					return ";49";
 				case IOFormatTextBG::black:
@@ -694,13 +446,17 @@ public:
 		return "";
 	}
 
+	/// \return the current IOFormatTextFG flag
 	const IOFormatTextFG& text_fg() const { return fmt_text_fg; }
+
+	/** Returns the control codes for the text foreground color.
+	 * \param standard: the attribute standard to use
+	 * \return a std::string specifying the text foreground color.
+	 */
 	const std::string text_fg(const IOFormatStandard& standard) const
 	{
-		if (standard == IOFormatStandard::ansi)
-		{
-			switch (fmt_text_fg)
-			{
+		if (standard == IOFormatStandard::ansi) {
+			switch (fmt_text_fg) {
 				case IOFormatTextFG::none:
 					return ";39";
 				case IOFormatTextFG::black:
@@ -724,37 +480,38 @@ public:
 		return "";
 	}
 
-	/* Generate a terminal format string (e.g. ANSI SGR) for the current
-	 * formatting flags.
+	/** Generate a terminal format string (e.g. ANSI SGR) for the current
+	 * formatting flags, according to the specified standard.
+	 * \param standard: the attribute standard to use
+	 * \return the terminal format string.
 	 */
 	const std::string format_string(const IOFormatStandard& standard) const
 	{
 		std::string format = "";
-		switch (standard)
-		{
+		switch (standard) {
 			case IOFormatStandard::none:
 				break;
 			case IOFormatStandard::ansi:
-				format += "\033[";
+				format += "\33[";
 				format += text_attr(standard);
-				if (fmt_text_bg != IOFormatTextBG::none)
-				{
-					format += ";" + text_bg(standard);
-				}
-				if (fmt_text_fg != IOFormatTextFG::none)
-				{
-					format += ";" + text_fg(standard);
-				}
-
+				format += text_bg(standard);
+				format += text_fg(standard);
+				format += "m";
 		}
 		return format;
 	}
 
+	/** Generate a terminal format string (e.g. ANSI SGR) for the current
+	 * formatting flags, according to the standard specified in the IOFormat
+	 * object.
+	 * \return the terminal format string.
+	 */
 	const std::string format_string() const
 	{
 		return format_string(this->fmt_standard);
 	}
 
+	/// Reset the text attributes and colors, but nothing else.
 	void reset_attributes()
 	{
 		this->fmt_text_attr = IOFormatTextAttr::none;
@@ -762,11 +519,12 @@ public:
 		this->fmt_text_bg = IOFormatTextBG::none;
 	}
 
+	/// Copy assignment operator.
 	IOFormat& operator=(const IOFormat& cpy)
 	{
 		fmt_base = cpy.fmt_base;
 		fmt_base_notation = cpy.fmt_base_notation;
-		fmt_bool = cpy.fmt_bool;
+		fmt_bool_style = cpy.fmt_bool_style;
 		fmt_char_value = cpy.fmt_char_value;
 		fmt_decimal_places = cpy.fmt_decimal_places;
 		fmt_mem_sep = cpy.fmt_mem_sep;
@@ -774,11 +532,14 @@ public:
 		fmt_ptr = cpy.fmt_ptr;
 		fmt_sci_notation = cpy.fmt_sci_notation;
 		fmt_sign = cpy.fmt_sign;
+		fmt_standard = cpy.fmt_standard;
 		fmt_text_attr = cpy.fmt_text_attr;
 		fmt_text_bg = cpy.fmt_text_bg;
 		fmt_text_fg = cpy.fmt_text_fg;
 		return *this;
 	}
+
+	// Inject formatting flags into IOFormat object...
 
 	IOFormat& operator<<(const IOFormatBase& rhs)
 	{
@@ -790,9 +551,9 @@ public:
 		fmt_base_notation = rhs;
 		return *this;
 	}
-	IOFormat& operator<<(const IOFormatBool& rhs)
+	IOFormat& operator<<(const IOFormalBoolStyle& rhs)
 	{
-		fmt_bool = rhs;
+		fmt_bool_style = rhs;
 		return *this;
 	}
 	IOFormat& operator<<(const IOFormatCharValue& rhs)
@@ -828,6 +589,11 @@ public:
 	IOFormat& operator<<(const IOFormatSign& rhs)
 	{
 		fmt_sign = rhs;
+		return *this;
+	}
+	IOFormat& operator<<(const IOFormatStandard& rhs)
+	{
+		fmt_standard = rhs;
 		return *this;
 	}
 	IOFormat& operator<<(const IOFormatTextAttr& rhs)

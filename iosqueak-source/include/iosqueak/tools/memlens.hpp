@@ -42,6 +42,8 @@
  * on how to contribute to our projects.
  */
 
+// TODO: Comment this!
+
 #ifndef IOSQUEAK_MEMLENS_HPP
 #define IOSQUEAK_MEMLENS_HPP
 
@@ -50,12 +52,9 @@
 #include <typeindex>
 #include <typeinfo>
 
-enum class PtrType
-{
-	raw,
-	shared,
-	weak
-};
+#include "iosqueak/ioctrl.hpp"
+
+enum class PtrType { raw, shared, weak };
 
 // NOTE: We cannot support unique_ptr because it cannot be copied.
 
@@ -70,16 +69,14 @@ protected:
 
 	void take_snapshot()
 	{
-		if (focus == nullptr)
-		{
+		if (this->focus == nullptr) {
 			return;
 		}
 
 		const uint8_t* root = reinterpret_cast<const uint8_t*>(focus);
 
-		for (uint8_t lens = 0; lens < size; ++lens)
-		{
-			snapshot.push_back(*(root + lens));
+		for (uint8_t lens = 0; lens < size; ++lens) {
+			this->snapshot.push_back(*(root + lens));
 		}
 	}
 
@@ -89,8 +86,8 @@ public:
 	: focus(ptr), size(readsize.readsize), type(std::type_index(typeid(void))),
 	  ptr_type(PtrType::raw)
 	{
-		snapshot.reserve(size);
-		take_snapshot();
+		this->snapshot.reserve(size);
+		this->take_snapshot();
 	}
 
 	template<typename T>
@@ -98,8 +95,8 @@ public:
 	: focus(reinterpret_cast<const void*>(ptr)), size(sizeof(T)),
 	  type(std::type_index(typeid(T))), ptr_type(PtrType::raw)
 	{
-		snapshot.reserve(size);
-		take_snapshot();
+		this->snapshot.reserve(size);
+		this->take_snapshot();
 	}
 
 	explicit MemLens(const std::shared_ptr<void>& ptr,
@@ -107,8 +104,8 @@ public:
 	: focus(ptr.get()), size(readsize.readsize),
 	  type(std::type_index(typeid(void))), ptr_type(PtrType::shared)
 	{
-		snapshot.reserve(size);
-		take_snapshot();
+		this->snapshot.reserve(size);
+		this->take_snapshot();
 	}
 
 	template<typename T>
@@ -116,8 +113,8 @@ public:
 	: focus(ptr.get()), size(sizeof(T)), type(std::type_index(typeid(T))),
 	  ptr_type(PtrType::shared)
 	{
-		snapshot.reserve(size);
-		take_snapshot();
+		this->snapshot.reserve(size);
+		this->take_snapshot();
 	}
 
 	explicit MemLens(const std::weak_ptr<void>& ptr,
@@ -125,16 +122,15 @@ public:
 	: focus(nullptr), size(readsize.readsize),
 	  type(std::type_index(typeid(void))), ptr_type(PtrType::weak)
 	{
-		snapshot.reserve(size);
+		this->snapshot.reserve(size);
 
-		if (!ptr.expired())
-		{
+		if (!ptr.expired()) {
 			// Steal the raw pointer out of the weak pointer.
 			auto shared = ptr.lock();
 			focus = shared.get();
 		}
 
-		take_snapshot();
+		this->take_snapshot();
 	}
 
 	template<typename T>
@@ -142,16 +138,15 @@ public:
 	: focus(nullptr), size(sizeof(T)), type(std::type_index(typeid(T))),
 	  ptr_type(PtrType::weak)
 	{
-		snapshot.reserve(size);
+		this->snapshot.reserve(size);
 
-		if (!ptr.expired())
-		{
+		if (!ptr.expired()) {
 			// Steal the raw pointer out of the weak pointer.
 			auto shared = ptr.lock();
 			focus = shared.get();
 		}
 
-		take_snapshot();
+		this->take_snapshot();
 	}
 
 	uint64_t address() const { return reinterpret_cast<uint64_t>(focus); }
@@ -162,7 +157,7 @@ public:
 	std::type_index data_type() const { return type; }
 
 	// TODO: Can we return ref?
-	virtual std::vector<uint8_t> memory() const { return snapshot; }
+	virtual std::vector<uint8_t> memory() const { return this->snapshot; }
 
 	PtrType pointer_type() const { return ptr_type; }
 };
@@ -186,13 +181,16 @@ public:
 
 	virtual std::vector<uint8_t> memory() const override
 	{
-		if (handle.expired())
-		{
+		if (this->handle.expired()) {
 			return std::vector<uint8_t>();
 		}
 
-		take_snapshot();
-		return snapshot;
+		/* NOTE: I used to take a snapshot here, but that violated const
+		 * indirectly. Therefore, I just won't retake it here; it will only
+		 * be taken automatically at constructor, or else explicitly by the
+		 * user.
+		 */
+		return this->snapshot;
 	}
 };
 

@@ -56,19 +56,6 @@
 // Needed for stdsplit
 #include <string>
 
-/* NOTE: Due to bug 19439, if we're using GCC, this only works on g++ 5.3 or
- * higher. https://sourceware.org/bugzilla/show_bug.cgi?id=19439
- */
-#if defined(__clang__) || defined(__INTEL_COMPILER) || __GNUC__ > 5 || \
-	(__GNUC__ == 5 &&                                                  \
-	 (__GNUC_MINOR__ > 3 || (__GNUC_MINOR__ == 3 && __GNUC_PATCHLEVEL__ > 0)))
-using std::isinf;
-using std::isnan;
-#endif  // __GNUC__
-
-////const double PRECISION = 0.00000000000001;
-////const int MAX_NUMBER_STRING_SIZE = 32;
-
 namespace stringy
 {
 /** Efficiently split a std::string by tokens.
@@ -90,8 +77,7 @@ inline void stdsplit(std::string str,
 	std::string frag;
 
 	// Loop infinitely - break is internal.
-	while (true)
-	{
+	while (true) {
 		// Store the split index in a 'size_t' (unsigned integer) type.
 		size_t splitAt;
 
@@ -101,8 +87,7 @@ inline void stdsplit(std::string str,
 		/* The index where the split is. */
 		splitAt = frag.find(splitBy);
 		// If we didn't find a new split point...
-		if (splitAt == std::string::npos)
-		{
+		if (splitAt == std::string::npos) {
 			// Break the loop and (implicitly) return.
 			break;
 		}
@@ -123,19 +108,16 @@ inline void stdsplit(std::string str,
  */
 inline char* strrev(char* str)
 {
-	if (str != NULL)
-	{
+	if (str != NULL) {
 		char* src;
 		size_t len;
 
 		len = strlen(str);
-		if (len > 1)
-		{
+		if (len > 1) {
 			char* dst;
 			src = str;
 			dst = src + len - 1;
-			while (src < dst)
-			{
+			while (src < dst) {
 				char tmp = *src;
 				*src++ = *dst;
 				*dst-- = tmp;
@@ -150,8 +132,7 @@ template<typename T>
 inline void arev(T* arr, size_t start, size_t end)
 {
 	T tmp;
-	while (start < end)
-	{
+	while (start < end) {
 		memcpy(&tmp, (arr + end), sizeof(T));
 		memcpy((arr + end), (arr + start), sizeof(T));
 		memcpy((arr + start), &tmp, sizeof(T));

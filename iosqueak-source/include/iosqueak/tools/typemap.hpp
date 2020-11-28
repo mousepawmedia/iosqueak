@@ -60,8 +60,7 @@ protected:
 	 * but only if the map hasn't already been initialized. */
 	static void initialize()
 	{
-		if (init)
-		{
+		if (init) {
 			return;
 		}
 		TypesMap::register_type<void>("void");
@@ -108,8 +107,7 @@ public:
 		/* Although unordered map doesn't allow for duplicate keys,
 		 * we'll save several function calls by checking first. */
 		if (TypesMap::type_names.find(std::type_index(typeid(T))) !=
-			TypesMap::type_names.end())
-		{
+			TypesMap::type_names.end()) {
 			return;
 		}
 
@@ -119,8 +117,7 @@ public:
 		// Value
 		TypesMap::type_names[std::type_index(typeid(T))] = std::string(name);
 
-		if (TypeOnly)
-		{
+		if (TypeOnly) {
 			return;
 		}
 
@@ -168,12 +165,9 @@ public:
 	static std::string lookup(const std::type_index& type)
 	{
 		TypesMap::initialize();
-		try
-		{
+		try {
 			return type_names.at(type);
-		}
-		catch (std::out_of_range)
-		{
+		} catch (const std::out_of_range&) {
 			return type.name();
 		}
 	}

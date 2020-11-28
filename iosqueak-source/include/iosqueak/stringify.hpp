@@ -93,7 +93,8 @@ size_t lengthify(
 	return lengthify_integral(val, base, sign, notation);
 }
 
-size_t lengthify(const bool& val, const IOFormatBool& fmt = IOFormatBool::lower)
+size_t lengthify(const bool& val,
+				 const IOFormalBoolStyle& fmt = IOFormalBoolStyle::lower)
 {
 	return lengthify_boolean(val, fmt);
 }
@@ -111,14 +112,24 @@ std::string stringify(const T& val)
 	return _StringifyImpl<T>::stringify(val);
 }
 
+template<typename T>
+std::string stringify(const T& val, const IOFormat& fmt)
+{
+	return _StringifyImpl<T>::stringify(val, fmt);
+}
+
 /** Fallback **/
 
 template<typename T, typename Enable /*=void*/>
-struct _StringifyImpl
-{
+struct _StringifyImpl {
 	static std::string stringify(const T& val)
 	{
 		// If we reach here, there's no stringify function for the given value.
+		return ::stringify_anything(val);
+	}
+
+	static std::string stringify(const T& val, const IOFormat&)
+	{
 		return ::stringify_anything(val);
 	}
 };
@@ -137,12 +148,17 @@ std::string stringify(
 }
 
 template<typename T>
-struct _StringifyImpl<T,
-					  typename std::enable_if<std::is_integral<T>::value>::type>
-{
+struct _StringifyImpl<
+	T,
+	typename std::enable_if<std::is_integral<T>::value>::type> {
 	static std::string stringify(const T& val)
 	{
 		return ::stringify(val, IOFormatBase::dec);
+	}
+
+	static std::string stringify(const T& val, const IOFormat& fmt)
+	{
+		return ::stringify(val, fmt.base());
 	}
 };
 
@@ -161,11 +177,15 @@ std::string stringify(
 template<typename T>
 struct _StringifyImpl<
 	T,
-	typename std::enable_if<std::is_floating_point<T>::value>::type>
-{
+	typename std::enable_if<std::is_floating_point<T>::value>::type> {
 	static std::string stringify(const T& val)
 	{
 		return ::stringify(val, IOFormatDecimalPlaces(14));
+	}
+
+	static std::string stringify(const T& val, const IOFormat& fmt)
+	{
+		return ::stringify(val, fmt.decimal_places());
 	}
 };
 
@@ -179,28 +199,37 @@ std::string stringify(
 }
 
 template<>
-struct _StringifyImpl<char>
-{
+struct _StringifyImpl<char> {
 	static std::string stringify(const char& val)
 	{
 		return ::stringify(val, IOFormatCharValue::as_char);
+	}
+
+	static std::string stringify(const char& val, const IOFormat& fmt)
+	{
+		return ::stringify(val, fmt.char_value());
 	}
 };
 
 /* Stringify bool */
 
-std::string stringify(const bool& val,
-					  const IOFormatBool& fmt /*= IOFormatBool::lower*/)
+std::string stringify(
+	const bool& val,
+	const IOFormalBoolStyle& fmt /*= IOFormalBoolStyle::lower*/)
 {
 	return stringify_boolean(val, fmt);
 }
 
 template<>
-struct _StringifyImpl<bool>
-{
+struct _StringifyImpl<bool> {
 	static std::string stringify(const bool& val)
 	{
-		return ::stringify(val, IOFormatBool::lower);
+		return ::stringify(val, IOFormalBoolStyle::lower);
+	}
+
+	static std::string stringify(const bool& val, const IOFormat& fmt)
+	{
+		return ::stringify(val, fmt.bool_style());
 	}
 };
 
@@ -209,9 +238,13 @@ struct _StringifyImpl<bool>
 template<typename T>
 struct _StringifyImpl<
 	T,
-	typename std::enable_if<std::is_base_of<std::exception, T>::value>::type>
-{
+	typename std::enable_if<std::is_base_of<std::exception, T>::value>::type> {
 	static std::string stringify(const T& except)
+	{
+		return ::stringify_exception(except);
+	}
+
+	static std::string stringify(const T& except, const IOFormat&)
 	{
 		return ::stringify_exception(except);
 	}
@@ -238,8 +271,7 @@ std::string stringify(const MemLens& lens,
 					  const IOFormatPtr& as /*= IOFormatPtr::address*/,
 					  const IOFormatNumCase& num_case = IOFormatNumCase::upper)
 {
-	switch (as)
-	{
+	switch (as) {
 		case IOFormatPtr::value:
 			throw std::invalid_argument("stringify() cannot retrieve the value "
 										"from a MemLens-captured pointer");
@@ -262,8 +294,7 @@ std::string stringify(const MemLens& lens,
 					  const IOFormatBase& base = IOFormatBase::hex,
 					  const IOFormatNumCase& num_case = IOFormatNumCase::upper)
 {
-	switch (as)
-	{
+	switch (as) {
 		case IOFormatPtr::value:
 			throw std::invalid_argument("stringify() cannot retrieve the value "
 										"from a MemLens-captured pointer");
@@ -279,11 +310,15 @@ std::string stringify(const MemLens& lens,
 }
 
 template<>
-struct _StringifyImpl<MemLens>
-{
+struct _StringifyImpl<MemLens> {
 	static std::string stringify(const MemLens& lens)
 	{
 		return ::stringify(lens, IOFormatPtr::address);
+	}
+
+	static std::string stringify(const MemLens& lens, const IOFormat& fmt)
+	{
+		return ::stringify(lens, fmt.ptr());
 	}
 };
 
@@ -294,8 +329,7 @@ std::string stringify(const T* ptr,
 					  const IOFormatPtr& as /*= IOFormatPtr::address*/,
 					  const IOFormatNumCase& num_case = IOFormatNumCase::upper)
 {
-	if (as == IOFormatPtr::value)
-	{
+	if (as == IOFormatPtr::value) {
 		return stringify_from_pointer(ptr);
 	}
 	return stringify(MemLens(ptr), as, num_case);
@@ -308,19 +342,22 @@ std::string stringify(const T* ptr,
 					  const IOFormatBase& base = IOFormatBase::hex,
 					  const IOFormatNumCase& num_case = IOFormatNumCase::upper)
 {
-	if (as == IOFormatPtr::value)
-	{
+	if (as == IOFormatPtr::value) {
 		return stringify_from_pointer(ptr);
 	}
 	return stringify(MemLens(ptr), as, sep, base, num_case);
 }
 
 template<typename T>
-struct _StringifyImpl<T*>
-{
+struct _StringifyImpl<T*> {
 	static std::string stringify(const T* ptr)
 	{
 		return ::stringify(ptr, IOFormatPtr::address);
+	}
+
+	static std::string stringify(const T* ptr, const IOFormat& fmt)
+	{
+		return ::stringify(ptr, fmt.ptr());
 	}
 };
 
@@ -331,8 +368,7 @@ std::string stringify(const std::shared_ptr<T>& ptr,
 					  const IOFormatPtr& as /*= IOFormatPtr::address*/,
 					  const IOFormatNumCase& num_case = IOFormatNumCase::upper)
 {
-	if (as == IOFormatPtr::value)
-	{
+	if (as == IOFormatPtr::value) {
 		return stringify_from_pointer(ptr);
 	}
 	return stringify(MemLens(ptr), as, num_case);
@@ -345,19 +381,23 @@ std::string stringify(const std::shared_ptr<T>& ptr,
 					  const IOFormatBase& base = IOFormatBase::hex,
 					  const IOFormatNumCase& num_case = IOFormatNumCase::upper)
 {
-	if (as == IOFormatPtr::value)
-	{
+	if (as == IOFormatPtr::value) {
 		return stringify_from_pointer(ptr);
 	}
 	return stringify(MemLens(ptr), as, sep, base, num_case);
 }
 
 template<typename T>
-struct _StringifyImpl<std::shared_ptr<T>>
-{
+struct _StringifyImpl<std::shared_ptr<T>> {
 	static std::string stringify(const std::shared_ptr<T>& ptr)
 	{
 		return ::stringify(ptr, IOFormatPtr::address);
+	}
+
+	static std::string stringify(const std::shared_ptr<T>& ptr,
+								 const IOFormat& fmt)
+	{
+		return ::stringify(ptr, fmt.ptr());
 	}
 };
 
@@ -368,8 +408,7 @@ std::string stringify(const std::weak_ptr<T>& ptr,
 					  const IOFormatPtr& as /*= IOFormatPtr::address*/,
 					  const IOFormatNumCase& num_case = IOFormatNumCase::upper)
 {
-	if (as == IOFormatPtr::value)
-	{
+	if (as == IOFormatPtr::value) {
 		return stringify_from_pointer(ptr);
 	}
 	return stringify(MemLens(ptr), as, num_case);
@@ -382,58 +421,72 @@ std::string stringify(const std::weak_ptr<T>& ptr,
 					  const IOFormatBase& base = IOFormatBase::hex,
 					  const IOFormatNumCase& num_case = IOFormatNumCase::upper)
 {
-	if (as == IOFormatPtr::value)
-	{
+	if (as == IOFormatPtr::value) {
 		return stringify_from_pointer(ptr);
 	}
 	return stringify(MemLens(ptr), as, sep, base, num_case);
 }
 
 template<typename T>
-struct _StringifyImpl<std::weak_ptr<T>>
-{
+struct _StringifyImpl<std::weak_ptr<T>> {
 	static std::string stringify(const std::weak_ptr<T>& ptr)
 	{
 		return ::stringify(ptr, IOFormatPtr::address);
+	}
+
+	static std::string stringify(const std::weak_ptr<T>& ptr,
+								 const IOFormat& fmt)
+	{
+		return ::stringify(ptr, fmt.ptr());
 	}
 };
 
 /* Stringify types */
 
 template<>
-struct _StringifyImpl<std::type_info>
-{
+struct _StringifyImpl<std::type_info> {
 	static std::string stringify(const std::type_info& type)
 	{
 		return ::stringify_type(type);
 	}
-};
 
-template<>
-struct _StringifyImpl<std::type_index>
-{
-	static std::string stringify(const std::type_index& type)
+	static std::string stringify(const std::type_info& type, const IOFormat&)
 	{
 		return ::stringify_type(type);
 	}
 };
 
-/* Stringify strings; wrap them in double quotes. */
 template<>
-struct _StringifyImpl<const char*>
-{
-	static std::string stringify(const char* str)
+struct _StringifyImpl<std::type_index> {
+	static std::string stringify(const std::type_index& type)
 	{
-		return std::string("\"") + str + std::string("\"");
+		return ::stringify_type(type);
+	}
+
+	static std::string stringify(const std::type_index& type, const IOFormat&)
+	{
+		return ::stringify_type(type);
+	}
+};
+
+/* Stringify strings. */
+template<>
+struct _StringifyImpl<const char*> {
+	static std::string stringify(const char* str) { return str; }
+
+	static std::string stringify(const char* str, const IOFormat&)
+	{
+		return str;
 	}
 };
 
 template<>
-struct _StringifyImpl<std::string>
-{
-	static std::string stringify(const std::string& str)
+struct _StringifyImpl<std::string> {
+	static std::string stringify(const std::string& str) { return str; }
+
+	static std::string stringify(const std::string& str, const IOFormat&)
 	{
-		return "\"" + str + "\"";
+		return str;
 	}
 };
 
@@ -441,8 +494,7 @@ struct _StringifyImpl<std::string>
 template<typename T, typename... Args>
 std::string stringify_variadic(const T& val, [[maybe_unused]] Args... rem)
 {
-	if constexpr (sizeof...(Args) > 0)
-	{
+	if constexpr (sizeof...(Args) > 0) {
 		return stringify(val) + ", " + stringify_variadic(rem...);
 	}
 	return stringify(val);
@@ -460,8 +512,7 @@ std::string stringify_from_pointer(const T* ptr)
 {
 	// We only guarantee as much memory safety as the user provides.
 	// We can't check for bad pointers; only null pointers!
-	if (ptr != nullptr)
-	{
+	if (ptr != nullptr) {
 		return stringify(*ptr);
 	}
 	return "(null pointer)";

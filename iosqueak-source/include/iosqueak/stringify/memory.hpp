@@ -67,8 +67,7 @@ std::string stringify_byte(const uint8_t byte,
 	// Calculate the length of the string based on the desired base.
 	size_t length = 0;
 
-	switch (base)
-	{
+	switch (base) {
 		case IOFormatBase::bin:
 			length = 8;
 			break;
@@ -98,12 +97,10 @@ std::string stringify_byte(const uint8_t byte,
 	/* Get digits for all positions in the number, thereby zero-padding.
 	 * Store each digit directly in the appropriate position, so we don't
 	 * have to reverse. */
-	for (size_t i = 0; i < length; ++i)
-	{
+	for (size_t i = 0; i < length; ++i) {
 		size_t digit = val % _base;
 
-		switch (num_case)
-		{
+		switch (num_case) {
 			case IOFormatNumCase::lower:
 				str += DIGIT_CHARS_LOWER[digit];
 				break;
@@ -137,22 +134,19 @@ std::string stringify_bytes(const T& bytes,
 	std::string str = std::string();
 
 	// Parse each byte in the number, from last to first.
-	for (int i = sizeof(T) - 1; i >= 0; --i)
-	{
+	for (int i = sizeof(T) - 1; i >= 0; --i) {
 		// Convert the byte to string.
 		str += stringify_byte(static_cast<uint8_t>(bytes >> (8 * i)),
 							  base,
 							  num_case);
 
 		// Insert byte separation if desired.
-		if (static_cast<bool>(sep & IOFormatMemSep::byte))
-		{
+		if (static_cast<bool>(sep & IOFormatMemSep::byte)) {
 			str += ' ';
 		}
 
 		// Insert word separation if desired.
-		if (static_cast<bool>(sep & IOFormatMemSep::word) && i + 1 % 8 == 0)
-		{
+		if (static_cast<bool>(sep & IOFormatMemSep::word) && i + 1 % 8 == 0) {
 			str += (static_cast<bool>(sep & IOFormatMemSep::byte)) ? "| " : "|";
 		}
 	}
@@ -178,20 +172,17 @@ std::string stringify_bytes(const std::vector<uint8_t>& bytes,
 	std::string str = std::string();
 
 	// Parse each byte in the vector, from last to first.
-	for (size_t i = bytes.size(); i > 0; --i)
-	{
+	for (size_t i = bytes.size(); i > 0; --i) {
 		// Convert the byte to string.
 		str += stringify_byte(bytes[i - 1], base, num_case);
 
 		// Insert byte separation if desired.
-		if (static_cast<bool>(sep & IOFormatMemSep::byte))
-		{
+		if (static_cast<bool>(sep & IOFormatMemSep::byte)) {
 			str += ' ';
 		}
 
 		// Insert word separation if desired.
-		if (static_cast<bool>(sep & IOFormatMemSep::word) && i + 1 % 8 == 0)
-		{
+		if (static_cast<bool>(sep & IOFormatMemSep::word) && i + 1 % 8 == 0) {
 			str += (static_cast<bool>(sep & IOFormatMemSep::byte)) ? "| " : "|";
 		}
 	}
@@ -233,8 +224,7 @@ std::string stringify_address(
 	str.replace(1, 1, "x");
 
 	// If the address is null, just return the null address string.
-	if (lens.address() == 0)
-	{
+	if (lens.address() == 0) {
 		return str;
 	}
 
@@ -257,8 +247,7 @@ std::string stringify_pointer_data(const MemLens& lens)
 	std::string str = "";
 	std::string type = stringify_type(lens.data_type());
 
-	switch (lens.pointer_type())
-	{
+	switch (lens.pointer_type()) {
 		case PtrType::raw:
 			str = "[" + type + "*]";
 			break;

@@ -56,8 +56,7 @@
 std::string reversify(const std::string& str)
 {
 	// If the string has less than 2 characters, return as-is.
-	if (str.length() < 2)
-	{
+	if (str.length() < 2) {
 		return str;
 	}
 
@@ -70,8 +69,7 @@ std::string reversify(const std::string& str)
 
 	/* Append characters from the input string to the output string,
 	 * reading from the last character to the first. */
-	do
-	{
+	do {
 		reversed += str[target - 1];
 	} while (--target > 0);
 

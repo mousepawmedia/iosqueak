@@ -108,13 +108,39 @@ void test_stringify()
  */
 void test_code()
 {
-	int value = 42;
+	/*int value = 42;
 	channel << value << IOCtrl::endl;
 	channel << IOFormatPtr::value << &value << IOCtrl::endl;
 
 	channel << IOFormatPtr::address
 		<< reinterpret_cast<void*>(test_code)
-		<< IOCtrl::endl;
+		<< IOCtrl::endl;*/
+
+	channel << IOFormatTextAttr::bold << IOFormatTextFG::blue << "Hello!"
+			<< IOCtrl::endl;
+	channel << 42 << IOCtrl::endl;
+	channel << IOFormatBase::hex << 254 << IOCtrl::endl;
+
+	channel << IOFormatTextFG::green << IOFormatTextAttr::italic
+			<< IOFormalBoolStyle::scott << true << IOCtrl::endl;
+	std::cout << true << std::endl;
+
+	channel << 123.456 << IOCtrl::endl;
+	channel << IOFormatDecimalPlaces(2) << 10.152 << IOCtrl::endl;
+
+	channel << IOFormatDecimalPlaces(5) << 51.00001
+			<< IOCtrl::endl;  // This is a bug??
+	std::cout << 51.00001 << std::endl;
+
+	int thing = 123;
+	int* thing_ptr = &thing;
+	channel << IOFormatTextFG::red << IOFormatPtr::address << thing_ptr
+			<< IOCtrl::endl;
+	channel << IOFormatTextFG::red << IOFormatPtr::value << thing_ptr
+			<< IOCtrl::endl;
+	channel << IOFormatTextFG::red << IOFormatPtr::memory << thing_ptr
+			<< IOCtrl::endl;
+	channel << IOFormatTextFG::red << typeid(thing) << IOCtrl::endl;
 }
 
 /////// WARNING: DO NOT ALTER BELOW THIS POINT! ///////

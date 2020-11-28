@@ -244,18 +244,18 @@ Output for boolean is pretty basic and boring.
     ioc << foo << IOCtrl::endl;
     //OUTPUT: "TRUE"
 
-The output style can be adjusted, however, using the ``IOFormatBool::`` flags.
+The output style can be adjusted, however, using the ``IOFormalBoolStyle::`` flags.
 
 ..  code-block:: c++
 
     bool foo = true;
-    ioc << IOFormatBool::lower << foo << IOCtrl::endl;
+    ioc << IOFormalBoolStyle::lower << foo << IOCtrl::endl;
     //OUTPUT: "true"
-    ioc << IOFormatBool::upper << foo << IOCtrl::endl;
+    ioc << IOFormalBoolStyle::upper << foo << IOCtrl::endl;
     //OUTPUT: "True"
-    ioc << IOFormatBool::caps << foo << IOCtrl::endl;
+    ioc << IOFormalBoolStyle::caps << foo << IOCtrl::endl;
     //OUTPUT: "TRUE"
-    ioc << IOFormatBool::numeral << foo << IOCtrl::endl;
+    ioc << IOFormalBoolStyle::numeral << foo << IOCtrl::endl;
     //OUTPUT: "1"
 
 ..  index::
@@ -383,8 +383,8 @@ can also be forced using ``IOFormatPtr::value``.
 ..  code-block:: c++
 
     int foo = 12345;
-    int* fooptr = &foo;
-    ioc << "Value of foo: " << IOFormatPtr::value << fooptr << IOCtrl::endl;
+    int* foo_ptr = &foo;
+    ioc << "Value of foo: " << IOFormatPtr::value << foo_ptr << IOCtrl::endl;
 
     char* bar = "My name is Bob, and I am a coder.\0";
     ioc << "Value of bar: " << bar << IOCtrl::endl;
@@ -406,8 +406,8 @@ It is capable of doing this with any pointer, even for custom objects.
 ..  code-block:: c++
 
     int foo = 12345;
-    int* fooptr = &foo;
-    ioc << "Address of foo: " << IOFormatPtr::address << fooptr << IOCtrl::endl;
+    int* foo_ptr = &foo;
+    ioc << "Address of foo: " << IOFormatPtr::address << foo_ptr << IOCtrl::endl;
 
     char* bar = "My name is Bob, and I am a coder.\0";
     ioc << "Address of bar: " << IOFormatPtr::address << IOFormatNumCase::upper
@@ -435,9 +435,9 @@ the memory dumps with no spacing (``IOFormatMemSep::none``).
 ..  code-block:: c++
 
     int foo = 12345;
-    int* fooptr = &foo;
+    int* foo_ptr = &foo;
     ioc << "Memory dump of foo: " << IOFormatPtr::memory << IOFormatMemSep::byte
-        << fooptr << IOCtrl::endl;
+        << foo_ptr << IOCtrl::endl;
 
     char* bar = "My name is Bob, and I am a coder.\0";
     ioc << "Memory dump of bar: " << IOFormatPtr::memory << IOFormatMemSep::all
@@ -924,21 +924,21 @@ Base/Radix Format (``IOFormatBase::``)
 
 ..  _channel_flags_format_bool:
 
-Boolean Format (``IOFormatBool::``)
+Boolean Format (``IOFormalBoolStyle::``)
 --------------------------------------------------------
 
 +-------------------------+-------------------------------+
 | Flag                    | Use                           |
 +=========================+===============================+
-| ``IOFormatBool::lower`` | Lowercase - "true" or "false" |
+| ``IOFormalBoolStyle::lower`` | Lowercase - "true" or "false" |
 +-------------------------+-------------------------------+
-| ``IOFormatBool::upper`` | Uppercase - "True" or "False" |
+| ``IOFormalBoolStyle::upper`` | Uppercase - "True" or "False" |
 +-------------------------+-------------------------------+
-| ``IOFormatBool::caps``  | All caps - "TRUE" or "FALSE"  |
+| ``IOFormalBoolStyle::caps``  | All caps - "TRUE" or "FALSE"  |
 +-------------------------+-------------------------------+
-| ``IOFormatBool::num``   | Binary numerals - "0" or "1"  |
+| ``IOFormalBoolStyle::num``   | Binary numerals - "0" or "1"  |
 +-------------------------+-------------------------------+
-| ``IOFormatBool::scott`` | "Yea" or "Nay"                |
+| ``IOFormalBoolStyle::scott`` | "Yea" or "Nay"                |
 +-------------------------+-------------------------------+
 
 ..  index::

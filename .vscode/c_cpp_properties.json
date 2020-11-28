@@ -5,11 +5,9 @@
             "includePath": [
                 "/usr/include",
                 "/usr/local/include",
-                "${workspaceRoot}/../libdeps/libs/include",
-                "${workspaceRoot}/../pawlib/pawlib/include",
-                "${workspaceRoot}/iosqueak-source/include/iosqueak/stringify",
-                "${workspaceRoot}/iosqueak-source/include/iosqueak",
-                "${workspaceRoot}/iosqueak-source/include"
+                "${workspaceRoot}/../libdeps/libs/include/**",
+                "${workspaceRoot}/../pawlib/pawlib/include/**",
+                "${workspaceRoot}/iosqueak-source/include/**"
             ],
             "defines": [],
             "intelliSenseMode": "clang-x64",
@@ -35,31 +33,22 @@
         {
             "name": "Linux",
             "includePath": [
-                "/usr/include/c++/8",
-                "/usr/include/x86_64-linux-gnu/c++/8",
-                "/usr/include/c++/8/backward",
-                "/usr/lib/gcc/x86_64-linux-gnu/8/include",
-                "/usr/local/include",
-                "/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed",
-                "/usr/include/x86_64-linux-gnu",
-                "/usr/include",
-                "${workspaceRoot}/../libdeps/libs/include",
-                "${workspaceRoot}/../pawlib/pawlib/include",
-                "${workspaceRoot}/iosqueak-source/include/iosqueak/stringify",
-                "${workspaceRoot}/iosqueak-source/include/iosqueak",
-                "${workspaceRoot}/iosqueak-source/include"
+                "/usr/include/c++/**",
+                "/usr/include/x86_64-linux-gnu/**",
+                "/usr/local/include/**",
+                "/usr/lib/gcc/x86_64-linux-gnu/**",
+                "/usr/include/**",
+                "${workspaceRoot}/../libdeps/libs/include/**",
+                "${workspaceRoot}/../pawlib/pawlib/include/**",
+                "${workspaceRoot}/iosqueak-source/include/**"
             ],
             "defines": [],
             "intelliSenseMode": "clang-x64",
             "browse": {
                 "path": [
-                    "/usr/include/c++/8",
-                    "/usr/include/x86_64-linux-gnu/c++/8",
-                    "/usr/include/c++/8/backward",
-                    "/usr/lib/gcc/x86_64-linux-gnu/8/include",
-                    "/usr/local/include",
-                    "/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed",
+                    "/usr/include/c++",
                     "/usr/include/x86_64-linux-gnu",
+                    "/usr/local/include",
                     "/usr/include",
                     "${workspaceRoot}/../libdeps/libs/include",
                     "${workspaceRoot}/../pawlib/pawlib/include",

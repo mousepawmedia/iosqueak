@@ -3,6 +3,19 @@
  *
  * Allows managed, custom output to any console or terminal.
  *
+ * Prints out (virtually) any value in a human-readable form that is
+ * appropriate to the data type. For example, a boolean prints as 'true' or
+ * 'false', and a pointer prints as a hexadecimal memory address.
+ *
+ * Messages can be routed based on category and verbosity (priority) to
+ * the standard output/standard error streams, or to any custom function
+ * via callback.
+ *
+ * Fully supports all ANSI formatting, so you can make text bold, blue, and
+ * flashing (or whatever) without having to memorize ANSI control codes.
+ *
+ * In other words, it prints things nicely!
+ *
  * Author: Jason C. McDonald
  */
 
@@ -76,14 +89,15 @@ These need to be swapped out for pawlib alternatives ASAP.*/
 // We use C's classes often.
 #include <cstdio>
 
+#include "iosqueak/ioctrl.hpp"
 #include "iosqueak/ioformat.hpp"
-#include "iosqueak/stringy.hpp"
+#include "iosqueak/stringify.hpp"
 #include "pawlib/core_types.hpp"
 
 class Channel
 {
 protected:
-	std::string msg;
+	std::string buffer;
 
 	/// Which categories are permitted.
 	IOCat process_cat;
@@ -102,27 +116,24 @@ protected:
 	IOVrb vrb;
 	IOCat cat;
 
-	/// The string containing the formatting codes.
-	std::string format_str;
-
 	// Message parsable?
 	tril parse;
 
 	/// Dirty flag raised when attributes are changed and not yet applied.
 	bool dirty_attributes = false;
 
-	/** Returns whether the verbosity and category match parsing rules. */
+	/** Determines whether the verbosity and category match parsing rules.
+	 * \return true if we can definitely parse
+	 */
 	bool can_parse()
 	{
 		// If we aren't sure about the parsing condition...
-		if (~parse)
-		{
+		if (~parse) {
 			/* Proceed if the verbosity is in range
 			 * and the category is set to parse. */
-			parse =
-				((vrb <= process_vrb) && static_cast<bool>(process_cat & cat))
-					? true
-					: false;
+			parse = ((vrb <= process_vrb) && flags_check(process_cat, cat))
+						? true
+						: false;
 		}
 		return parse;
 	}
@@ -135,13 +146,15 @@ protected:
 	bool process_fmt(T val)
 	{
 		// If we are blocked from parsing, abort.
-		if (!can_parse())
-		{
+		if (!can_parse()) {
 			return false;
 		}
 
+		// Inject the formatting flag into the IOFormat
 		this->fmt << val;
+		// Require attributes to be reparsed.
 		dirty_attributes = true;
+		// Report processing was successful.
 		return true;
 	}
 
@@ -153,13 +166,16 @@ protected:
 		 */
 
 		// Flush is essential for progress-style outputs (after \r and no \n)
-		switch (echo_mode)
-		{
+
+		// Flush the standard streams.
+		switch (echo_mode) {
 			case IOEchoMode::cout:
 				std::cout << std::flush;
+				std::cerr << std::flush;
 				break;
 			case IOEchoMode::printf:
 				fflush(stdout);
+				fflush(stderr);
 				break;
 			case IOEchoMode::none:
 				break;
@@ -167,17 +183,16 @@ protected:
 	}
 
 	/** Move the cursor given the command.
-	 * \param the cursor command
+	 * \param rhs: the cursor command
 	 */
 	void move_cursor(const IOCursor& rhs)
 	{
 		// TODO: Migrate to ioformat.hpp
-		if (this->fmt.standard() == IOFormatStandard::ansi)
-		{
-			switch (rhs)
-			{
+		if (this->fmt.standard() == IOFormatStandard::ansi) {
+			switch (rhs) {
 				case IOCursor::left:
-					// NOTE: Watch this. \x1B is allegedly equal to \e, check it.
+					// NOTE: Watch this. \x1B is allegedly equal to \e, check
+					// it.
 					inject("\x1B[1D");
 					break;
 				case IOCursor::right:
@@ -186,46 +201,40 @@ protected:
 					break;
 				default:
 					/* Can't happen unless you forgot to implement an
-					* IOCursor option! */
+					 * IOCursor option! */
 					assert(false);
 			}
 		}
 	}
 
 	/** Insert a single character without need for null terminator.
-	 * \param the character to insert
+	 * \param ch: the character to insert
 	 */
 	void inject(char ch)
 	{
-		// If we just applied attributes, push them now.
-		if (apply_attributes())
-		{
-			inject(this->format_str.c_str());
-		}
-		msg.push_back(ch);
+		// Add any pending attributes to the buffer.
+		inject_attributes();
+		// Inject the character into the buffer.
+		buffer.push_back(ch);
 	}
 
 	/** Insert a C string into the output stream. Automatically applies
 	 * unapplied attributes before inserting text.
-	 * \param the C string to insert
-	 * \param whether the call was recursive. (Internal use only!)
+	 * \param str: the C string to insert
 	 */
-	void inject(const char* str, bool recursive = false)
+	void inject(const char* str)
 	{
-		// If we just applied attributes, push them now.
-		if (!recursive && apply_attributes())
-		{
-			inject(format_str.c_str(), true);
-		}
-
-		// Append to the message.
-		msg.append(str);
+		// Add any pending attributes to the buffer.
+		inject_attributes();
+		// Add the message to the buffer.
+		buffer.append(str);
 	}
 
-	void inject(const std::string& str)
-	{
-		inject(str.c_str());
-	}
+	/** Insert a standard string into the output stream. Automatically
+	 * applies unapplied attributes before inserting text.
+	 * \param str: the std::string to insert
+	 */
+	inline void inject(const std::string& str) { inject(str.c_str()); }
 
 	/** Transmit the current pending output stream and reset in
 	 * preparation for the next message.
@@ -233,143 +242,134 @@ protected:
 	 */
 	void transmit(bool keep = false)
 	{
-		if (this->msg != "")
-		{
-			switch (vrb)
-			{
-				case IOVrb::quiet:
-					// Dispatch on the "quiet" verbosity signal.
-					signal_v_quiet(msg, cat);
-					/* Fall through, so the lower signals get emitted too.
-					 * This allows outputs to connect to the HIGHEST
-					 * verbosity they will allow, and get the lower verbosity
-					 * messages regardless.
-					 */
-					[[fallthrough]];
-				case IOVrb::normal:
-					// Dispatch on the "normal" verbosity signal.
-					signal_v_normal(msg, cat);
-					[[fallthrough]];
-				case IOVrb::chatty:
-					// Dispatch on the "chatty" verbosity signal.
-					signal_v_chatty(msg, cat);
-					[[fallthrough]];
-				case IOVrb::tmi:
-					// Dispatch on the "TMI" verbosity signal.
-					signal_v_tmi(msg, cat);
-					break;
-			}
+		// If the buffer is empty, abort transmission.
+		if (this->buffer == "") {
+			return;
+		}
 
-			if (static_cast<bool>(cat & IOCat::normal))
-			{
-				// Dispatch on the "normal" category signal.
-				signal_c_normal(msg, vrb);
-			}
-			if (static_cast<bool>(cat & IOCat::debug))
-			{
-				// Dispatch on the "debug" category signal.
-				signal_c_debug(msg, vrb);
-			}
-			if (static_cast<bool>(cat & IOCat::warning))
-			{
-				// Dispatch on the "warning" category signal.
-				signal_c_warning(msg, vrb);
-			}
-			if (static_cast<bool>(cat & IOCat::error))
-			{
-				// Dispatch on the "error" category signal.
-				signal_c_error(msg, vrb);
-			}
-			if (static_cast<bool>(cat & IOCat::testing))
-			{
-				// Dispatch on the "testing" category signal.
-				signal_c_testing(msg, vrb);
-			}
+		// Transmit to verbosity-based callbacks as appropriate.
+		switch (vrb) {
+			// Dispatch on the "quiet" verbosity signal.
+			case IOVrb::quiet:
+				signal_v_quiet(buffer, cat);
+				/* Fall through, so the lower signals get emitted too.
+				 * This allows outputs to connect to the HIGHEST
+				 * verbosity they will allow, and get the lower verbosity
+				 * messages regardless.
+				 */
+				[[fallthrough]];
+			// Dispatch on the "normal" verbosity signal.
+			case IOVrb::normal:
+				signal_v_normal(buffer, cat);
+				[[fallthrough]];
+			// Dispatch on the "chatty" verbosity signal.
+			case IOVrb::chatty:
+				signal_v_chatty(buffer, cat);
+				[[fallthrough]];
+			// Dispatch on the "TMI" verbosity signal.
+			case IOVrb::tmi:
+				signal_v_tmi(buffer, cat);
+				break;
+		}
 
-			// Dispatch the general purpose signals.
-			signal_full(msg, vrb, cat);
-			signal_all(msg);
+		// Transmit to category-based callbacks.
 
-			// If we are supposed to be echoing...
-			if (echo_mode != IOEchoMode::none)
-			{
-				// If the verbosity and category is correct...
-				if (vrb <= echo_vrb && static_cast<bool>(cat | echo_cat))
-				{
-					switch (echo_mode)
-					{
-						// If we're supposed to use `printf`...
-						case IOEchoMode::printf:
-							// For error messages, echo to stderr instead.
-							if (static_cast<bool>(cat & IOCat::error))
-							{
-								fprintf(stderr, "%s", msg.c_str());
-							}
-							// For all other messages, echo to stdout.
-							else
-							{
-								printf("%s", msg.c_str());
-							}
-							break;
-						// If we're supposed to use std::cout...
-						case IOEchoMode::cout:
-							// For error messages, echo to stderr instead.
-							if (static_cast<bool>(cat & IOCat::error))
-							{
-								std::cerr << msg.c_str();
-							}
-							// For all other messages, echo to stdout.
-							else
-							{
-								std::cout << msg.c_str();
-							}
-							break;
-						// This case is here for completeness...
-						case IOEchoMode::none:
-							// ...we should never reach this point!
-							assert(false);
-							break;
-					}
+		// Dispatch on the "normal" category signal.
+		if (flags_check(cat, IOCat::normal)) {
+			signal_c_normal(buffer, vrb);
+		}
+		// Dispatch on the "debug" category signal.
+		if (flags_check(cat, IOCat::debug)) {
+			signal_c_debug(buffer, vrb);
+		}
+		// Dispatch on the "warning" category signal.
+		if (flags_check(cat, IOCat::warning)) {
+			signal_c_warning(buffer, vrb);
+		}
+		// Dispatch on the "error" category signal.
+		if (flags_check(cat, IOCat::error)) {
+			signal_c_error(buffer, vrb);
+		}
+		// Dispatch on the "testing" category signal.
+		if (flags_check(cat, IOCat::testing)) {
+			signal_c_testing(buffer, vrb);
+		}
+
+		// Dispatch the general purpose signals.
+		signal_full(buffer, vrb, cat);
+		signal_all(buffer);
+
+		// If we are supposed to be echoing...
+		if (echo_mode != IOEchoMode::none) {
+			// If the verbosity and category is correct...
+			if (vrb <= echo_vrb && static_cast<bool>(cat | echo_cat)) {
+				// Transmit to standard output using the desired method.
+				switch (echo_mode) {
+					// If we're supposed to use `printf`...
+					case IOEchoMode::printf:
+						// For error messages, echo to stderr instead.
+						if (flags_check(cat, IOCat::error)) {
+							fprintf(stderr, "%s", buffer.c_str());
+						}
+						// For all other messages, echo to stdout.
+						else {
+							printf("%s", buffer.c_str());
+						}
+						break;
+					// If we're supposed to use std::cout...
+					case IOEchoMode::cout:
+						// For error messages, echo to stderr instead.
+						if (flags_check(cat, IOCat::error)) {
+							std::cerr << buffer.c_str();
+						}
+						// For all other messages, echo to stdout.
+						else {
+							std::cout << buffer.c_str();
+						}
+						break;
+					// This case is here for completeness...
+					case IOEchoMode::none:
+						// ...we should never reach this point!
+						assert(false);
+						break;
 				}
 			}
-
-			/* If we aren't flagged to keep formatting,
-			 * reset the system in prep for the next message.
-			 */
-			if (!keep)
-			{
-				reset_flags();
-			}
-
-			// Clear the message out in preparation for the next.
-			clear_msg();
 		}
+
+		/* If we aren't flagged to keep formatting,
+		 * reset the system in prep for the next message.
+		 */
+		if (!keep) {
+			reset_flags();
+		}
+
+		// Clear the message out in preparation for the next.
+		clear_buffer();
 	}
 
-	bool apply_attributes()
+	void clear_buffer() { buffer.clear(); }
+
+	/** Injects the current attribute string into the buffer. */
+	void inject_attributes()
 	{
-		// If we have unapplied attributes, create attribute format string.
-		if (!dirty_attributes) { return false; }
-
-		this->format_str = this->fmt.format_string();
-
-		return true;
+		// If we have no unapplied attributes, abort.
+		if (!dirty_attributes) {
+			return;
+		}
+		// Otherwise, inject the attributes into the buffer.
+		buffer.append(this->fmt.format_string().c_str());
 	}
 
-	void clear_msg()
-	{
-		msg.clear();
-	}
-
-	/**Reset all attributes.*/
+	/** Reset all attributes, and inject the reset attribute string
+	 * into the buffer.*/
 	void reset_attributes()
 	{
+		// Reset the formatting attributes to their defaults.
 		this->fmt.reset_attributes();
+		// Immediately inject the reset attributes string!
+		this->inject(this->fmt.format_string().c_str());
+		// We have no pending attributes now.
 		this->dirty_attributes = false;
-		/* We must leave calling `apply_attributes()` to `inject()`,
-		 * otherwise the reset attributes will never get injected
-		 * into the broadcast stream.
-		 */
 	}
 
 	/**Reset all flags.*/
@@ -378,19 +378,19 @@ protected:
 		// Reset all the flags.
 		this->fmt = IOFormat();
 
-		// We reset the verbosity and category.
+		// Reset the verbosity and category.
 		vrb = IOVrb::normal;
 		cat = IOCat::normal;
 	}
 
 public:
 	Channel()
-	: msg(""), process_cat(IOCat::all), process_vrb(IOVrb::tmi),
+	: buffer(""), process_cat(IOCat::all), process_vrb(IOVrb::tmi),
 	  echo_mode(IOEchoMode::cout), echo_cat(IOCat::all), echo_vrb(IOVrb::tmi),
-	  fmt(IOFormat()), vrb(IOVrb::normal), cat(IOCat::normal),
-	  format_str(""), parse(maybe),
+	  fmt(IOFormat()), vrb(IOVrb::normal), cat(IOCat::normal), parse(maybe),
 	  dirty_attributes(false)
-	{}
+	{
+	}
 
 	/// Signal for categories.
 	typedef eventpp::CallbackList<void(std::string, IOCat)> IOSignalCat;
@@ -477,77 +477,79 @@ public:
 	 */
 	IOSignalAll signal_all;
 
+	// Process formatting flags.
 	Channel& operator<<(const IOFormatBase& rhs)
 	{
-		 process_fmt(rhs);
-		 return *this;
+		process_fmt(rhs);
+		return *this;
 	}
 	Channel& operator<<(const IOFormatBaseNotation& rhs)
 	{
-		 process_fmt(rhs);
-		 return *this;
+		process_fmt(rhs);
+		return *this;
 	}
-	Channel& operator<<(const IOFormatBoolStyle& rhs)
+	Channel& operator<<(const IOFormalBoolStyle& rhs)
 	{
-		 process_fmt(rhs);
-		 return *this;
+		process_fmt(rhs);
+		return *this;
 	}
 	Channel& operator<<(const IOFormatCharValue& rhs)
 	{
-		 process_fmt(rhs);
-		 return *this;
+		process_fmt(rhs);
+		return *this;
 	}
 	Channel& operator<<(const IOFormatDecimalPlaces& rhs)
 	{
-		 process_fmt(rhs);
-		 return *this;
+		process_fmt(rhs);
+		return *this;
 	}
 	Channel& operator<<(const IOFormatMemSep& rhs)
 	{
-		 process_fmt(rhs);
-		 return *this;
+		process_fmt(rhs);
+		return *this;
 	}
 	Channel& operator<<(const IOFormatNumCase& rhs)
 	{
-		 process_fmt(rhs);
-		 return *this;
+		process_fmt(rhs);
+		return *this;
 	}
 	Channel& operator<<(const IOFormatPtr& rhs)
 	{
-		 process_fmt(rhs);
-		 return *this;
+		process_fmt(rhs);
+		return *this;
 	}
 	Channel& operator<<(const IOFormatSciNotation& rhs)
 	{
-		 process_fmt(rhs);
-		 return *this;
+		process_fmt(rhs);
+		return *this;
 	}
 	Channel& operator<<(const IOFormatSign& rhs)
 	{
-		 process_fmt(rhs);
-		 return *this;
+		process_fmt(rhs);
+		return *this;
 	}
 	Channel& operator<<(const IOFormatStandard& rhs)
 	{
-		 process_fmt(rhs);
-		 return *this;
+		process_fmt(rhs);
+		return *this;
 	}
 	Channel& operator<<(const IOFormatTextAttr& rhs)
 	{
-		 process_fmt(rhs);
-		 return *this;
+		process_fmt(rhs);
+		return *this;
 	}
 	Channel& operator<<(const IOFormatTextBG& rhs)
 	{
-		 process_fmt(rhs);
-		 return *this;
+		process_fmt(rhs);
+		return *this;
 	}
 	Channel& operator<<(const IOFormatTextFG& rhs)
 	{
-		 process_fmt(rhs);
-		 return *this;
+		process_fmt(rhs);
+		return *this;
 	}
 
+	// Set message category.
 	Channel& operator<<(const IOCat& rhs)
 	{
 		// Set the category and force revalidation of parsing.
@@ -556,6 +558,7 @@ public:
 		return *this;
 	}
 
+	// Set message verbosity.
 	Channel& operator<<(const IOVrb& rhs)
 	{
 		// Set the verbosity and force the revalidation of parsing.
@@ -564,6 +567,7 @@ public:
 		return *this;
 	}
 
+	// Control channel.
 	Channel& operator<<(const IOCtrl& rhs)
 	{
 		/* We'll need to track whether we're supposed to ask the transmission
@@ -571,45 +575,72 @@ public:
 		 * was the cause of T1081. */
 		bool keep = true;
 
-		if (flags_check(rhs, IOCtrl::clear))
-		{
+		if (flags_check(rhs, IOCtrl::clear)) {
 			reset_attributes();
 			keep = false;
 		}
 
-		if (flags_check(rhs, IOCtrl::r))
-		{
+		if (flags_check(rhs, IOCtrl::r)) {
 			can_parse() ? inject("\r") : inject("");
 		}
 
-		if (flags_check(rhs, IOCtrl::n))
-		{
+		if (flags_check(rhs, IOCtrl::n)) {
 			can_parse() ? inject("\n") : inject("");
 		}
 
-		if (flags_check(rhs, IOCtrl::send))
-		{
+		if (flags_check(rhs, IOCtrl::send)) {
 			transmit(keep);
 		}
 
-		if (flags_check(rhs, IOCtrl::flush))
-		{
+		if (flags_check(rhs, IOCtrl::flush)) {
 			flush();
 		}
 
 		return *this;
 	}
 
-	template<typename T>
-	Channel& operator<<(const T& rhs)
+	// Inject c-string into buffer.
+	Channel& operator<<(const char* rhs)
 	{
-		if(!can_parse()) { return *this; }
+		if (!can_parse()) {
+			return *this;
+		}
 
-		inject(stringify(rhs));
+		inject(rhs);
 
 		return *this;
 	}
 
+	// Inject std::string into buffer.
+	Channel& operator<<(const std::string& rhs)
+	{
+		if (!can_parse()) {
+			return *this;
+		}
+
+		inject(rhs.c_str());
+
+		return *this;
+	}
+
+	// Inject anything else, using stringify.
+	template<typename T>
+	Channel& operator<<(const T& rhs)
+	{
+		if (!can_parse()) {
+			return *this;
+		}
+
+		inject(stringify(rhs, this->fmt));
+
+		return *this;
+	}
+
+	/** Configure if/when channel echoes to the standard output.
+	 * \param mode: the echo mode (typically cout or fstream)
+	 * \param vrb: the maximum verbosity to echo.
+	 * \param cat: the categories to echo.
+	 */
 	void configure_echo(IOEchoMode mode,
 						IOVrb vrb = IOVrb::tmi,
 						IOCat cat = IOCat::all)
@@ -620,13 +651,12 @@ public:
 	}
 
 	/** Suppress a category from broadcasting at all.
-	  * \param the category to suppress
-	  */
+	 * \param the category to suppress
+	 */
 	void shut_up(const IOCat& cat)
 	{
 		this->process_cat = this->process_cat & ~cat;
-		if (this->process_cat == IOCat::none)
-		{
+		if (this->process_cat == IOCat::none) {
 			printf("WARNING: All message categories have been turned off!\n");
 		}
 		// Revalidate parsing.
@@ -634,9 +664,9 @@ public:
 	}
 
 	/** Suppress a verbosity from broadcasting at all.
-	  * All verbosities greater than the one specified will be silenced.
-	  * \param the verbosity to suppress
-	  */
+	 * All verbosities greater than the one specified will be silenced.
+	 * \param the verbosity to suppress
+	 */
 	void shut_up(const IOVrb& vrb = IOVrb::normal)
 	{
 		// Set the processing verbosity.
@@ -663,14 +693,16 @@ public:
 	void speak_up(const IOVrb& vrb)
 	{
 		// Allow verbosity through by turning on its bit.
-		if (this->process_vrb < vrb)
-		{
+		if (this->process_vrb < vrb) {
 			this->process_vrb = vrb;
 			// Revalidate parsing.
 			parse = maybe;
 		}
 	}
 
+	/** Permit all messages to broadcast.
+	 * Sets verbosity and category to permit all messages.
+	 */
 	void speak_up()
 	{
 		process_vrb = IOVrb::tmi;

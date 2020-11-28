@@ -77,18 +77,13 @@ size_t lengthify_integral(
 	size_t length = (val <= 0 || sign == IOFormatSign::always) ? 1 : 0;
 
 	if (notation == IOFormatBaseNotation::prefix &&
-		(_base == 2 || _base == 3 || _base == 8 || _base == 12 || _base == 16))
-	{
+		(_base == 2 || _base == 3 || _base == 8 || _base == 12 ||
+		 _base == 16)) {
 		length += 2;
-	}
-	else if (notation != IOFormatBaseNotation::none)
-	{
-		if (_base < 10)
-		{
+	} else if (notation != IOFormatBaseNotation::none) {
+		if (_base < 10) {
 			length += 2;
-		}
-		else if (_base > 10)
-		{
+		} else if (_base > 10) {
 			length += 3;
 		}
 	}
@@ -97,8 +92,7 @@ size_t lengthify_integral(
 	T number = (val >= 0) ? val : -val;
 
 	// Count the number of digits in the absolute value of the integer.
-	while (number)
-	{
+	while (number) {
 		number /= _base;
 		++length;
 	}
@@ -129,8 +123,7 @@ size_t lengthify_floating_point(
 	int magnitude = 0;
 	bool useExp = false;
 
-	switch (sci)
-	{
+	switch (sci) {
 		case IOFormatSciNotation::always:
 			magnitude = log10(val);
 			useExp = true;
@@ -149,8 +142,7 @@ size_t lengthify_floating_point(
 	 * If negative, also add 1 to the length for the negative sign. */
 	size_t len = (val < 0 || sign == IOFormatSign::always) ? 2 : 1;
 
-	if (useExp)
-	{
+	if (useExp) {
 		// Add space for the whole digit and the 'e'
 		len += 2;
 		// Show up to the specified number of decimal places.
@@ -159,9 +151,7 @@ size_t lengthify_floating_point(
 		len += lengthify_integral(magnitude,
 								  IOFormatBase::dec,
 								  IOFormatSign::always);
-	}
-	else
-	{
+	} else {
 		// Add space for the whole part of the number.
 		len += lengthify_integral(static_cast<int>(floor(number)));
 		// Add space for the specified number of decimal places.
@@ -191,8 +181,7 @@ std::string stringify_integral(
 	   solution is called for. */
 
 	// If the number is zero, skip everything else and return that.
-	if (val == 0)
-	{
+	if (val == 0) {
 		return "0";
 	}
 
@@ -206,15 +195,12 @@ std::string stringify_integral(
 	bool prefix = false;
 
 	if (notation == IOFormatBaseNotation::prefix &&
-		(_base == 2 || _base == 3 || _base == 8 || _base == 12 || _base == 16))
-	{
+		(_base == 2 || _base == 3 || _base == 8 || _base == 12 ||
+		 _base == 16)) {
 		prefix = true;
-	}
-	else if (_base != 10 && notation != IOFormatBaseNotation::none)
-	{
+	} else if (_base != 10 && notation != IOFormatBaseNotation::none) {
 		str += DIGIT_CHARS_LOWER[_base % 10];
-		if (_base > 10)
-		{
+		if (_base > 10) {
 			str += DIGIT_CHARS_LOWER[_base / 10];
 		}
 		str += '_';
@@ -224,11 +210,9 @@ std::string stringify_integral(
 	 * If it's negative, make it positive. */
 	T number = (val >= 0) ? val : -val;
 
-	while (number)
-	{
+	while (number) {
 		size_t digit = number % _base;
-		switch (num_case)
-		{
+		switch (num_case) {
 			case IOFormatNumCase::lower:
 				str += DIGIT_CHARS_LOWER[digit];
 				break;
@@ -239,10 +223,8 @@ std::string stringify_integral(
 		number /= _base;
 	}
 
-	if (prefix)
-	{
-		switch (_base)
-		{
+	if (prefix) {
+		switch (_base) {
 			case 2:
 				str += 'b';
 				break;
@@ -262,12 +244,9 @@ std::string stringify_integral(
 		str += '0';
 	}
 
-	if (val < 0)
-	{
+	if (val < 0) {
 		str += "-";
-	}
-	else if (sign == IOFormatSign::always)
-	{
+	} else if (sign == IOFormatSign::always) {
 		str += "+";
 	}
 
@@ -277,8 +256,7 @@ std::string stringify_integral(
 std::string stringify_char(
 	const char& val, const IOFormatCharValue& as = IOFormatCharValue::as_char)
 {
-	switch (as)
-	{
+	switch (as) {
 		case IOFormatCharValue::as_char:
 			return std::string(1, val);
 		case IOFormatCharValue::as_int:
@@ -310,8 +288,7 @@ std::string stringify_floating_point(
 	int magnitude = 0;
 	bool useExp = false;
 
-	switch (sci)
-	{
+	switch (sci) {
 		case IOFormatSciNotation::always:
 			magnitude = log10(number);
 			useExp = true;
@@ -327,17 +304,13 @@ std::string stringify_floating_point(
 	}
 
 	// Append appropriate sign
-	if (val < 0)
-	{
+	if (val < 0) {
 		str += '-';
-	}
-	else if (sign == IOFormatSign::always)
-	{
+	} else if (sign == IOFormatSign::always) {
 		str += '+';
 	}
 
-	if (useExp)
-	{
+	if (useExp) {
 		// Modify to D.NNNNNNNN form and convert that to a string.
 		T modified = number * pow(10, -(ceil(log10(number))) + 1);
 		str += stringify_floating_point(modified,
@@ -350,9 +323,7 @@ std::string stringify_floating_point(
 												 IOFormatBase::dec,
 												 IOFormatSign::always);
 		str += str_mag;
-	}
-	else
-	{
+	} else {
 		// Get whole part
 		long long int whole = static_cast<int>(floor(number));
 		str += stringify_integral(whole);

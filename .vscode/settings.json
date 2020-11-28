@@ -2,8 +2,7 @@
     "workbench.colorCustomizations": {
         "statusBar.background": "#de8787",
         "statusBarItem.hoverBackground": "#d35f5f",
-        "statusBar.foreground": "#15202b",
-        "statusBar.border": "#de8787"
+        "statusBar.foreground": "#15202b"
     },
     "peacock.color": "#DE8787",
     "restructuredtext.confPath": "${workspaceFolder}/docs/source",
@@ -73,19 +72,29 @@
     },
     "cSpell.words": [
         "decimal places",
+        "dozenal",
         "format",
         "hpp",
         "io",
         "ioformat",
         "iosqueak",
         "lengthify",
-        "reversify"
+        "reversify",
+        "struct"
     ],
     "cSpell.ignoreWords": [
+        "cout",
+        "cstr",
         "endc",
+        "endl",
         "itos",
+        "numcase",
+        "printf",
         "sendc",
-        "sendl"
+        "sendl",
+        "textattr",
+        "textbg",
+        "textfg"
     ],
     "astyle.astylerc": "${workspaceRoot}/astylerc"
 }
