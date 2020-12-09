@@ -116,6 +116,11 @@ void test_code()
 		<< reinterpret_cast<void*>(test_code)
 		<< IOCtrl::endl;*/
 
+	// Test bitset stringification/channel compat
+	std::bitset<71> bits(0xFFEE);
+	channel << IOFormatTextFG::magenta << IOFormatMemSep::all
+			<< bits << IOCtrl::endl;
+
 	channel << IOFormatTextAttr::bold << IOFormatTextFG::blue << "Hello!"
 			<< IOCtrl::endl;
 	channel << 42 << IOCtrl::endl;
@@ -124,6 +129,8 @@ void test_code()
 	channel << IOFormatTextFG::green << IOFormatTextAttr::italic
 			<< IOFormalBoolStyle::scott << true << IOCtrl::endl;
 	std::cout << true << std::endl;
+
+	channel << IOFormatBase::hex << IOFormatNumCase::lower << 0xABCD << IOCtrl::endl;
 
 	channel << 123.456 << IOCtrl::endl;
 	channel << IOFormatDecimalPlaces(2) << 10.152 << IOCtrl::endl;

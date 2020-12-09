@@ -158,7 +158,13 @@ struct _StringifyImpl<
 
 	static std::string stringify(const T& val, const IOFormat& fmt)
 	{
-		return ::stringify(val, fmt.base());
+		return ::stringify(
+			val,
+			fmt.base(),
+			fmt.sign(),
+			fmt.numeral_case(),
+			fmt.base_notation()
+		);
 	}
 };
 
@@ -185,7 +191,12 @@ struct _StringifyImpl<
 
 	static std::string stringify(const T& val, const IOFormat& fmt)
 	{
-		return ::stringify(val, fmt.decimal_places());
+		return ::stringify(
+			val,
+			fmt.decimal_places(),
+			fmt.sci_notation(),
+			fmt.sign()
+		);
 	}
 };
 
@@ -258,6 +269,28 @@ std::string stringify(const char* name_hint, const T& func, Args... args)
 	return stringify_function(name_hint, func, args...);
 }
 
+/* Stringify bitsets */
+
+template<size_t N>
+std::string stringify(const std::bitset<N>& bits,
+					  const IOFormatMemSep& sep)
+{
+	return stringify_bitset(bits, sep);
+}
+
+template<size_t N>
+struct _StringifyImpl<std::bitset<N>> {
+	static std::string stringify(const std::bitset<N>& bits)
+	{
+		return ::stringify(bits, IOFormatMemSep::all);
+	}
+
+	static std::string stringify(const std::bitset<N>& bits, const IOFormat& fmt)
+	{
+		return ::stringify(bits, fmt.mem_sep());
+	}
+};
+
 /* Stringify MemLens */
 
 /* Implementation Note: By writing the two functions with the default arguments
@@ -318,7 +351,30 @@ struct _StringifyImpl<MemLens> {
 
 	static std::string stringify(const MemLens& lens, const IOFormat& fmt)
 	{
-		return ::stringify(lens, fmt.ptr());
+		if (fmt.ptr() == IOFormatPtr::address) {
+			return ::stringify(lens, fmt.ptr(), fmt.numeral_case());
+		}
+
+		auto base = fmt.base();
+		switch(base) {
+			case IOFormatBase::bin:
+				[[fallthrough]];
+			case IOFormatBase::oct:
+				[[fallthrough]];
+			case IOFormatBase::hex:
+				break;
+			default:
+				base = IOFormatBase::hex;
+		}
+
+		return ::stringify(
+			lens,
+			fmt.ptr(),
+			fmt.mem_sep(),
+			base,
+			fmt.numeral_case()
+		);
+
 	}
 };
 
@@ -357,7 +413,29 @@ struct _StringifyImpl<T*> {
 
 	static std::string stringify(const T* ptr, const IOFormat& fmt)
 	{
-		return ::stringify(ptr, fmt.ptr());
+		if (fmt.ptr() == IOFormatPtr::address) {
+			return ::stringify(ptr, fmt.ptr(), fmt.numeral_case());
+		}
+
+		auto base = fmt.base();
+		switch(base) {
+			case IOFormatBase::bin:
+				[[fallthrough]];
+			case IOFormatBase::oct:
+				[[fallthrough]];
+			case IOFormatBase::hex:
+				break;
+			default:
+				base = IOFormatBase::hex;
+		}
+
+		return ::stringify(
+			ptr,
+			fmt.ptr(),
+			fmt.mem_sep(),
+			base,
+			fmt.numeral_case()
+		);
 	}
 };
 
@@ -397,7 +475,29 @@ struct _StringifyImpl<std::shared_ptr<T>> {
 	static std::string stringify(const std::shared_ptr<T>& ptr,
 								 const IOFormat& fmt)
 	{
-		return ::stringify(ptr, fmt.ptr());
+		if (fmt.ptr() == IOFormatPtr::address) {
+			return ::stringify(ptr, fmt.ptr(), fmt.numeral_case());
+		}
+
+		auto base = fmt.base();
+		switch(base) {
+			case IOFormatBase::bin:
+				[[fallthrough]];
+			case IOFormatBase::oct:
+				[[fallthrough]];
+			case IOFormatBase::hex:
+				break;
+			default:
+				base = IOFormatBase::hex;
+		}
+
+		return ::stringify(
+			ptr,
+			fmt.ptr(),
+			fmt.mem_sep(),
+			base,
+			fmt.numeral_case()
+		);
 	}
 };
 
@@ -437,7 +537,29 @@ struct _StringifyImpl<std::weak_ptr<T>> {
 	static std::string stringify(const std::weak_ptr<T>& ptr,
 								 const IOFormat& fmt)
 	{
-		return ::stringify(ptr, fmt.ptr());
+		if (fmt.ptr() == IOFormatPtr::address) {
+			return ::stringify(ptr, fmt.ptr(), fmt.numeral_case());
+		}
+
+		auto base = fmt.base();
+		switch(base) {
+			case IOFormatBase::bin:
+				[[fallthrough]];
+			case IOFormatBase::oct:
+				[[fallthrough]];
+			case IOFormatBase::hex:
+				break;
+			default:
+				base = IOFormatBase::hex;
+		}
+
+		return ::stringify(
+			ptr,
+			fmt.ptr(),
+			fmt.mem_sep(),
+			base,
+			fmt.numeral_case()
+		);
 	}
 };
 

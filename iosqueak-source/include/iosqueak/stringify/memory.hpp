@@ -44,6 +44,7 @@
 #ifndef IOSQUEAK_STRINGIFY_MEMORY_HPP
 #define IOSQUEAK_STRINGIFY_MEMORY_HPP
 
+#include <math.h>
 #include <stdexcept>
 #include <string>
 
@@ -52,6 +53,63 @@
 #include "iosqueak/stringify/types.hpp"
 #include "iosqueak/stringify/utilities.hpp"
 #include "iosqueak/tools/memlens.hpp"
+#include "iosqueak/utilities/bitfield.hpp"
+
+/** Convert bitset to string.
+ * Only supports printing to binary.
+ * \param bits: the bitset to stringify
+ * \param sep: the memory separation formatting flag
+ * \return string equivalent of bitset
+ */
+template<size_t LONGNESS>
+std::string stringify_bitset(const std::bitset<LONGNESS>& bits,
+							 IOFormatMemSep sep = IOFormatMemSep::all)
+{
+	// Avoiding magic numbers.
+	const size_t BYTE_SIZE = 8;
+	const size_t WORD_SIZE = 64;
+
+	// Without memory separation formatting, string length is bitset length.
+	size_t len = LONGNESS;
+
+	// Add reserved space in string for byte/word separation, as requested.
+	switch (sep) {
+		case IOFormatMemSep::all:
+			len += floor(LONGNESS / WORD_SIZE) * 2;
+			[[fallthrough]];
+		case IOFormatMemSep::byte:
+			len += floor(LONGNESS / BYTE_SIZE);
+			break;
+		case IOFormatMemSep::word:
+			len += floor(LONGNESS / WORD_SIZE);
+			break;
+		case IOFormatMemSep::none:
+			break;
+	}
+
+	// Create a string with the necessary space reserved.
+	std::string str = std::string();
+	str.reserve(len);
+
+	// Convert each bit to its binary string representation.
+	for (size_t i = 0; i < LONGNESS; ++i) {
+		str += (bits.test(i) ? "1" : "0");
+
+		// Insert byte separation if desired.
+		if (flags_check(sep, IOFormatMemSep::byte) &&
+			(i + 1) % BYTE_SIZE == 0) {
+			str += ' ';
+		}
+
+		// Insert word separation if desired.
+		if (flags_check(sep, IOFormatMemSep::word) &&
+			(i + 1) % WORD_SIZE == 0) {
+			str += (flags_check(sep, IOFormatMemSep::byte)) ? "| " : "|";
+		}
+	}
+
+	return str;
+}
 
 /** Convert integer representations of a single byte to a string.
  * Note: This uses separate (optimized) logic from stringify_integral!

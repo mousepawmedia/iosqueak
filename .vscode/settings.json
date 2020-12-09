@@ -68,7 +68,8 @@
         "iomanip": "cpp",
         "compare": "cpp",
         "concepts": "cpp",
-        "stop_token": "cpp"
+        "stop_token": "cpp",
+        "future": "cpp"
     },
     "cSpell.words": [
         "decimal places",
