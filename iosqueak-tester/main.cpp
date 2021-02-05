@@ -44,7 +44,7 @@
 #include <iostream>
 #include <string>
 
-//#include "pawlib/goldilocks_shell.hpp"
+//#include "goldilocks/shell.hpp"
 
 #include "iosqueak/channel.hpp"
 #include "iosqueak/stringify.hpp"

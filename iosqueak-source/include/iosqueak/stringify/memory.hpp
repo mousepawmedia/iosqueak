@@ -118,7 +118,7 @@ std::string stringify_bitset(const std::bitset<LONGNESS>& bits,
  * \param num_case: the case to use for digits > 9
  * \return a string representation of the byte
  */
-std::string stringify_byte(const uint8_t byte,
+inline std::string stringify_byte(const uint8_t byte,
 						   IOFormatBase base = IOFormatBase::hex,
 						   IOFormatNumCase num_case = IOFormatNumCase::upper)
 {
@@ -221,7 +221,7 @@ std::string stringify_bytes(const T& bytes,
  * hex/bin/oct) \param num_case: the case to use for digits > 9 \return the
  * string representation of the data
  */
-std::string stringify_bytes(const std::vector<uint8_t>& bytes,
+inline std::string stringify_bytes(const std::vector<uint8_t>& bytes,
 							IOFormatMemSep sep = IOFormatMemSep::none,
 							IOFormatBase base = IOFormatBase::hex,
 							IOFormatNumCase num_case = IOFormatNumCase::upper)
@@ -257,7 +257,7 @@ std::string stringify_bytes(const std::vector<uint8_t>& bytes,
  * hex/bin/oct) \param num_case: the case to use for digits > 9 \return the
  * string representation of the data
  */
-std::string stringify_bytes(const MemLens& lens,
+inline std::string stringify_bytes(const MemLens& lens,
 							IOFormatMemSep sep = IOFormatMemSep::none,
 							IOFormatBase base = IOFormatBase::hex,
 							IOFormatNumCase num_case = IOFormatNumCase::upper)
@@ -270,7 +270,7 @@ std::string stringify_bytes(const MemLens& lens,
  * \param the pointer integer to convert
  * \param letter case to use for digits greater than 9
  * \return the string representing the address */
-std::string stringify_address(
+inline std::string stringify_address(
 	const MemLens& lens,
 	const IOFormatNumCase& num_case = IOFormatNumCase::upper)
 {
@@ -300,7 +300,7 @@ std::string stringify_address(
 	return str;
 }
 
-std::string stringify_pointer_data(const MemLens& lens)
+inline std::string stringify_pointer_data(const MemLens& lens)
 {
 	std::string str = "";
 	std::string type = stringify_type(lens.data_type());

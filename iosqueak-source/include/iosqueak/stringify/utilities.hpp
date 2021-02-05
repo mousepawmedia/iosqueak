@@ -53,7 +53,7 @@
 /**Reverse a string, creating a new copy.
  * \param the string to reverse
  * \param the reversed string */
-std::string reversify(const std::string& str)
+inline std::string reversify(const std::string& str)
 {
 	// If the string has less than 2 characters, return as-is.
 	if (str.length() < 2) {

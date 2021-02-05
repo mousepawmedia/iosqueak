@@ -93,8 +93,8 @@ size_t lengthify(
 	return lengthify_integral(val, base, sign, notation);
 }
 
-size_t lengthify(const bool& val,
-				 const IOFormalBoolStyle& fmt = IOFormalBoolStyle::lower)
+inline size_t lengthify(const bool& val,
+						const IOFormalBoolStyle& fmt = IOFormalBoolStyle::lower)
 {
 	return lengthify_boolean(val, fmt);
 }
@@ -158,13 +158,11 @@ struct _StringifyImpl<
 
 	static std::string stringify(const T& val, const IOFormat& fmt)
 	{
-		return ::stringify(
-			val,
-			fmt.base(),
-			fmt.sign(),
-			fmt.numeral_case(),
-			fmt.base_notation()
-		);
+		return ::stringify(val,
+						   fmt.base(),
+						   fmt.sign(),
+						   fmt.numeral_case(),
+						   fmt.base_notation());
 	}
 };
 
@@ -191,18 +189,16 @@ struct _StringifyImpl<
 
 	static std::string stringify(const T& val, const IOFormat& fmt)
 	{
-		return ::stringify(
-			val,
-			fmt.decimal_places(),
-			fmt.sci_notation(),
-			fmt.sign()
-		);
+		return ::stringify(val,
+						   fmt.decimal_places(),
+						   fmt.sci_notation(),
+						   fmt.sign());
 	}
 };
 
 /* Stringify char */
 
-std::string stringify(
+inline std::string stringify(
 	const char& val,
 	const IOFormatCharValue& as /*=IOFormatCharValue::as_char*/)
 {
@@ -224,7 +220,7 @@ struct _StringifyImpl<char> {
 
 /* Stringify bool */
 
-std::string stringify(
+inline std::string stringify(
 	const bool& val,
 	const IOFormalBoolStyle& fmt /*= IOFormalBoolStyle::lower*/)
 {
@@ -272,8 +268,7 @@ std::string stringify(const char* name_hint, const T& func, Args... args)
 /* Stringify bitsets */
 
 template<size_t N>
-std::string stringify(const std::bitset<N>& bits,
-					  const IOFormatMemSep& sep)
+std::string stringify(const std::bitset<N>& bits, const IOFormatMemSep& sep)
 {
 	return stringify_bitset(bits, sep);
 }
@@ -285,7 +280,8 @@ struct _StringifyImpl<std::bitset<N>> {
 		return ::stringify(bits, IOFormatMemSep::all);
 	}
 
-	static std::string stringify(const std::bitset<N>& bits, const IOFormat& fmt)
+	static std::string stringify(const std::bitset<N>& bits,
+								 const IOFormat& fmt)
 	{
 		return ::stringify(bits, fmt.mem_sep());
 	}
@@ -300,9 +296,10 @@ struct _StringifyImpl<std::bitset<N>> {
  * perspective!
  */
 
-std::string stringify(const MemLens& lens,
-					  const IOFormatPtr& as /*= IOFormatPtr::address*/,
-					  const IOFormatNumCase& num_case = IOFormatNumCase::upper)
+inline std::string stringify(
+	const MemLens& lens,
+	const IOFormatPtr& as /*= IOFormatPtr::address*/,
+	const IOFormatNumCase& num_case = IOFormatNumCase::upper)
 {
 	switch (as) {
 		case IOFormatPtr::value:
@@ -321,11 +318,12 @@ std::string stringify(const MemLens& lens,
 	return "";
 }
 
-std::string stringify(const MemLens& lens,
-					  const IOFormatPtr& as,
-					  const IOFormatMemSep& sep,
-					  const IOFormatBase& base = IOFormatBase::hex,
-					  const IOFormatNumCase& num_case = IOFormatNumCase::upper)
+inline std::string stringify(
+	const MemLens& lens,
+	const IOFormatPtr& as,
+	const IOFormatMemSep& sep,
+	const IOFormatBase& base = IOFormatBase::hex,
+	const IOFormatNumCase& num_case = IOFormatNumCase::upper)
 {
 	switch (as) {
 		case IOFormatPtr::value:
@@ -356,7 +354,7 @@ struct _StringifyImpl<MemLens> {
 		}
 
 		auto base = fmt.base();
-		switch(base) {
+		switch (base) {
 			case IOFormatBase::bin:
 				[[fallthrough]];
 			case IOFormatBase::oct:
@@ -367,14 +365,11 @@ struct _StringifyImpl<MemLens> {
 				base = IOFormatBase::hex;
 		}
 
-		return ::stringify(
-			lens,
-			fmt.ptr(),
-			fmt.mem_sep(),
-			base,
-			fmt.numeral_case()
-		);
-
+		return ::stringify(lens,
+						   fmt.ptr(),
+						   fmt.mem_sep(),
+						   base,
+						   fmt.numeral_case());
 	}
 };
 
@@ -418,7 +413,7 @@ struct _StringifyImpl<T*> {
 		}
 
 		auto base = fmt.base();
-		switch(base) {
+		switch (base) {
 			case IOFormatBase::bin:
 				[[fallthrough]];
 			case IOFormatBase::oct:
@@ -429,13 +424,11 @@ struct _StringifyImpl<T*> {
 				base = IOFormatBase::hex;
 		}
 
-		return ::stringify(
-			ptr,
-			fmt.ptr(),
-			fmt.mem_sep(),
-			base,
-			fmt.numeral_case()
-		);
+		return ::stringify(ptr,
+						   fmt.ptr(),
+						   fmt.mem_sep(),
+						   base,
+						   fmt.numeral_case());
 	}
 };
 
@@ -480,7 +473,7 @@ struct _StringifyImpl<std::shared_ptr<T>> {
 		}
 
 		auto base = fmt.base();
-		switch(base) {
+		switch (base) {
 			case IOFormatBase::bin:
 				[[fallthrough]];
 			case IOFormatBase::oct:
@@ -491,13 +484,11 @@ struct _StringifyImpl<std::shared_ptr<T>> {
 				base = IOFormatBase::hex;
 		}
 
-		return ::stringify(
-			ptr,
-			fmt.ptr(),
-			fmt.mem_sep(),
-			base,
-			fmt.numeral_case()
-		);
+		return ::stringify(ptr,
+						   fmt.ptr(),
+						   fmt.mem_sep(),
+						   base,
+						   fmt.numeral_case());
 	}
 };
 
@@ -542,7 +533,7 @@ struct _StringifyImpl<std::weak_ptr<T>> {
 		}
 
 		auto base = fmt.base();
-		switch(base) {
+		switch (base) {
 			case IOFormatBase::bin:
 				[[fallthrough]];
 			case IOFormatBase::oct:
@@ -553,13 +544,11 @@ struct _StringifyImpl<std::weak_ptr<T>> {
 				base = IOFormatBase::hex;
 		}
 
-		return ::stringify(
-			ptr,
-			fmt.ptr(),
-			fmt.mem_sep(),
-			base,
-			fmt.numeral_case()
-		);
+		return ::stringify(ptr,
+						   fmt.ptr(),
+						   fmt.mem_sep(),
+						   base,
+						   fmt.numeral_case());
 	}
 };
 
@@ -627,7 +616,10 @@ std::string stringify_variadic(const T& val, [[maybe_unused]] Args... rem)
  * at the top of the header.
  */
 
-std::string stringify_from_pointer(const void*) { return "(void pointer)"; }
+inline std::string stringify_from_pointer(const void*)
+{
+	return "(void pointer)";
+}
 
 template<typename T>
 std::string stringify_from_pointer(const T* ptr)

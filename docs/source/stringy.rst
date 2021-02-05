@@ -44,7 +44,7 @@ two of which are required:
 
     // OUTPUT: -16753
 
-..  IMPORTANT:: Enumerations are not implicitly cast to ints with this function.
+..  important:: Enumerations are not implicitly cast to ints with this function.
     Therefore, you must ``static_cast<int>()`` any enumeration variables
     before passing them to this function.
 
@@ -102,9 +102,9 @@ C-string, without having to know anything in advance.
 
     // OUTPUT: -16753
 
-..  NOTE:: It is generally going to be more practical to use ``itos()`` instead.
+..  note:: It is generally going to be more practical to use ``itos()`` instead.
 
-..  IMPORTANT:: Enumerations are not implicitly cast to ints with this function.
+..  important:: Enumerations are not implicitly cast to ints with this function.
     Therefore, you must ``static_cast<int>()`` any enumeration variables
     before passing them to this function.
 
@@ -197,10 +197,10 @@ how floating point numbers work, and the number of decimal places we
 specified. If we were to raise the decimal places to the default 14, our output
 would actually have been "-65.78324891505623".
 
-..  NOTE:: It is generally going to be more practical to use ``ftos()`` instead.
+..  note:: It is generally going to be more practical to use ``ftos()`` instead.
 
 
-Split String By Tokens [``stdsplit``]
+Split String By Tokens [``split_string``]
 ===========================================
 
 This will split a ``std::string`` by a given token and store it in a
@@ -216,7 +216,7 @@ Later versions of this will support Onestring and FlexArray.
     stringy::stdsplit(splitMe, ":", result);
     // result now contains "What if we", "Want to split", "A string", "By colons?"
 
-Reverse C-String [``strrev()``]
+Reverse C-String [``reverse_c_string()``]
 ===================================
 
 This will reverse a given C-string in place, overriding the string.
@@ -224,5 +224,5 @@ This will reverse a given C-string in place, overriding the string.
 ..  code-block:: c++
 
     char foo[14] = "Hello, world!";
-    stringy::strrev(foo);
+    stringy::reverse_c_string(foo);
     ioc << foo << IOCtrl::endl;

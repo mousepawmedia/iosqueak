@@ -42,8 +42,8 @@
 #define IOSQUEAK_STRINGIFY_NUMBERS_TESTS_HPP
 
 #include "iosqueak/stringify/numbers.hpp"
-#include "pawlib/goldilocks.hpp"
-#include "pawlib/goldilocks_assertions.hpp"
+#include "goldilocks/goldilocks.hpp"
+#include "goldilocks/assertions.hpp"
 
 class Test_LengthifyIntegral : public Test
 {

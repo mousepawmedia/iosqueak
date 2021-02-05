@@ -52,8 +52,8 @@
 #include "iosqueak/stringify/utilities.hpp"
 #include "iosqueak/tools/memlens.hpp"
 
-const char* DIGIT_CHARS_UPPER = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-const char* DIGIT_CHARS_LOWER = "0123456789abcdefghijklmnopqrstuvwxyz";
+inline const char* DIGIT_CHARS_UPPER = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+inline const char* DIGIT_CHARS_LOWER = "0123456789abcdefghijklmnopqrstuvwxyz";
 
 /**Count the number of characters necessary to represent an integer
  * as a string. Does not count the null terminator.
@@ -253,7 +253,7 @@ std::string stringify_integral(
 	return reversify(str);
 }
 
-std::string stringify_char(
+inline std::string stringify_char(
 	const char& val, const IOFormatCharValue& as = IOFormatCharValue::as_char)
 {
 	switch (as) {

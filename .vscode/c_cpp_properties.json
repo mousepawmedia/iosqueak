@@ -6,7 +6,7 @@
                 "/usr/include",
                 "/usr/local/include",
                 "${workspaceRoot}/../libdeps/libs/include/**",
-                "${workspaceRoot}/../pawlib/pawlib/include/**",
+                "${workspaceRoot}/../arctic-tern/arctic-tern/include/**",
                 "${workspaceRoot}/iosqueak-source/include/**"
             ],
             "defines": [],
@@ -16,7 +16,7 @@
                     "/usr/include",
                     "/usr/local/include",
                     "${workspaceRoot}/../libdeps/libs/include",
-                    "${workspaceRoot}/../pawlib/pawlib/include",
+                    "${workspaceRoot}/../arctic-tern/arctic-tern/include",
                     "${workspaceRoot}"
                 ],
                 "limitSymbolsToIncludedHeaders": true,
@@ -39,7 +39,7 @@
                 "/usr/lib/gcc/x86_64-linux-gnu/**",
                 "/usr/include/**",
                 "${workspaceRoot}/../libdeps/libs/include/**",
-                "${workspaceRoot}/../pawlib/pawlib/include/**",
+                "${workspaceRoot}/../arctic-tern/arctic-tern/include/**",
                 "${workspaceRoot}/iosqueak-source/include/**"
             ],
             "defines": [],
@@ -51,7 +51,7 @@
                     "/usr/local/include",
                     "/usr/include",
                     "${workspaceRoot}/../libdeps/libs/include",
-                    "${workspaceRoot}/../pawlib/pawlib/include",
+                    "${workspaceRoot}/../arctic-tern/arctic-tern/include",
                     "${workspaceRoot}"
                 ],
                 "limitSymbolsToIncludedHeaders": true,

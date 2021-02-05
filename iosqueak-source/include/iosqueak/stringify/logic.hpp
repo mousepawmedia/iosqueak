@@ -53,7 +53,7 @@
  * \param the boolean to convert to a string
  * \param the format to represent the boolean in, default lowercase word
  * \return the calculated string length */
-size_t lengthify_boolean(
+inline size_t lengthify_boolean(
 	const bool& val, const IOFormalBoolStyle& fmt = IOFormalBoolStyle::lower)
 {
 	switch (fmt) {
@@ -75,7 +75,7 @@ size_t lengthify_boolean(
 	return 0;
 }
 
-std::string stringify_boolean(
+inline std::string stringify_boolean(
 	const bool& val, const IOFormalBoolStyle& fmt = IOFormalBoolStyle::lower)
 {
 	switch (fmt) {

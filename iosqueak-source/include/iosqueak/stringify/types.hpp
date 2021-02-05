@@ -55,12 +55,12 @@
 /**Convert a type index to a human-readable string representing the type.
  * \param the type index to convert
  * \return the type represented as a human-readable string */
-std::string stringify_type(const std::type_index& type)
+inline std::string stringify_type(const std::type_index& type)
 {
 	return TypesMap::lookup(type);
 }
 
-std::string stringify_type(const std::type_info& type)
+inline std::string stringify_type(const std::type_info& type)
 {
 	return TypesMap::lookup(std::type_index(type));
 }

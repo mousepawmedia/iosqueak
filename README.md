@@ -23,7 +23,7 @@ Authors
 Dependencies
 ----------------------------------------
 
-* PawLIB Minimal 2.0
+* Arctic Tern
 * eventpp 0.1.1
 * Goldilocks (IOSqueak Tester only)
 

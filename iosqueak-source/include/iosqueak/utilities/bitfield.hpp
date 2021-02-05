@@ -3,8 +3,6 @@
  *
  * Bitfield utility functions.
  *
- * TODO: Relocate this to PawLIB.
- *
  * Author: Jason C. McDonald
  */
 

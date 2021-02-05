@@ -1,7 +1,7 @@
 /** Stringify: Types Map [IOSqueak]
  *  Version 1.0
  *
- *  String-form names for common C++ and PawLIB data types.
+ *  String-form names for common C++ data types.
  *
  * Author(s): Jason C. McDonald
  */
@@ -56,7 +56,7 @@ protected:
 		std::unordered_map<std::type_index, std::string>();
 	inline static bool init = false;
 
-	/* Initially registers the essential C++ and PawLIB data types with the map,
+	/* Initially registers the essential C++ data types with the map,
 	 * but only if the map hasn't already been initialized. */
 	static void initialize()
 	{

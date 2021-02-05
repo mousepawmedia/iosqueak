@@ -49,7 +49,7 @@ IncludeCategories:
     Priority: 1
   - Regex: '^(<|")(cairo|cpgf|cinder|eigen|eventpp|opus|pugixml|sdl2)'
     Priority: 2
-  - Regex: '^(<|")(anari|goldilocks|iosqueak|pawlib|ratscript|simplexpress|stormsound|trailcrest)'
+  - Regex: '^(<|")(anari|arctic-tern|goldilocks|iosqueak|ratscript|simplexpress|stormsound|trailcrest)'
     Priority: 3
   - Regex: '^".*'
     Priority: 4

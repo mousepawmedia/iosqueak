@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -15,7 +13,7 @@
    viewBox="0 0 95 95"
    version="1.1"
    id="svg4850"
-   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
+   inkscape:version="1.0.2 (e86c870879, 2021-01-15)"
    sodipodi:docname="iosqueak.svg"
    inkscape:export-filename="/home/jason/MPM Nextcloud/Core Shared/Design/Logos/IOSqueak/iosqueak.png"
    inkscape:export-xdpi="213.89"
@@ -89,18 +87,19 @@
      inkscape:cx="175.11525"
      inkscape:cy="130.71907"
      inkscape:document-units="mm"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="g1073"
      showgrid="false"
      inkscape:snap-global="false"
-     inkscape:window-width="1600"
-     inkscape:window-height="877"
+     inkscape:window-width="1920"
+     inkscape:window-height="1016"
      inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-y="27"
      inkscape:window-maximized="1"
      fit-margin-top="5"
      fit-margin-left="5"
      fit-margin-right="5"
-     fit-margin-bottom="5" />
+     fit-margin-bottom="5"
+     inkscape:document-rotation="0" />
   <metadata
      id="metadata4847">
     <rdf:RDF>
@@ -109,7 +108,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -214,94 +213,78 @@
     <g
        id="g1073"
        transform="matrix(1.5480718,0,0,1.5480718,-3.1667293,-72.936463)">
-      <text
+      <g
+         aria-label="I"
          id="text5527-9"
-         y="105.74733"
-         x="16.955187"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:semi-condensed;font-size:8.76405811px;line-height:1.25;font-family:Monoid;-inkscape-font-specification:'Monoid, Bold Semi-Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.65729213"
-         xml:space="preserve"><tspan
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:semi-condensed;font-size:8.76405811px;font-family:Monoid;-inkscape-font-specification:'Monoid, Bold Semi-Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.65729213"
-           y="105.74733"
-           x="16.955187"
-           id="tspan5525-7"
-           sodipodi:role="line">I</tspan></text>
-      <text
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:semi-condensed;font-size:8.76406px;line-height:1.25;font-family:Monoid;-inkscape-font-specification:'Monoid, Bold Semi-Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.657292">
+        <path
+           d="m 22.432724,97.713608 v 1.369384 h -1.460676 v 5.294958 h 1.460676 v 1.36938 h -4.38203 v -1.36938 h 1.460677 v -5.294958 h -1.460677 v -1.369384 z"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:semi-condensed;font-size:8.76406px;font-family:Monoid;-inkscape-font-specification:'Monoid, Bold Semi-Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.657292"
+           id="path880" />
+      </g>
+      <g
+         aria-label="O"
          id="text5527-9-4"
-         y="105.74733"
-         x="21.965767"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:semi-condensed;font-size:8.76405811px;line-height:1.25;font-family:Monoid;-inkscape-font-specification:'Monoid, Bold Semi-Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.65729213"
-         xml:space="preserve"><tspan
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:semi-condensed;font-size:8.76405811px;font-family:Monoid;-inkscape-font-specification:'Monoid, Bold Semi-Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.65729213"
-           y="105.74733"
-           x="21.965767"
-           id="tspan5525-7-9"
-           sodipodi:role="line">O</tspan></text>
-      <text
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:semi-condensed;font-size:8.76406px;line-height:1.25;font-family:Monoid;-inkscape-font-specification:'Monoid, Bold Semi-Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.657292">
+        <path
+           d="m 24.151076,100.25838 q -0.08559,0.46787 -0.08559,1.47209 0,1.00421 0.08559,1.47209 0.102704,0.55346 0.376581,0.91292 0.279582,0.35376 0.724632,0.35376 0.44505,0 0.718927,-0.35376 0.279583,-0.35946 0.382287,-0.91292 0.08559,-0.47358 0.08559,-1.47209 0,-1.00422 -0.08559,-1.47209 -0.102704,-0.553459 -0.382287,-0.907216 -0.273877,-0.359464 -0.718927,-0.359464 -0.44505,0 -0.724632,0.359464 -0.273877,0.353757 -0.376581,0.907216 z m -1.386502,3.4634 q -0.159761,-0.63334 -0.159761,-1.99131 0,-1.35797 0.159761,-1.991314 0.228231,-0.924335 0.861571,-1.517735 0.633341,-0.599105 1.626144,-0.599105 0.992804,0 1.626144,0.599105 0.633341,0.5934 0.861571,1.517735 0.159762,0.633344 0.159762,1.991314 0,1.35797 -0.159762,1.99131 -0.22823,0.92434 -0.861571,1.52344 -0.63334,0.5934 -1.626144,0.5934 -0.992803,0 -1.626144,-0.5934 -0.63334,-0.5991 -0.861571,-1.52344 z"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:semi-condensed;font-size:8.76406px;font-family:Monoid;-inkscape-font-specification:'Monoid, Bold Semi-Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.657292"
+           id="path883" />
+      </g>
+      <g
+         aria-label="S"
          id="text5527-9-4-9"
-         y="105.74733"
-         x="27.114113"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:semi-condensed;font-size:8.76405811px;line-height:1.25;font-family:Monoid;-inkscape-font-specification:'Monoid, Bold Semi-Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.65729213"
-         xml:space="preserve"><tspan
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:semi-condensed;font-size:8.76405811px;font-family:Monoid;-inkscape-font-specification:'Monoid, Bold Semi-Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.65729213"
-           y="105.74733"
-           x="27.114113"
-           id="tspan5525-7-9-4"
-           sodipodi:role="line">S</tspan></text>
-      <text
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:semi-condensed;font-size:8.76406px;line-height:1.25;font-family:Monoid;-inkscape-font-specification:'Monoid, Bold Semi-Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.657292">
+        <path
+           d="m 30.28652,105.83862 q -0.935746,0 -2.111134,-0.18258 v -1.39221 q 1.37509,0.20541 2.111134,0.20541 1.015627,0 1.015627,-1.0841 0,-0.3024 -0.14835,-0.57058 -0.142644,-0.27387 -0.40511,-0.37658 -0.165467,-0.0628 -0.456461,-0.1027 -0.290994,-0.0399 -0.599106,-0.11412 -0.302406,-0.0799 -0.581988,-0.24534 -1.072685,-0.63905 -1.072685,-2.019845 0,-0.987098 0.627635,-1.660379 0.63334,-0.67328 1.620438,-0.67328 0.770279,0 2.111134,0.142644 v 1.37509 Q 31.011153,98.9917 30.28652,98.9917 q -0.216819,0 -0.382286,0.097 -0.159762,0.097 -0.245349,0.251054 -0.08559,0.154056 -0.125526,0.313817 -0.03424,0.159762 -0.03424,0.313817 0,0.673284 0.456461,0.878684 0.14835,0.0685 0.673281,0.15406 0.530637,0.0799 0.855865,0.25105 0.456462,0.23394 0.753162,0.60482 0.2967,0.37087 0.410815,0.74745 0.114115,0.37658 0.114115,0.78169 0,1.10692 -0.684692,1.7802 -0.684692,0.67328 -1.791611,0.67328 z"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:semi-condensed;font-size:8.76406px;font-family:Monoid;-inkscape-font-specification:'Monoid, Bold Semi-Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.657292"
+           id="path886" />
+      </g>
+      <g
+         aria-label="q"
          id="text5527-9-4-9-5"
-         y="103.55631"
-         x="31.656822"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:semi-condensed;font-size:8.76405811px;line-height:1.25;font-family:Monoid;-inkscape-font-specification:'Monoid, Bold Semi-Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.65729213"
-         xml:space="preserve"><tspan
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:semi-condensed;font-size:8.76405811px;font-family:Monoid;-inkscape-font-specification:'Monoid, Bold Semi-Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.65729213"
-           y="103.55631"
-           x="31.656822"
-           id="tspan5525-7-9-4-9"
-           sodipodi:role="line">q</tspan></text>
-      <text
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:semi-condensed;font-size:8.76406px;line-height:1.25;font-family:Monoid;-inkscape-font-specification:'Monoid, Bold Semi-Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.657292">
+        <path
+           d="m 34.310004,97.622314 q 0.66187,0 0.952864,0.462167 h 0.04565 v -0.370875 h 1.460677 v 8.033724 h -1.460677 v -2.56189 h -0.04565 q -0.290994,0.46216 -0.952864,0.46216 -0.433638,0 -0.770278,-0.35375 -0.330935,-0.35947 -0.484991,-0.99851 -0.119821,-0.51352 -0.119821,-1.66038 0,-1.14686 0.119821,-1.660379 0.154056,-0.639046 0.484991,-0.992804 0.33664,-0.359463 0.770278,-0.359463 z m 0.793102,1.546263 q -0.102704,-0.176879 -0.251054,-0.176879 -0.14835,0 -0.251053,0.176879 -0.102704,0.171173 -0.14835,0.433638 -0.05706,0.308112 -0.05706,1.032745 0,0.72463 0.05706,1.03274 0.04565,0.26247 0.14835,0.43935 0.102703,0.17117 0.251053,0.17117 0.14835,0 0.251054,-0.17117 0.102704,-0.17688 0.14835,-0.43935 0.05706,-0.30811 0.05706,-1.03274 0,-0.724633 -0.05706,-1.032745 -0.04565,-0.262465 -0.14835,-0.433638 z"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:semi-condensed;font-size:8.76406px;font-family:Monoid;-inkscape-font-specification:'Monoid, Bold Semi-Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.657292"
+           id="path889" />
+      </g>
+      <g
+         aria-label="u"
          id="text5527-9-4-9-5-9"
-         y="103.46502"
-         x="36.027065"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:semi-condensed;font-size:8.76405811px;line-height:1.25;font-family:Monoid;-inkscape-font-specification:'Monoid, Bold Semi-Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.65729213"
-         xml:space="preserve"><tspan
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:semi-condensed;font-size:8.76405811px;font-family:Monoid;-inkscape-font-specification:'Monoid, Bold Semi-Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.65729213"
-           y="103.46502"
-           x="36.027065"
-           id="tspan5525-7-9-4-9-0"
-           sodipodi:role="line">u</tspan></text>
-      <text
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:semi-condensed;font-size:8.76406px;line-height:1.25;font-family:Monoid;-inkscape-font-specification:'Monoid, Bold Semi-Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.657292">
+        <path
+           d="m 38.77154,103.55631 q -0.610517,0 -0.987098,-0.61052 -0.136939,-0.22823 -0.211114,-0.52493 -0.06847,-0.2967 -0.07988,-0.49069 -0.0057,-0.1997 -0.0057,-0.55917 v -3.748687 h 1.460677 V 101.371 q 0,0.46217 0.08559,0.62193 0.10841,0.194 0.279583,0.194 0.171173,0 0.279582,-0.194 0.08559,-0.15976 0.08559,-0.62193 v -3.748687 h 1.460677 v 5.842707 h -1.460677 v -0.35376 h -0.03994 q -0.159762,0.20541 -0.393698,0.32523 -0.233937,0.11982 -0.473579,0.11982 z"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:semi-condensed;font-size:8.76406px;font-family:Monoid;-inkscape-font-specification:'Monoid, Bold Semi-Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.657292"
+           id="path892" />
+      </g>
+      <g
+         aria-label="e"
          id="text5527-9-4-9-5-2"
-         y="103.55631"
-         x="40.428967"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:semi-condensed;font-size:8.76405811px;line-height:1.25;font-family:Monoid;-inkscape-font-specification:'Monoid, Bold Semi-Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.65729213"
-         xml:space="preserve"><tspan
-           id="tspan1017"
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:semi-condensed;font-size:8.76405811px;font-family:Monoid;-inkscape-font-specification:'Monoid, Bold Semi-Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.65729213"
-           y="103.55631"
-           x="40.428967"
-           sodipodi:role="line">e</tspan></text>
-      <text
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:semi-condensed;font-size:8.76406px;line-height:1.25;font-family:Monoid;-inkscape-font-specification:'Monoid, Bold Semi-Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.657292">
+        <path
+           d="m 43.715489,97.622314 q 0.661869,0 1.129742,0.325228 0.467873,0.319523 0.667575,0.821631 0.097,0.245348 0.142644,0.576283 0.05135,0.330934 0.05706,0.587694 0.01141,0.25105 0.01141,0.70181 v 0.68469 h -2.550478 q 0,0.46787 0.08559,0.65616 0.14835,0.30241 0.570576,0.30241 0.621929,0 1.711731,-0.11411 v 1.36367 q -1.03845,0.11982 -1.711731,0.11982 -0.707515,0 -1.192505,-0.33093 -0.48499,-0.33093 -0.70181,-0.86157 -0.14835,-0.35946 -0.18829,-0.77028 -0.03994,-0.41081 -0.03994,-1.04986 0,-0.656164 0.03423,-1.078391 0.03994,-0.427933 0.176879,-0.787396 0.18829,-0.507813 0.656163,-0.827336 0.473579,-0.319523 1.141154,-0.319523 z m 0,1.369384 q -0.097,0 -0.176879,0.02282 -0.07988,0.01712 -0.136938,0.07417 -0.05135,0.05135 -0.09129,0.097 -0.03994,0.03994 -0.06847,0.142644 -0.02282,0.097 -0.03994,0.154056 -0.01141,0.05706 -0.02282,0.193996 -0.0057,0.131233 -0.0057,0.188291 0,0.05135 -0.0057,0.199699 h 1.095508 q -0.01141,-0.587692 -0.09129,-0.775982 -0.114115,-0.2967 -0.456461,-0.2967 z"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:semi-condensed;font-size:8.76406px;font-family:Monoid;-inkscape-font-specification:'Monoid, Bold Semi-Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.657292"
+           id="path895" />
+      </g>
+      <g
+         aria-label="a"
          id="text5527-9-4-9-5-2-7"
-         y="103.55631"
-         x="44.813"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:semi-condensed;font-size:8.76405811px;line-height:1.25;font-family:Monoid;-inkscape-font-specification:'Monoid, Bold Semi-Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.65729213"
-         xml:space="preserve"><tspan
-           id="tspan1017-4"
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:semi-condensed;font-size:8.76405811px;font-family:Monoid;-inkscape-font-specification:'Monoid, Bold Semi-Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.65729213"
-           y="103.55631"
-           x="44.813"
-           sodipodi:role="line">a</tspan></text>
-      <text
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:semi-condensed;font-size:8.76406px;line-height:1.25;font-family:Monoid;-inkscape-font-specification:'Monoid, Bold Semi-Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.657292">
+        <path
+           d="m 48.464691,101.15418 h -0.387992 q -0.279582,0 -0.405109,0.16547 -0.119822,0.15976 -0.119822,0.50781 0,0.194 0.09129,0.32523 0.09129,0.12553 0.262465,0.12553 0.193996,0 0.313817,-0.097 0.125527,-0.097 0.171173,-0.27387 0.05135,-0.18259 0.06276,-0.30812 0.01141,-0.12552 0.01141,-0.31381 z m -0.182584,-3.531866 q 0.490696,0 0.861571,0.154055 0.370875,0.14835 0.610517,0.570577 0.171173,0.302406 0.171173,0.935746 v 4.273618 h -1.460677 v -0.3024 h -0.05706 q -0.319523,0.39369 -0.810219,0.39369 -0.604812,0 -1.055567,-0.51922 -0.450756,-0.51922 -0.450756,-1.2895 0,-0.83875 0.502107,-1.3808 0.182585,-0.194 0.387993,-0.31382 0.211113,-0.12552 0.427932,-0.17117 0.222525,-0.04565 0.353758,-0.05706 0.136938,-0.01141 0.325229,-0.01141 h 0.37658 v -0.5934 q 0,-0.114115 -0.097,-0.211113 -0.097,-0.102704 -0.251053,-0.102704 -0.524931,0 -1.477794,0.108409 v -1.37509 q 0.941451,-0.108409 1.643261,-0.108409 z"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:semi-condensed;font-size:8.76406px;font-family:Monoid;-inkscape-font-specification:'Monoid, Bold Semi-Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.657292"
+           id="path898" />
+      </g>
+      <g
+         aria-label="k"
          id="text5527-9-4-9-5-2-7-2"
-         y="105.65604"
-         x="49.065723"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:semi-condensed;font-size:8.76405811px;line-height:1.25;font-family:Monoid;-inkscape-font-specification:'Monoid, Bold Semi-Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.65729213"
-         xml:space="preserve"><tspan
-           id="tspan1017-4-6"
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:semi-condensed;font-size:8.76405811px;font-family:Monoid;-inkscape-font-specification:'Monoid, Bold Semi-Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.65729213"
-           y="105.65604"
-           x="49.065723"
-           sodipodi:role="line">k</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:semi-condensed;font-size:8.76406px;line-height:1.25;font-family:Monoid;-inkscape-font-specification:'Monoid, Bold Semi-Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.657292">
+        <path
+           d="M 51.987077,105.65604 H 50.5264 v -8.033725 h 1.460677 v 4.056805 l 0.952863,-1.86579 h 1.574792 l -1.295209,2.52766 1.56338,3.31505 h -1.574792 l -0.952863,-2.01414 -0.268171,0.55917 z"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:semi-condensed;font-size:8.76406px;font-family:Monoid;-inkscape-font-specification:'Monoid, Bold Semi-Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.657292"
+           id="path901" />
+      </g>
     </g>
   </g>
   <g

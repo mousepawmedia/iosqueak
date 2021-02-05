@@ -38,17 +38,15 @@
 # See https://www.mousepawmedia.com/developers for information
 # on how to contribute to our projects.
 
-# Specify the verison being used as well as the language.
+# Specify the verison being used.
 cmake_minimum_required(VERSION 3.1)
 
 # CHANGEME: Name your project here
-project("IOSqueak Tester")
-set(TARGET_NAME "iosqueak-tester")
+project("IOSqueak")
+set(TARGET_NAME "iosqueak")
 
 message("Using ${CONFIG_FILENAME}.config")
 include(${CMAKE_HOME_DIRECTORY}/../${CONFIG_FILENAME}.config)
-
-# Compiler and Version check...
 
 # Compiler and Version check...
 # Allow Clang 3.4
@@ -114,7 +112,7 @@ if(COMPILERTYPE STREQUAL "gcc")
     # Set debug flags. -g is a default.
     #set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ")
     # Set release flags. -O3 is a default.
-    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -s -fexpensive-optimizations")
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
 elseif(COMPILERTYPE STREQUAL "clang")
     # Use libc++ if requested.
     if(LLVM)
@@ -127,24 +125,47 @@ elseif(COMPILERTYPE STREQUAL "clang")
     #set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ")
 endif()
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/../../bin/$<CONFIG>")
+if(LD)
+    message("Using ${LD} linker...")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fuse-ld=${LD}")
+endif()
+
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/../../lib/${CMAKE_BUILD_TYPE}")
 
 include_directories(include)
 
 # CHANGEME: Include headers of dependencies.
-include_directories(../iosqueak-source/include)
-include_directories(${ARCTICTERN_DIR}/include)
 include_directories(${EVENTPP_DIR}/include)
+include_directories(${ARCTICTERN_DIR}/include)
 
 # CHANGEME: Include files to compile.
-add_executable(${TARGET_NAME}
-    main.cpp
+add_library(${TARGET_NAME} STATIC
+    include/iosqueak/stringify/anything.hpp
+    include/iosqueak/stringify/exception.hpp
+    include/iosqueak/stringify/function.hpp
+    include/iosqueak/stringify/logic.hpp
+    include/iosqueak/stringify/memory.hpp
+    include/iosqueak/stringify/numbers.hpp
+    include/iosqueak/stringify/types.hpp
+    include/iosqueak/stringify/utilities.hpp
+
+    include/iosqueak/tools/memlens.hpp
+    include/iosqueak/tools/typemap.hpp
+
+    include/iosqueak/utilities/bitfield.hpp
+
+    include/iosqueak/channel.hpp
+    include/iosqueak/ioctrl.hpp
+    include/iosqueak/ioformat.hpp
+    include/iosqueak/stringify.hpp
+    include/iosqueak/stringy.hpp
+
+    src/channel.cpp
+    src/ioformat.cpp
+    src/stringy.cpp
 )
 
 # CHANGEME: Link against dependencies.
-message("HERE WE GO!")
-message(${CMAKE_HOME_DIRECTORY}/../iosqueak-source/lib/${CMAKE_BUILD_TYPE}/libiosqueak.a)
-target_link_libraries(${TARGET_NAME} ${CMAKE_HOME_DIRECTORY}/../iosqueak-source/lib/${CMAKE_BUILD_TYPE}/libiosqueak.a)
 
 if(COMPILERTYPE STREQUAL "clang")
     if(SAN STREQUAL "address")
