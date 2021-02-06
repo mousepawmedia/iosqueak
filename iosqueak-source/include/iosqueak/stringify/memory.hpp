@@ -47,6 +47,7 @@
 #include <math.h>
 #include <stdexcept>
 #include <string>
+#include <vector>
 
 #include "iosqueak/ioformat.hpp"
 #include "iosqueak/stringify/numbers.hpp"

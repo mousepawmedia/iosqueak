@@ -51,6 +51,7 @@
 #include <memory>
 #include <typeindex>
 #include <typeinfo>
+#include <vector>
 
 #include "iosqueak/ioctrl.hpp"
 
