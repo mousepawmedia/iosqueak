@@ -49,8 +49,8 @@ template<typename T, typename... Args>
 std::string stringify_variadic(const T&, Args...);
 
 template<typename T, typename... Args>
-std::string stringify_function(const char* name_hint,
-							   [[maybe_unused]] const T& func,
+std::string stringify_function([[maybe_unused]] const T& func,
+							   const char* name_hint,
 							   [[maybe_unused]] Args... args)
 {
 	std::string r = std::string(name_hint) + "(";

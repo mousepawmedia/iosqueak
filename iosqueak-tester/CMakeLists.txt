@@ -142,8 +142,6 @@ add_executable(${TARGET_NAME}
 )
 
 # CHANGEME: Link against dependencies.
-message("HERE WE GO!")
-message(${CMAKE_HOME_DIRECTORY}/../iosqueak-source/lib/${CMAKE_BUILD_TYPE}/libiosqueak.a)
 target_link_libraries(${TARGET_NAME} ${CMAKE_HOME_DIRECTORY}/../iosqueak-source/lib/${CMAKE_BUILD_TYPE}/libiosqueak.a)
 
 if(COMPILERTYPE STREQUAL "clang")

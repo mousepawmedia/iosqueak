@@ -99,7 +99,7 @@ void test_stringify()
 			  << stringify(std::runtime_error("Error text here!")) << std::endl;
 
 	std::cout << "Function: "
-			  << stringify("dummy_func", dummy_func, 42, 42, true) << std::endl;
+			  << stringify(dummy_func, "dummy_func", 42, 42, true) << std::endl;
 }
 
 /** Temporary test code goes in this function ONLY.

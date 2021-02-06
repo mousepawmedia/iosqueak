@@ -44,6 +44,7 @@
 #ifndef IOSQUEAK_STRINGIFY_HPP
 #define IOSQUEAK_STRINGIFY_HPP
 
+#include <bitset>
 #include <stdexcept>
 #include <string>
 
@@ -260,9 +261,9 @@ struct _StringifyImpl<
 /* Stringify functions */
 
 template<typename T, typename... Args>
-std::string stringify(const char* name_hint, const T& func, Args... args)
+std::string stringify(const T& func, const char* name_hint, Args... args)
 {
-	return stringify_function(name_hint, func, args...);
+	return stringify_function(func, name_hint, args...);
 }
 
 /* Stringify bitsets */
