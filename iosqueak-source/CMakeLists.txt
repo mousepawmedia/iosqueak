@@ -135,8 +135,8 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/../../lib/${CMAK
 include_directories(include)
 
 # CHANGEME: Include headers of dependencies.
-include_directories(${EVENTPP_DIR}/include)
 include_directories(${ARCTICTERN_DIR}/include)
+include_directories(${EVENTPP_DIR}/include)
 
 # CHANGEME: Include files to compile.
 add_library(${TARGET_NAME} STATIC
