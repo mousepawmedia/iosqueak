@@ -97,5 +97,6 @@
         "textbg",
         "textfg"
     ],
-    "astyle.astylerc": "${workspaceRoot}/astylerc"
+    "astyle.astylerc": "${workspaceRoot}/astylerc",
+    "cmake.configureOnOpen": false
 }

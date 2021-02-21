@@ -1,11 +1,10 @@
-# CMake Config for Executable (MousePaw Media Build System)
-# Version: 2.1.0
-# Tailored For: IOSqueak
+# CMake Config (MousePaw Media Build System)
+# Version: 3.0.0
 #
 # Author(s): Jason C. McDonald
 
-# LICENSE (BSD-3-Clause)
-# Copyright (c) 2018 MousePaw Media.
+# LICENSE
+# Copyright (c) 2021 MousePaw Media.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -38,15 +37,20 @@
 # See https://www.mousepawmedia.com/developers for information
 # on how to contribute to our projects.
 
-# Specify the verison being used.
-cmake_minimum_required(VERSION 3.1)
-
 # CHANGEME: Name your project here
 project("IOSqueak")
-set(TARGET_NAME "iosqueak")
 
+# WARNING: Don't modify this file to configure project! See project.conf
+
+# Specify the verison being used.
+cmake_minimum_required(VERSION 3.8)
+
+# Import user-specified library path configuration
 message("Using ${CONFIG_FILENAME}.config")
 include(${CMAKE_HOME_DIRECTORY}/../${CONFIG_FILENAME}.config)
+
+# Import project configuration
+include(${CMAKE_HOME_DIRECTORY}/project.conf)
 
 # Compiler and Version check...
 # Allow Clang 3.4
@@ -56,12 +60,6 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     endif()
     set(COMPILERTYPE "clang")
     message("Clang 3.4 or later detected. Proceeding...")
-# Allow AppleClang
-elseif(CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
-    if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS "5")
-        message(FATAL_ERROR "Clang is too old. >= v5.x required. Aborting build.")
-    endif()
-    set(COMPILERTYPE "clang")
 # Allow GCC 5.x
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS "5")
@@ -82,7 +80,7 @@ endif()
 
 # Target C++17
 set(CMAKE_CXX_STANDARD 17)
-# Disable extensions (turns gnu++17 to c++17)
+# Disable extensions (turns gnu++14 to c++14)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Target 32-bit or 64-bit, based on ARCH variable.
@@ -100,19 +98,14 @@ else()
 endif()
 
 # Our global compiler flags.
-add_definitions(-Wall -Wextra -Werror -Wpedantic)
+add_definitions(-Wall -Wextra -Werror)
+#add_definitions(-Wall -Wextra)
 
 if(COMPILERTYPE STREQUAL "gcc")
-    # -Wimplicit-fallthrough=0 is required for
-    # GCC 7.x and onward. That is, until we switch
-    # to C++17
-    if(CMAKE_CXX_COMPILER_VERSION VERSION_EQUAL "7" OR CMAKE_CXX_COMPILER_VERSION VERSION_GREATER "7")
-        add_definitions(-Wimplicit-fallthrough)
-    endif()
     # Set debug flags. -g is a default.
     #set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ")
     # Set release flags. -O3 is a default.
-    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -s")
 elseif(COMPILERTYPE STREQUAL "clang")
     # Use libc++ if requested.
     if(LLVM)
@@ -125,47 +118,24 @@ elseif(COMPILERTYPE STREQUAL "clang")
     #set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ")
 endif()
 
-if(LD)
-    message("Using ${LD} linker...")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fuse-ld=${LD}")
+# CHANGEME: Select appropriate output (lib or bin)
+if(ARTIFACT_TYPE STREQUAL "library")
+    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/../../lib/${CMAKE_BUILD_TYPE}")
+elseif(ARTIFACT_TYPE STREQUAL "executable")
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/../../bin/${CMAKE_BUILD_TYPE}")
 endif()
-
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/../../lib/${CMAKE_BUILD_TYPE}")
 
 include_directories(include)
 
-# CHANGEME: Include headers of dependencies.
-include_directories(${ARCTICTERN_DIR}/include)
-include_directories(${EVENTPP_DIR}/include)
+include_directories(${INCLUDE_LIBS})
 
-# CHANGEME: Include files to compile.
-add_library(${TARGET_NAME} STATIC
-    include/iosqueak/stringify/anything.hpp
-    include/iosqueak/stringify/exception.hpp
-    include/iosqueak/stringify/function.hpp
-    include/iosqueak/stringify/logic.hpp
-    include/iosqueak/stringify/memory.hpp
-    include/iosqueak/stringify/numbers.hpp
-    include/iosqueak/stringify/types.hpp
-    include/iosqueak/stringify/utilities.hpp
+if(ARTIFACT_TYPE STREQUAL "library")
+    add_library(${TARGET_NAME} ${FILES})
+elseif(ARTIFACT_TYPE STREQUAL "executable")
+    add_executable(${TARGET_NAME} ${FILES})
+endif()
 
-    include/iosqueak/tools/memlens.hpp
-    include/iosqueak/tools/typemap.hpp
-
-    include/iosqueak/utilities/bitfield.hpp
-
-    include/iosqueak/channel.hpp
-    include/iosqueak/ioctrl.hpp
-    include/iosqueak/ioformat.hpp
-    include/iosqueak/stringify.hpp
-    include/iosqueak/stringy.hpp
-
-    src/channel.cpp
-    src/ioformat.cpp
-    src/stringy.cpp
-)
-
-# CHANGEME: Link against dependencies.
+target_link_libraries(${TARGET_NAME} ${LINK_LIBS})
 
 if(COMPILERTYPE STREQUAL "clang")
     if(SAN STREQUAL "address")
@@ -177,13 +147,9 @@ if(COMPILERTYPE STREQUAL "clang")
         set_property(TARGET ${TARGET_NAME} APPEND_STRING PROPERTY LINK_FLAGS " -fsanitize=leak")
         message("Compiling with LeakSanitizer.")
     elseif(SAN STREQUAL "memory")
-        if(LLVM)
-            add_definitions(-O1 -fsanitize=memory -fno-optimize-sibling-calls -fno-omit-frame-pointer -fsanitize-memory-track-origins)
-            set_property(TARGET ${TARGET_NAME} APPEND_STRING PROPERTY LINK_FLAGS " -fsanitize=memory")
-            message("Compiling with MemorySanitizer.")
-        else()
-            message("Skipping MemorySanitizer: requires libc++")
-        endif()
+        add_definitions(-O1 -fsanitize=memory -fno-optimize-sibling-calls -fno-omit-frame-pointer)
+        set_property(TARGET ${TARGET_NAME} APPEND_STRING PROPERTY LINK_FLAGS " -fsanitize=memory")
+        message("Compiling with MemorySanitizer.")
     elseif(SAN STREQUAL "thread")
         add_definitions(-O1 -fsanitize=thread)
         set_property(TARGET ${TARGET_NAME} APPEND_STRING PROPERTY LINK_FLAGS " -fsanitize=thread")
@@ -193,4 +159,6 @@ if(COMPILERTYPE STREQUAL "clang")
         set_property(TARGET ${TARGET_NAME} APPEND_STRING PROPERTY LINK_FLAGS " -fsanitize=undefined")
         message("Compiling with UndefiniedBehaviorSanitizer.")
     endif()
+elseif(NOT SAN MATCHES "")
+    message("${SAN} is not available with compiler ${COMPILERTYPE}.")
 endif()

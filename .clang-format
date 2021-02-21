@@ -19,11 +19,11 @@ AllowShortLambdasOnASingleLine: Inline
 AllowShortLoopsOnASingleLine: false
 AlwaysBreakAfterReturnType: None
 AlwaysBreakBeforeMultilineStrings: false
-AlwaysBreakTemplateDeclarations: Yes
+AlwaysBreakTemplateDeclarations: MultiLine
 BinPackArguments: false
 BinPackParameters: false
 BreakBeforeBinaryOperators: None
-BreakBeforeBraces: Linux  # Linux (OTBS) OR Allman
+BreakBeforeBraces: Linux  # a.k.a. OTBS
 BreakBeforeTernaryOperators: true
 BreakConstructorInitializers: BeforeColon
 BreakInheritanceList: BeforeColon
@@ -47,12 +47,14 @@ IncludeBlocks: Regroup
 IncludeCategories:
   - Regex: '^<.*'
     Priority: 1
-  - Regex: '^(<|")(cairo|cpgf|cinder|eigen|eventpp|opus|pugixml|sdl2)'
+  - Regex: '^(<|")(cairo|eigen|eventpp|opus|pugixml|sdl2)'
     Priority: 2
-  - Regex: '^(<|")(anari|arctic-tern|goldilocks|iosqueak|ratscript|simplexpress|stormsound|trailcrest)'
+  - Regex: '^(<|")(arctic-tern|goldilocks|iosqueak|nimbly|onestring|simplexpress)'
     Priority: 3
-  - Regex: '^".*'
+  - Regex: '^(<|")(anari|ratscript|stormsound|trailcrest)'
     Priority: 4
+  - Regex: '^".*'
+    Priority: 5
 IncludeIsMainRegex: '(_tests)?$'
 # IndentCaseBlocks: false  # clang-format-11 only
 IndentCaseLabels: true
