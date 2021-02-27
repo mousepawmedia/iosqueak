@@ -1,11 +1,8 @@
 # Inner Makefile (MousePaw Media Build System)
-# Version: 2.1.0
-# Tailored For: IOSqueak (Tester)
-#
-# Author(s): Jason C. McDonald
+# Version: 3.1.0
 
-# LICENSE (BSD-3-Clause)
-# Copyright (c) 2018 MousePaw Media.
+# LICENSE
+# Copyright (c) 2021 MousePaw Media.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -38,6 +35,11 @@
 # See https://www.mousepawmedia.com/developers for information
 # on how to contribute to our projects.
 
+# CHANGE: Project name
+NAME = "IOSqueak (Tester)"
+# CHANGE: Set to 'lib' or 'bin'
+BUILD_DIR = bin
+
 CMAKE = cmake ../.. -G"Unix Makefiles"
 T_DEBUG = -DCMAKE_BUILD_TYPE=Debug
 T_RELEASE = -DCMAKE_BUILD_TYPE=Release
@@ -55,6 +57,9 @@ CH_DIR = @cmake -E chdir
 RM_DIR = @cmake -E remove_directory
 ECHO = @cmake -E echo
 
+# CHANGEME: Project name
+NAME = "Anari Tester"
+
 # CHANGEME: Set to 'lib' or 'bin'
 BUILD_DIR = bin
 
@@ -63,8 +68,7 @@ TEMP_DIR = build_temp
 EXEC_BUILD = $(CH_DIR) $(TEMP_DIR)
 
 none:
-	# CHANGEME: Project name
-	$(ECHO) "=== IOSqueak Tester ==="
+	$(ECHO) "=== $(NAME) ==="
 	$(ECHO) "Select a build target:"
 	$(ECHO) "  make debug"
 	$(ECHO) "  make release"
@@ -104,11 +108,11 @@ cleanrelease:
 debug:
 	$(MK_DIR) $(TEMP_DIR)/Debug$(ARCH)
 	$(CH_DIR) $(TEMP_DIR)/Debug$(ARCH) $(CMAKE) $(T_DEBUG) -DARCH=$(ARCH) -DSAN=$(SAN) $(P_CONF)$(P_CONF_PATH)
-	$(EXEC_BUILD)/Debug$(ARCH) $(MAKE) VERBOSE=1
+	$(EXEC_BUILD)/Debug$(ARCH) $(MAKE) $(TARGET)
 
 release:
 	$(MK_DIR) $(TEMP_DIR)/Release$(ARCH)
 	$(CH_DIR) $(TEMP_DIR)/Release$(ARCH) $(CMAKE) $(T_RELEASE) -DARCH=$(ARCH) $(P_CONF)$(P_CONF_PATH)
-	$(EXEC_BUILD)/Release$(ARCH) $(MAKE) VERBOSE=1
+	$(EXEC_BUILD)/Release$(ARCH) $(MAKE) $(TARGET)
 
-.PHONY: clean cleandebug cleanrelease help
+.PHONY: clean cleandebug cleanrelease
