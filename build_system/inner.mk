@@ -1,5 +1,5 @@
 # Inner Makefile (MousePaw Media Build System)
-# Version: 3.2.0
+# Version: 3.2.1
 
 # LICENSE
 # Copyright (c) 2021 MousePaw Media.
@@ -97,11 +97,11 @@ cleanrelease:
 debug:
 	$(MK_DIR) $(TEMP_DIR)/Debug$(ARCH)
 	$(CH_DIR) $(TEMP_DIR)/Debug$(ARCH) $(CMAKE) $(T_DEBUG) -DARCH=$(ARCH) -DSAN=$(SAN) $(P_CONF)$(P_CONF_PATH)
-	$(EXEC_BUILD)/Debug$(ARCH) $(MAKE) $(TARGET)
+	$(EXEC_BUILD)/Debug$(ARCH) $(MAKE)
 
 release:
 	$(MK_DIR) $(TEMP_DIR)/Release$(ARCH)
 	$(CH_DIR) $(TEMP_DIR)/Release$(ARCH) $(CMAKE) $(T_RELEASE) -DARCH=$(ARCH) $(P_CONF)$(P_CONF_PATH)
-	$(EXEC_BUILD)/Release$(ARCH) $(MAKE) $(TARGET)
+	$(EXEC_BUILD)/Release$(ARCH) $(MAKE)
 
 .PHONY: clean cleandebug cleanrelease
