@@ -1,5 +1,5 @@
 # CMake Config (MousePaw Media Build System)
-# Version: 3.2.0
+# Version: 3.2.1
 
 # CHANGE: Name your project here
 project("IOSqueak")
