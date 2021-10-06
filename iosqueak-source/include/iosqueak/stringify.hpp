@@ -47,6 +47,7 @@
 #include <bitset>
 #include <stdexcept>
 #include <string>
+#include <tuple>
 
 #include "iosqueak/ioformat.hpp"
 #include "iosqueak/stringify/anything.hpp"
@@ -644,6 +645,24 @@ std::string stringify_from_pointer(const std::weak_ptr<T>& ptr)
 {
 	auto shared = ptr.lock();
 	return stringify_from_pointer(shared.get());
+}
+
+// Stringifies tuples.
+template <typename... Args>
+std::string stringify_tuples(std::tuple<Args...> args)
+{
+	// Uses lambda in order to iterate and assign the strigigied args to the variable.
+    std::string stringified_tuples = std::apply([](auto const&... arg) {
+            std::string stringified_args;
+            size_t i = 0;
+
+			// Iterates through the args to stringify it and append it.
+            ((stringified_args += std::to_string(arg) + (++i == sizeof...(Args) ? "" : ",")), ...);
+            
+            return stringified_args;
+        }, args);
+
+	return stringified_tuples;
 }
 
 #endif

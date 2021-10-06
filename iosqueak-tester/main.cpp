@@ -148,6 +148,10 @@ void test_code()
 	channel << IOFormatTextFG::red << IOFormatPtr::memory << thing_ptr
 			<< IOCtrl::endl;
 	channel << IOFormatTextFG::red << typeid(thing) << IOCtrl::endl;
+
+	std::tuple <int, int, int, int> nums = std::make_tuple(1, 2, 4, 5);
+
+	channel << stringify_tuples(nums) << IOCtrl::endl;
 }
 
 /////// WARNING: DO NOT ALTER BELOW THIS POINT! ///////
