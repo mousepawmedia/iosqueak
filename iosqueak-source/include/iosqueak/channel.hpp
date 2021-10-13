@@ -293,7 +293,7 @@ public:
 		process_fmt(rhs);
 		return *this;
 	}
-	Channel& operator<<(const IOFormalBoolStyle& rhs)
+	Channel& operator<<(const IOFormatBoolStyle& rhs)
 	{
 		process_fmt(rhs);
 		return *this;

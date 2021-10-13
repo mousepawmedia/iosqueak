@@ -3,7 +3,7 @@
 	"repository.callsign" : "I",
 	"load" : [
 		".arclibs/cppcheck",
-		"clang-format-linter"
+		".arclibs/clang-format-linter"
 	],
 	"phutil_libraries": [
    		 ".arclib"

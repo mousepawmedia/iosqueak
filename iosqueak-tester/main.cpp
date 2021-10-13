@@ -127,7 +127,7 @@ void test_code()
 	channel << IOFormatBase::hex << 254 << IOCtrl::endl;
 
 	channel << IOFormatTextFG::green << IOFormatTextAttr::italic
-			<< IOFormalBoolStyle::scott << true << IOCtrl::endl;
+			<< IOFormatBoolStyle::scott << true << IOCtrl::endl;
 	std::cout << true << std::endl;
 
 	channel << IOFormatBase::hex << IOFormatNumCase::lower << 0xABCD << IOCtrl::endl;

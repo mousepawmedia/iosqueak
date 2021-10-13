@@ -54,42 +54,42 @@
  * \param the format to represent the boolean in, default lowercase word
  * \return the calculated string length */
 inline size_t lengthify_boolean(
-	const bool& val, const IOFormalBoolStyle& fmt = IOFormalBoolStyle::lower)
+	const bool& val, const IOFormatBoolStyle& fmt = IOFormatBoolStyle::lower)
 {
 	switch (fmt) {
 		// TRUE has four letters, FALSE has five...
-		case IOFormalBoolStyle::lower:
-		case IOFormalBoolStyle::upper:
-		case IOFormalBoolStyle::caps:
+		case IOFormatBoolStyle::lower:
+		case IOFormatBoolStyle::upper:
+		case IOFormatBoolStyle::caps:
 			return val ? 4 : 5;
 		// 1 and 0 each are one letter...
-		case IOFormalBoolStyle::numeral:
+		case IOFormatBoolStyle::numeral:
 			return 1;
 		// PASS and FAIL have four letters each...
-		case IOFormalBoolStyle::test:
+		case IOFormatBoolStyle::test:
 			return 4;
 		// YEA and NAY have three letters each...
-		case IOFormalBoolStyle::scott:
+		case IOFormatBoolStyle::scott:
 			return 3;
 	}
 	return 0;
 }
 
 inline std::string stringify_boolean(
-	const bool& val, const IOFormalBoolStyle& fmt = IOFormalBoolStyle::lower)
+	const bool& val, const IOFormatBoolStyle& fmt = IOFormatBoolStyle::lower)
 {
 	switch (fmt) {
-		case IOFormalBoolStyle::lower:
+		case IOFormatBoolStyle::lower:
 			return val ? "true" : "false";
-		case IOFormalBoolStyle::upper:
+		case IOFormatBoolStyle::upper:
 			return val ? "True" : "False";
-		case IOFormalBoolStyle::caps:
+		case IOFormatBoolStyle::caps:
 			return val ? "TRUE" : "FALSE";
-		case IOFormalBoolStyle::numeral:
+		case IOFormatBoolStyle::numeral:
 			return val ? "1" : "0";
-		case IOFormalBoolStyle::test:
+		case IOFormatBoolStyle::test:
 			return val ? "PASS" : "FAIL";
-		case IOFormalBoolStyle::scott:
+		case IOFormatBoolStyle::scott:
 			return val ? "yea" : "nay";
 	}
 	return "";

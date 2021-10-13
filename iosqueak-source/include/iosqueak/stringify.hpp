@@ -96,7 +96,7 @@ size_t lengthify(
 }
 
 inline size_t lengthify(const bool& val,
-						const IOFormalBoolStyle& fmt = IOFormalBoolStyle::lower)
+						const IOFormatBoolStyle& fmt = IOFormatBoolStyle::lower)
 {
 	return lengthify_boolean(val, fmt);
 }
@@ -224,7 +224,7 @@ struct _StringifyImpl<char> {
 
 inline std::string stringify(
 	const bool& val,
-	const IOFormalBoolStyle& fmt /*= IOFormalBoolStyle::lower*/)
+	const IOFormatBoolStyle& fmt /*= IOFormatBoolStyle::lower*/)
 {
 	return stringify_boolean(val, fmt);
 }
@@ -233,7 +233,7 @@ template<>
 struct _StringifyImpl<bool> {
 	static std::string stringify(const bool& val)
 	{
-		return ::stringify(val, IOFormalBoolStyle::lower);
+		return ::stringify(val, IOFormatBoolStyle::lower);
 	}
 
 	static std::string stringify(const bool& val, const IOFormat& fmt)

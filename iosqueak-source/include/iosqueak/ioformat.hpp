@@ -115,7 +115,7 @@ enum class IOFormatBaseNotation {
 };
 
 /// Defines how boolean values should be represented textually.
-enum class IOFormalBoolStyle {
+enum class IOFormatBoolStyle {
 	lower = 0,
 	upper = 1,
 	caps = 2,
@@ -255,7 +255,7 @@ class IOFormat
 private:
 	IOFormatBase fmt_base;
 	IOFormatBaseNotation fmt_base_notation;
-	IOFormalBoolStyle fmt_bool_style;
+	IOFormatBoolStyle fmt_bool_style;
 	IOFormatCharValue fmt_char_value;
 	IOFormatDecimalPlaces fmt_decimal_places;
 	IOFormatMemSep fmt_mem_sep;
@@ -273,7 +273,7 @@ public:
 	IOFormat()
 	: fmt_base(IOFormatBase::b10),
 	  fmt_base_notation(IOFormatBaseNotation::prefix),
-	  fmt_bool_style(IOFormalBoolStyle::lower),
+	  fmt_bool_style(IOFormatBoolStyle::lower),
 	  fmt_char_value(IOFormatCharValue::as_char),
 	  fmt_decimal_places(IOFormatDecimalPlaces(14)),
 	  fmt_mem_sep(IOFormatMemSep::all),
@@ -306,8 +306,8 @@ public:
 		return fmt_base_notation;
 	}
 
-	/// \return the current IOFormalBoolStyle flag
-	const IOFormalBoolStyle& bool_style() const { return fmt_bool_style; }
+	/// \return the current IOFormatBoolStyle flag
+	const IOFormatBoolStyle& bool_style() const { return fmt_bool_style; }
 
 	/// \return the current IOFormatCharValue flag
 	const IOFormatCharValue& char_value() const { return fmt_char_value; }
@@ -398,7 +398,7 @@ public:
 		fmt_base_notation = rhs;
 		return *this;
 	}
-	IOFormat& operator<<(const IOFormalBoolStyle& rhs)
+	IOFormat& operator<<(const IOFormatBoolStyle& rhs)
 	{
 		fmt_bool_style = rhs;
 		return *this;
