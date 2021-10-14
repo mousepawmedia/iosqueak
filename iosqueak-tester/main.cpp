@@ -149,9 +149,13 @@ void test_code()
 			<< IOCtrl::endl;
 	channel << IOFormatTextFG::red << typeid(thing) << IOCtrl::endl;
 
-	std::tuple <int, int, int, int> nums = std::make_tuple(1, 2, 4, 5);
+	std::tuple<int, bool, int> test_tuple = std::make_tuple(42, true, 24);
+	IOFormat fmt = IOFormat();
+	fmt << IOFormatBase::hex;
+	fmt << IOFormatBoolStyle::scott;
 
-	channel << stringify_tuples(nums) << IOCtrl::endl;
+	channel << stringify(test_tuple, fmt) << IOCtrl::endl;
+	channel << stringify(test_tuple) << IOCtrl::endl;
 }
 
 /////// WARNING: DO NOT ALTER BELOW THIS POINT! ///////

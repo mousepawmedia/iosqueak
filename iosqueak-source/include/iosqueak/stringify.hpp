@@ -46,7 +46,6 @@
 
 #include <bitset>
 #include <stdexcept>
-#include <string>
 #include <tuple>
 
 #include "iosqueak/ioformat.hpp"
@@ -649,15 +648,15 @@ std::string stringify_from_pointer(const std::weak_ptr<T>& ptr)
 
 // Stringifies tuples.
 template <typename... Args>
-std::string stringify_tuples(std::tuple<Args...> args)
+std::string stringify(std::tuple<Args...> args, const IOFormat iof = IOFormat())
 {
 	// Uses lambda in order to iterate and assign the strigigied args to the variable.
-    std::string stringified_tuples = std::apply([](auto const&... arg) {
+    std::string stringified_tuples = std::apply([iof](auto const&... arg) {
             std::string stringified_args;
             size_t i = 0;
 
 			// Iterates through the args to stringify it and append it.
-            ((stringified_args += std::to_string(arg) + (++i == sizeof...(Args) ? "" : ",")), ...);
+            ((stringified_args += stringify(arg, iof) + (++i == sizeof...(Args) ? "" : ",")), ...);
             
             return stringified_args;
         }, args);
