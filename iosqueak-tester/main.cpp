@@ -42,6 +42,7 @@
  */
 
 #include <iostream>
+#include <limits>
 #include <string>
 
 //#include "goldilocks/shell.hpp"
@@ -108,54 +109,67 @@ void test_stringify()
  */
 void test_code()
 {
-	/*int value = 42;
-	channel << value << IOCtrl::endl;
-	channel << IOFormatPtr::value << &value << IOCtrl::endl;
+	// 	/*int value = 42;
+	// 	channel << value << IOCtrl::endl;
+	// 	channel << IOFormatPtr::value << &value << IOCtrl::endl;
 
-	channel << IOFormatPtr::address
-		<< reinterpret_cast<void*>(test_code)
-		<< IOCtrl::endl;*/
+	// 	channel << IOFormatPtr::address
+	// 		<< reinterpret_cast<void*>(test_code)
+	// 		<< IOCtrl::endl;*/
 
-	// Test bitset stringification/channel compat
-	std::bitset<71> bits(0xFFEE);
-	channel << IOFormatTextFG::magenta << IOFormatMemSep::all
-			<< bits << IOCtrl::endl;
+	// 	// Test bitset stringification/channel compat
+	// 	std::bitset<71> bits(0xFFEE);
+	// 	channel << IOFormatTextFG::magenta << IOFormatMemSep::all
+	// 			<< bits << IOCtrl::endl;
 
-	channel << IOFormatTextAttr::bold << IOFormatTextFG::blue << "Hello!"
-			<< IOCtrl::endl;
-	channel << 42 << IOCtrl::endl;
-	channel << IOFormatBase::hex << 254 << IOCtrl::endl;
+	// 	channel << IOFormatTextAttr::bold << IOFormatTextFG::blue << "Hello!"
+	// 			<< IOCtrl::endl;
+	// 	channel << 42 << IOCtrl::endl;
+	// 	channel << IOFormatBase::hex << 254 << IOCtrl::endl;
 
-	channel << IOFormatTextFG::green << IOFormatTextAttr::italic
-			<< IOFormatBoolStyle::scott << true << IOCtrl::endl;
-	std::cout << true << std::endl;
+	// 	channel << IOFormatTextFG::green << IOFormatTextAttr::italic
+	// 			<< IOFormatBoolStyle::scott << true << IOCtrl::endl;
+	// 	std::cout << true << std::endl;
 
-	channel << IOFormatBase::hex << IOFormatNumCase::lower << 0xABCD << IOCtrl::endl;
+	// 	channel << IOFormatBase::hex << IOFormatNumCase::lower << 0xABCD <<
+	// IOCtrl::endl;
 
-	channel << 123.456 << IOCtrl::endl;
-	channel << IOFormatDecimalPlaces(2) << 10.152 << IOCtrl::endl;
+	// 	channel << 123.456 << IOCtrl::endl;
+	// 	channel << IOFormatDecimalPlaces(2) << 10.152 << IOCtrl::endl;
 
-	channel << IOFormatDecimalPlaces(5) << 51.00001
-			<< IOCtrl::endl;  // This is a bug??
-	std::cout << 51.00001 << std::endl;
+	// 	channel << IOFormatDecimalPlaces(5) << 51.00001
+	// 			<< IOCtrl::endl;  // This is a bug??
+	// 	std::cout << 51.00001 << std::endl;
 
-	int thing = 123;
-	int* thing_ptr = &thing;
-	channel << IOFormatTextFG::red << IOFormatPtr::address << thing_ptr
-			<< IOCtrl::endl;
-	channel << IOFormatTextFG::red << IOFormatPtr::value << thing_ptr
-			<< IOCtrl::endl;
-	channel << IOFormatTextFG::red << IOFormatPtr::memory << thing_ptr
-			<< IOCtrl::endl;
-	channel << IOFormatTextFG::red << typeid(thing) << IOCtrl::endl;
+	// 	int thing = 123;
+	// 	int* thing_ptr = &thing;
+	// 	channel << IOFormatTextFG::red << IOFormatPtr::address << thing_ptr
+	// 			<< IOCtrl::endl;
+	// 	channel << IOFormatTextFG::red << IOFormatPtr::value << thing_ptr
+	// 			<< IOCtrl::endl;
+	// 	channel << IOFormatTextFG::red << IOFormatPtr::memory << thing_ptr
+	// 			<< IOCtrl::endl;
+	// 	channel << IOFormatTextFG::red << typeid(thing) << IOCtrl::endl;
 
-	std::tuple<int, bool, int> test_tuple = std::make_tuple(42, true, 24);
-	IOFormat fmt = IOFormat();
-	fmt << IOFormatBase::hex;
-	fmt << IOFormatBoolStyle::scott;
+	// std::tuple<int, bool, int, float> test_tuple = std::make_tuple(42, true,
+	// 24, 5.00001); IOFormat fmt = IOFormat(); fmt << IOFormatDecimalPlaces(5);
 
-	channel << stringify(test_tuple, fmt) << IOCtrl::endl;
-	channel << stringify(test_tuple) << IOCtrl::endl;
+	channel << IOFormatDecimalPlaces(5) << 51.00001 << IOCtrl::endl;
+	channel << IOFormatDecimalPlaces(6) << 51.00021 << IOCtrl::endl;
+	channel << IOFormatDecimalPlaces(5) << 51.00321 << IOCtrl::endl;
+	channel << IOFormatDecimalPlaces(7) << 51.0030201 << IOCtrl::endl;
+	channel << IOFormatDecimalPlaces(5) << 51.04321 << IOCtrl::endl;
+	channel << IOFormatDecimalPlaces(5) << 51.54321 << IOCtrl::endl;
+	channel << IOFormatDecimalPlaces(6) << 51.123451 << IOCtrl::endl;
+
+	channel << IOFormatDecimalPlaces(1) << 51.000123 << IOCtrl::endl;
+	channel << IOFormatDecimalPlaces(2) << 51.000123 << IOCtrl::endl;
+	channel << IOFormatDecimalPlaces(3) << 51.000123 << IOCtrl::endl;
+	channel << IOFormatDecimalPlaces(4) << 51.000123 << IOCtrl::endl;
+	channel << IOFormatDecimalPlaces(5) << 51.000123 << IOCtrl::endl;
+	channel << IOFormatDecimalPlaces(6) << 51.000123 << IOCtrl::endl;
+	channel << IOFormatDecimalPlaces(7) << 51.000123 << IOCtrl::endl;
+	channel << IOFormatDecimalPlaces(8) << 51.000123 << IOCtrl::endl;
 }
 
 /////// WARNING: DO NOT ALTER BELOW THIS POINT! ///////

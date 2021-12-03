@@ -334,6 +334,21 @@ std::string stringify_floating_point(
 		// Get decimal part
 		long long int decimal =
 			floor((number - whole) * pow(10, places.places));
+
+		// decimal var length.
+		const int decimal_len = lengthify_integral(decimal);
+
+		// If decimal len is lower than the amount of places, the following
+		// block code is executed.
+		if (decimal_len < places.places) {
+			int missing_places = places.places - decimal_len;
+
+			// For loop which appends the missing 0's to the string.
+			for (int i = 0; i < missing_places; ++i) {
+				str += '0';
+			}
+		}
+
 		str += stringify_integral(decimal);
 	}
 
