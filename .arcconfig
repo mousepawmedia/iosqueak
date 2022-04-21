@@ -2,8 +2,7 @@
 	"phabricator.uri" : "https://phab.mousepawmedia.com",
 	"repository.callsign" : "I",
 	"load" : [
-		".arclibs/cppcheck",
-		".arclibs/clang-format-linter"
+		".arclibs/cppcheck"
 	],
 	"phutil_libraries": [
    		 ".arclib"
