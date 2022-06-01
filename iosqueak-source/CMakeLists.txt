@@ -47,10 +47,12 @@ set(FILES
     include/iosqueak/ioformat.hpp
     include/iosqueak/stringify.hpp
     include/iosqueak/stringy.hpp
+    include/iosqueak/window.hpp
 
     src/channel.cpp
     src/ioformat.cpp
     src/stringy.cpp
+    src/window.cpp
 )
 
 # CHANGE: Link against dependencies.

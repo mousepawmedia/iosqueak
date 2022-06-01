@@ -48,60 +48,7 @@
 //#include "goldilocks/shell.hpp"
 
 #include "iosqueak/channel.hpp"
-#include "iosqueak/stringify.hpp"
-#include "iosqueak/tools/memlens.hpp"
-
-//#include "test_stringify_numbers.hpp"
-
-void dummy_func(int, int, bool) { return; }
-
-void test_stringify()
-{
-	std::cout << "Bool: " << stringify(true) << std::endl;
-	std::cout << "Char: " << stringify('c') << std::endl;
-	std::cout << "Integer: " << stringify(-12345) << std::endl;
-	std::cout << "Hex Integer: " << stringify(123, IOFormatBase::hex)
-			  << std::endl;
-	std::cout << "Float: " << stringify(123456789123456789.987654321)
-			  << std::endl;
-
-	long long val = 123456789123456789LL;
-
-	std::cout << "Nullptr: "
-			  << stringify(MemLens(nullptr), IOFormatPtr::address) << std::endl;
-	std::cout << "Value: " << stringify(&val, IOFormatPtr::value) << std::endl;
-	std::cout << "Address: " << stringify(&val, IOFormatPtr::address)
-			  << std::endl;
-	std::cout << "Type: " << stringify(&val, IOFormatPtr::pointer) << std::endl;
-	std::cout << "Memory: "
-			  << stringify(&val,
-						   IOFormatPtr::memory,
-						   IOFormatMemSep::all,
-						   IOFormatBase::hex)
-			  << std::endl;
-	// std::cout << "Pointer Value: " << stringify(MemLens(ptr),
-	// IOFormatPtr::value) << std::endl;
-
-	char test = 'c';
-	char* test_p = &test;
-	std::cout << "Type: " << stringify(typeid(test)) << std::endl;
-	std::cout << "Type*: " << stringify(typeid(&test_p)) << std::endl;
-
-	TypesMap::register_type<std::string>("std::string");
-	TypesMap::register_type<std::string>("std::string");
-	std::string str = "Hello, world!";
-	std::cout << "Type: " << stringify(typeid(str)) << std::endl;
-	std::cout << "String: " << stringify(str) << std::endl;
-
-	int ci = 42;
-	std::cout << "Const Type: " << stringify(typeid(&ci)) << std::endl;
-
-	std::cout << "Exception: "
-			  << stringify(std::runtime_error("Error text here!")) << std::endl;
-
-	std::cout << "Function: "
-			  << stringify(dummy_func, "dummy_func", 42, 42, true) << std::endl;
-}
+#include "iosqueak/window.hpp"
 
 /** Temporary test code goes in this function ONLY.
  * All test code that is needed long term should be
@@ -109,67 +56,9 @@ void test_stringify()
  */
 void test_code()
 {
-	// 	/*int value = 42;
-	// 	channel << value << IOCtrl::endl;
-	// 	channel << IOFormatPtr::value << &value << IOCtrl::endl;
-
-	// 	channel << IOFormatPtr::address
-	// 		<< reinterpret_cast<void*>(test_code)
-	// 		<< IOCtrl::endl;*/
-
-	// 	// Test bitset stringification/channel compat
-	// 	std::bitset<71> bits(0xFFEE);
-	// 	channel << IOFormatTextFG::magenta << IOFormatMemSep::all
-	// 			<< bits << IOCtrl::endl;
-
-	// 	channel << IOFormatTextAttr::bold << IOFormatTextFG::blue << "Hello!"
-	// 			<< IOCtrl::endl;
-	// 	channel << 42 << IOCtrl::endl;
-	// 	channel << IOFormatBase::hex << 254 << IOCtrl::endl;
-
-	// 	channel << IOFormatTextFG::green << IOFormatTextAttr::italic
-	// 			<< IOFormatBoolStyle::scott << true << IOCtrl::endl;
-	// 	std::cout << true << std::endl;
-
-	// 	channel << IOFormatBase::hex << IOFormatNumCase::lower << 0xABCD <<
-	// IOCtrl::endl;
-
-	// 	channel << 123.456 << IOCtrl::endl;
-	// 	channel << IOFormatDecimalPlaces(2) << 10.152 << IOCtrl::endl;
-
-	// 	channel << IOFormatDecimalPlaces(5) << 51.00001
-	// 			<< IOCtrl::endl;  // This is a bug??
-	// 	std::cout << 51.00001 << std::endl;
-
-	// 	int thing = 123;
-	// 	int* thing_ptr = &thing;
-	// 	channel << IOFormatTextFG::red << IOFormatPtr::address << thing_ptr
-	// 			<< IOCtrl::endl;
-	// 	channel << IOFormatTextFG::red << IOFormatPtr::value << thing_ptr
-	// 			<< IOCtrl::endl;
-	// 	channel << IOFormatTextFG::red << IOFormatPtr::memory << thing_ptr
-	// 			<< IOCtrl::endl;
-	// 	channel << IOFormatTextFG::red << typeid(thing) << IOCtrl::endl;
-
-	// std::tuple<int, bool, int, float> test_tuple = std::make_tuple(42, true,
-	// 24, 5.00001); IOFormat fmt = IOFormat(); fmt << IOFormatDecimalPlaces(5);
-
-	channel << IOFormatDecimalPlaces(5) << 51.00001 << IOCtrl::endl;
-	channel << IOFormatDecimalPlaces(6) << 51.00021 << IOCtrl::endl;
-	channel << IOFormatDecimalPlaces(5) << 51.00321 << IOCtrl::endl;
-	channel << IOFormatDecimalPlaces(7) << 51.0030201 << IOCtrl::endl;
-	channel << IOFormatDecimalPlaces(5) << 51.04321 << IOCtrl::endl;
-	channel << IOFormatDecimalPlaces(5) << 51.54321 << IOCtrl::endl;
-	channel << IOFormatDecimalPlaces(6) << 51.123451 << IOCtrl::endl;
-
-	channel << IOFormatDecimalPlaces(1) << 51.000123 << IOCtrl::endl;
-	channel << IOFormatDecimalPlaces(2) << 51.000123 << IOCtrl::endl;
-	channel << IOFormatDecimalPlaces(3) << 51.000123 << IOCtrl::endl;
-	channel << IOFormatDecimalPlaces(4) << 51.000123 << IOCtrl::endl;
-	channel << IOFormatDecimalPlaces(5) << 51.000123 << IOCtrl::endl;
-	channel << IOFormatDecimalPlaces(6) << 51.000123 << IOCtrl::endl;
-	channel << IOFormatDecimalPlaces(7) << 51.000123 << IOCtrl::endl;
-	channel << IOFormatDecimalPlaces(8) << 51.000123 << IOCtrl::endl;
+	while(1) {
+		channel << Window::get_width() << IOCtrl::endl;
+	}
 }
 
 /////// WARNING: DO NOT ALTER BELOW THIS POINT! ///////
