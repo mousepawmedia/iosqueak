@@ -59,6 +59,25 @@ public:
 	friend std::ostream& operator<<(std::ostream& out, const IODecor_Base& d);
 };
 
+class IODecor_Absorber : public IODecor_Base
+{
+protected:
+	std::string str;
+
+public:
+	IODecor_Absorber() : str("") {}
+
+	IODecor_Absorber& operator<<(const char* rhs);
+
+	IODecor_Absorber& operator<<(const std::string& rhs);
+
+	template<typename T> IODecor_Absorber& operator<<(const T& rhs)
+	{
+		this->str.append(stringify(rhs));
+		return *this;
+	};
+};
+
 class IODecorFill : public IODecor_Base
 {
 protected:
@@ -66,6 +85,17 @@ protected:
 
 public:
 	explicit IODecorFill(char c) : fill_char(c) {}
+
+	std::string to_string() const override;
+};
+
+class IODecorCenter : public IODecor_Absorber
+{
+protected:
+	char fill_char;
+
+public:
+	explicit IODecorCenter(char c = ' ') : fill_char(c) {}
 
 	std::string to_string() const override;
 };
