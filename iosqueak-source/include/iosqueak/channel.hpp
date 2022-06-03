@@ -380,17 +380,17 @@ public:
 		 * was the cause of T1081. */
 		bool keep = true;
 
-		if (flags_check(rhs, IOCtrl::clear)) {
-			reset_attributes();
-			keep = false;
-		}
-
 		if (flags_check(rhs, IOCtrl::r)) {
 			can_parse() ? inject("\r") : inject("");
 		}
 
 		if (flags_check(rhs, IOCtrl::n)) {
 			can_parse() ? inject("\n") : inject("");
+		}
+
+		if (flags_check(rhs, IOCtrl::clear)) {
+			reset_attributes();
+			keep = false;
 		}
 
 		if (flags_check(rhs, IOCtrl::send)) {

@@ -44,12 +44,14 @@ set(FILES
 
     include/iosqueak/channel.hpp
     include/iosqueak/ioctrl.hpp
+    include/iosqueak/iodecor.hpp
     include/iosqueak/ioformat.hpp
     include/iosqueak/stringify.hpp
     include/iosqueak/stringy.hpp
     include/iosqueak/window.hpp
 
     src/channel.cpp
+    src/iodecor.cpp
     src/ioformat.cpp
     src/stringy.cpp
     src/window.cpp

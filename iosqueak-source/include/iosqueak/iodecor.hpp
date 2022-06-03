@@ -1,9 +1,8 @@
-/** IOSqueak Tester
- * Version: 2.0
+/** IODecor [IOSqueak]
  *
- * Allows running tests and custom code for IOSqueak.
+ * Quickly create banners and align text.
  *
- * Author(s): Jason C. McDonald
+ * Author: Jason C. McDonald
  */
 
 /* LICENSE (BSD-3-Clause)
@@ -41,59 +40,34 @@
  * on how to contribute to our projects.
  */
 
+#ifndef IOSQUEAK_IODECOR_HPP
+#define IOSQUEAK_IODECOR_HPP
+
+#include <algorithm>
 #include <iostream>
-#include <limits>
-#include <string>
 
-//#include "goldilocks/shell.hpp"
+#include "iosqueak/window.hpp"
 
-#include "iosqueak/channel.hpp"
-#include "iosqueak/iodecor.hpp"
-
-/** Temporary test code goes in this function ONLY.
- * All test code that is needed long term should be
- * moved to a dedicated Goldilocks Test and TestSuite.
- */
-void test_code()
+class IODecor_Base
 {
-	channel << IODecorFill('=') << IOCtrl::endl;
-}
+protected:
+	static unsigned short columns();
 
-/////// WARNING: DO NOT ALTER BELOW THIS POINT! ///////
+public:
+	virtual std::string to_string() const = 0;
 
-int main(int argc, char* argv[])
+	friend std::ostream& operator<<(std::ostream& out, const IODecor_Base& d);
+};
+
+class IODecorFill : public IODecor_Base
 {
-	(void)argc;
-	(void)argv;
-	// Return code.
-	int r = 0;
+protected:
+	char fill_char;
 
-	test_code();
+public:
+	explicit IODecorFill(char c) : fill_char(c) {}
 
-	// Set up signal handling.
-	// ioc.configure_echo(IOEchoMode::cout);
+	std::string to_string() const override;
+};
 
-	// GoldilocksShell* shell = new GoldilocksShell(">> ");
-	// shell->register_suite<TestSuite_CoreTypes>("I-sB13");
-
-	// // If we got command-line arguments.
-	// if(argc > 1)
-	// {
-	//     r = shell->command(argc, argv);
-	// }
-	// else
-	// {
-	//     ioc << IOFormatTextAttr::bold << IOFormatTextFG::blue
-	//         << "===== IOSqueak Tester =====\n" << IOCtrl::endl;
-
-	// 	test_code();
-
-	//     // Shift control to the interactive console.
-	//     shell->interactive();
-	// }
-
-	// // Delete our GoldilocksShell.
-	// delete shell;
-
-	return r;
-}
+#endif  // IOSQUEAK_IODECOR_HPP
