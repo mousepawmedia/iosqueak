@@ -55,6 +55,10 @@
 class Window
 {
 protected:
+	// Width to use if the terminal size cannot be polled,
+	// and user specifies no width.
+	static const int FALLBACK_WIDTH = 32;
+
 	static unsigned short width;
 
 	/// Retrieve the width of the terminal according to the native system
@@ -76,6 +80,7 @@ protected:
 		width = ts.ts_cols;
 #elif defined(TIOCGWINSZ)
 		struct winsize ts;
+		// cppcheck-suppress ConfigurationNotChecked
 		auto _ = ioctl(STDIN_FILENO, TIOCGWINSZ, &ts);
 		(void)_;
 		width = ts.ws_col;
@@ -102,6 +107,10 @@ public:
 		poll_width();
 #endif  // ifndef WINDOW_SIGNAL_SETUP
 #endif  // ifndef _WIN32
+		if (width == 0) {
+			return Window::FALLBACK_WIDTH;
+		}
+
 		return width;
 	}
 };
