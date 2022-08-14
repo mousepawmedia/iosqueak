@@ -74,7 +74,6 @@ public:
 		this->str.append(stringify(rhs));
 		return *this;
 	};
-
 };
 
 class IODecorFill : public IODecor_Base
