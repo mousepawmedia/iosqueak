@@ -46,6 +46,8 @@
 #include <algorithm>
 #include <iostream>
 
+#include "iosqueak/ioformat.hpp"
+#include "iosqueak/stringify.hpp"
 #include "iosqueak/window.hpp"
 
 class IODecor_Base
@@ -67,15 +69,12 @@ protected:
 public:
 	IODecor_Absorber() : str("") {}
 
-	IODecor_Absorber& operator<<(const char* rhs);
-
-	IODecor_Absorber& operator<<(const std::string& rhs);
-
 	template<typename T> IODecor_Absorber& operator<<(const T& rhs)
 	{
 		this->str.append(stringify(rhs));
 		return *this;
 	};
+
 };
 
 class IODecorFill : public IODecor_Base
