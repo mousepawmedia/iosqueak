@@ -88,6 +88,17 @@ public:
 	std::string to_string() const override;
 };
 
+class IODecorLeft : public IODecor_Absorber
+{
+protected:
+	char fill_char;
+
+public:
+	explicit IODecorLeft(char c = ' ') : fill_char(c) {}
+
+	std::string to_string() const override;
+};
+
 class IODecorCenter : public IODecor_Absorber
 {
 protected:
@@ -95,6 +106,17 @@ protected:
 
 public:
 	explicit IODecorCenter(char c = ' ') : fill_char(c) {}
+
+	std::string to_string() const override;
+};
+
+class IODecorRight : public IODecor_Absorber
+{
+protected:
+	char fill_char;
+
+public:
+	explicit IODecorRight(char c = ' ') : fill_char(c) {}
 
 	std::string to_string() const override;
 };

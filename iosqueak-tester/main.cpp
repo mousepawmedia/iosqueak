@@ -57,7 +57,9 @@
 void test_code()
 {
 	channel << IODecorFill('=') << IOCtrl::endl;
-	channel << (IODecorCenter('*') << "hi") << "\n"
+	channel << (IODecorLeft('<') << "hi") << "\n"
+			<< (IODecorCenter('*') << true) << "\n"
+			<< (IODecorRight('>') << "hi") << "\n"
 			<< "hello" << IOCtrl::endl;
 }
 
