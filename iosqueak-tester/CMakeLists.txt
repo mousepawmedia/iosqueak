@@ -19,12 +19,15 @@ set(TARGET_NAME "iosqueak-tester")
 set(ARTIFACT_TYPE "executable")
 
 # CHANGE: Find dynamic library dependencies.
+#set(CURSES_NEED_NCURSES TRUE)
+#find_package(Curses)
 
 # CHANGE: Include headers of dependencies.
 set(INCLUDE_LIBS
     ${CMAKE_HOME_DIRECTORY}/../iosqueak-source/include
     ${ARCTICTERN_DIR}/include
     ${EVENTPP_DIR}/include
+#    ${CURSES_INCLUDE_DIRS}
 )
 
 # CHANGE: Include files to compile.
@@ -35,6 +38,7 @@ set(FILES
 # CHANGE: Link against dependencies.
 set(LINK_LIBS
     ${CMAKE_HOME_DIRECTORY}/../iosqueak-source/lib/${CMAKE_BUILD_TYPE}/libiosqueak.a
+#    ${CURSES_LIBRARIES}
 )
 
 # Imports build script. (Change if necessary to point to build.cmake)

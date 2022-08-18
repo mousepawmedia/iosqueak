@@ -20,6 +20,7 @@ set(ARTIFACT_TYPE "library")
 
 # CHANGE: Find dynamic library dependencies.
 
+
 # CHANGE: Include headers of dependencies.
 set(INCLUDE_LIBS
     ${ARCTICTERN_DIR}/include
@@ -42,19 +43,40 @@ set(FILES
 
     include/iosqueak/utilities/bitfield.hpp
 
+    include/iosqueak/blueshell.hpp
     include/iosqueak/channel.hpp
     include/iosqueak/ioctrl.hpp
     include/iosqueak/ioformat.hpp
     include/iosqueak/stringify.hpp
     include/iosqueak/stringy.hpp
 
+    #Delete testregister after completion.
+    src/blueshell/testregister.cpp
+    include/iosqueak/testregister.hpp
+
+    #Files for Blueshell
+    src/blueshell/arrowpress.cpp
+    src/blueshell/bang.cpp
+    src/blueshell/blueshell.cpp
+    src/blueshell/getch.cpp
+    src/blueshell/help.cpp
+    src/blueshell/history.cpp
+    src/blueshell/initialshell.cpp
+    src/blueshell/registercommand.cpp
+    src/blueshell/tabpress.cpp
+
+
     src/channel.cpp
     src/ioformat.cpp
     src/stringy.cpp
+
 )
+
+
 
 # CHANGE: Link against dependencies.
 set(LINK_LIBS
+    #${CURSES_LIBRARIES}
 )
 
 # Imports build script. (Change if necessary to point to build.cmake)

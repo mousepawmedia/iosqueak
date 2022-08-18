@@ -98,5 +98,6 @@
         "textfg"
     ],
     "astyle.astylerc": "${workspaceRoot}/astylerc",
-    "cmake.configureOnOpen": false
+    "cmake.configureOnOpen": false,
+    "cmake.sourceDirectory": "${workspaceFolder}/iosqueak-source"
 }

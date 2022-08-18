@@ -156,6 +156,8 @@ venv.bak/
 *.layout
 Session.vim
 Sessionx.vim
+*.save
+*.cbp
 
 !.vscode/c_cpp_properties.json
 !.vscode/extensions.json
