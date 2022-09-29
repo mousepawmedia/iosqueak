@@ -1,44 +1,39 @@
 #include "../include/iosqueak/blueshell.hpp"
-#include "string.h"
-void Blueshell::arrow_press(std::string& command)
+
+size_t Blueshell::arrow_press(std::string& sent_command)
 {
-	// This is for previous_commands vector call.
-	size_t vec_size{0};
-	std::string prev_cmd_holder;
-
-	// Set check_return to 0, to make sure no previous setting.
-	check_return = 0;
-
 	while (true) {
 		int keypress{Blueshell::getch()};
 
-		// If tab is pressed, run tab_press.
-		if (keypress == 9) {
-			command = prev_cmd_holder;
-			Blueshell::tab_press(command);
-			return;
+		/* Sometimes this is required for operating
+		 * systems that send different code for
+		 * delete button
+		 */
+		if (keypress == 126) {
+			Blueshell::delete_char(sent_command);
+			return 0;
+		}
+		/* If arrow keys are not pressed, return
+		 * which key was. */
+		if (keypress != 27 && keypress != 91) {
+			/* If no previous command was selected
+			 * return keypress. */
+			if (prev_cmd_holder.empty())
+				return keypress;
+
+			/* If a previous command was selected
+			 * send that back to caller and empty
+			 * prev_cmd_holder. */
+			if (prev_cmd_holder != sent_command) {
+				sent_command = prev_cmd_holder;
+				prev_cmd_holder = std::string();
+
+				return keypress;
+			}
 		}
 
-		/* Check if enter was pressed. If so swap out
-		 * command with prev_cmd_holder string. */
-		if (keypress == 10) {
-			check_return = 10;
-			command = prev_cmd_holder;
-			return;
-		}
+		keypress = Blueshell::getch();
 
-		if (keypress == 127) {
-			Blueshell::backspace(prev_cmd_holder);
-			Blueshell::print_line(prev_cmd_holder);
-			continue;
-		}
-
-		if (keypress != 91 && keypress != 27) {
-			command.push_back(keypress);
-			return;
-		}
-
-		/* If none of the above, then check for arrow keys */
 		if (keypress == 91) {
 			keypress = Blueshell::getch();
 		}
@@ -46,34 +41,33 @@ void Blueshell::arrow_press(std::string& command)
 		switch (keypress) {
 			// If up arrow was pressed:
 			case 65: {
+				(vec_size >= previous_commands.size())
+					? vec_size = previous_commands.size()
+					: ++vec_size;
+
+				cursor_moves = 0;
 				if (!previous_commands.empty() &&
-					vec_size < previous_commands.size()) {
+					vec_size <= previous_commands.size()) {
 					/* If prev_cmd_holder matches current position in
 					 *  previous_commands vector, print next element */
-					prev_cmd_holder =
-						(prev_cmd_holder == previous_commands[vec_size].second)
-							? (vec_size <= previous_commands.size() - 2)
-								  ? previous_commands[vec_size + 1].second
-								  : previous_commands[vec_size].second
-							: previous_commands[vec_size].second;
+					prev_cmd_holder = previous_commands[vec_size - 1].second;
 
 					Blueshell::print_line(prev_cmd_holder);
-
-					(vec_size >= previous_commands.size() - 1)
-						? vec_size = previous_commands.size() - 1
-						: ++vec_size;
 				}
 				continue;
 			}
 
 			// If down arrow was pressed:
 			case 66: {
-				/* If the down arrow was pressed, and are at the
-				 *  start of previous_commands, print out any previously
+				cursor_moves = 0;
+				(vec_size <= 1) ? vec_size = 0 : --vec_size;
+
+				/* If the down arrow was pressed and at the start
+				 *  of previous_commands, print out any previously
 				 *  typed chars if available */
 				if (vec_size == 0) {
-					Blueshell::print_line(command);
-					prev_cmd_holder = command;
+					Blueshell::print_line(sent_command);
+					prev_cmd_holder = std::string();
 				}
 
 				/* Start traversing over the previous_commands vector
@@ -83,47 +77,41 @@ void Blueshell::arrow_press(std::string& command)
 					 *  previous_commands vector, either print previous element
 					 *  or if 0, print 'command' to display anything
 					 *  previously typed before using arrow keys. */
-					prev_cmd_holder =
-						(prev_cmd_holder ==
-								 previous_commands[vec_size - 1].second
-							 ? ((vec_size == 1)
-									? command
-									: previous_commands[vec_size - 2].second)
-							 : previous_commands[vec_size - 1].second);
-
+					prev_cmd_holder = previous_commands[vec_size - 1].second;
 					Blueshell::print_line(prev_cmd_holder);
-					//                 }
-
-					(vec_size <= 1) ? vec_size = 0 : --vec_size;
 				}
 				continue;
 			}
 
+			// Check for right arrow press.
 			case 67: {
-				channel << "\x1b[1C" << IOCtrl::end;
+				if (cursor_moves > 0) {
+					--cursor_moves;
+					Blueshell::print_line((!prev_cmd_holder.empty())
+											  ? prev_cmd_holder
+											  : sent_command);
+				}
+
 				continue;
 			}
 
+			// Check for left arrow press.
 			case 68: {
-				//			    std::string check_position{"\x1b[6n"};
-				//			    std::cout<<check_position<<'\n';
+				//
+				if (cursor_moves <
+					static_cast<int>((!prev_cmd_holder.empty())
+										 ? prev_cmd_holder.size()
+										 : sent_command.size())) {
+					++cursor_moves;
+					Blueshell::print_line((!prev_cmd_holder.empty())
+											  ? prev_cmd_holder
+											  : sent_command);
+				}
 
-				//                if(strncmp("\x1b[6n","buttface", 3))
-				//                std::cout<<"eh there";
-
-				//			    (check_position.find("butt"))?
-				//std::cout<<"Found"
-				//: std::cout<<"Not found"; 			    std::cout
-				// <<check_position;
-
-				//			    if( check_position.find("4R")){
-				//                    std::cout<<"Beginning reached\n";
-				//			    }
-				channel << "\x1b[1D" << IOCtrl::end;
-				std::cout << "\x1b[6n" << '\n';
 				continue;
 			}
 		}
 	}
-	return;
+
+	return 0;
 }

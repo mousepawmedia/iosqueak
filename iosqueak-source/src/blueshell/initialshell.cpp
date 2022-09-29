@@ -22,40 +22,49 @@ void Blueshell::initial_shell()
 								  history_cmd};
 
 	channel << IOFormatTextBG::black << IOFormatTextFG::green
-			<< "Now running in Blueshell." << IOCtrl::endl;
+			<< "Now running in " << shell_name << " shell." << IOCtrl::endl;
+	// 			<< "Now running in Blueshell." << IOCtrl::endl;
 
 	// Delete after registering tests function is correct. Figure out how to
 	// pass function parameter better.
 	std::cout << "Registering test command\n";
-	register_command("test", &Blueshell::test, "Just testing out my work");
+	// Find way to add number of arguments required warning string to commands
+	// 	register_command("test", &Blueshell::test, "Just testing out my work.
+	// You need one argument.", "number_of_circles");
+	register_command("test",
+					 &Blueshell::test,
+					 "Just testing out my work. You need one argument.");
 	register_command("teat", &Blueshell::test, "Just testing out my work");
 
 	// Keep looping until 'exit' or 'quit' is typed in, then break out of loop.
 	while (true) {
-		std::string command;
+		// Variable to store returned key press.
+		size_t returned_key{0};
 
 		// Keep looping for key presses until 'enter' is pressed.
 		while (true) {
-			// Returns cursor to beginning of line.
-			Blueshell::print_line(command);
+			Blueshell::print_line(check_command);
+			if (check_command == "!")
+				returned_key = Blueshell::bang(check_command);
 
-			// Variable to check key press.
-			int keypress{Blueshell::getch()};
-
-			// Print keypress to find ansi code
-			//			            std::cout <<"Keypress: "<<keypress<<'\n';
+			// Variable to check if returned function sent 'keypress'.
+			size_t keypress{(returned_key) ? returned_key : Blueshell::getch()};
 
 			// Check for the key pressed.
 			switch (keypress) {
+				/* Check if backspace was pressed. This can
+				 * be different on different os's I think.
+				 */
+				case 8: {
+					Blueshell::backspace(check_command);
+					Blueshell::print_line(check_command);
+					returned_key = 0;
+					continue;
+				}
+
 				// Check if 'tab' was pressed.
 				case 9: {
-					Blueshell::tab_press(command);
-
-					/* If 'enter' was pressed after arrow press. If
-					 *  so, send command, otherwise check for keypress. */
-					if (check_return == 10) {
-						break;
-					}
+					returned_key = Blueshell::tab_press(check_command);
 					continue;
 				}
 
@@ -66,66 +75,67 @@ void Blueshell::initial_shell()
 
 				// Check if arrow key was pressed.
 				case 27: {
-					Blueshell::arrow_press(command);
-
-					/* If 'enter' was pressed after arrow press. If
-					 *  so, send command, otherwise check for keypress. */
-					if (check_return == 10) {
-						break;
-					}
+					returned_key = Blueshell::arrow_press(check_command);
 					continue;
 				}
 
+				// Check if '!' was pressed.
 				case 33: {
-					command.push_back(keypress);
-					Blueshell::bang(command);
-					break;
+					/* Check if ! is not at the start of command,
+					 * and if so, do not run bang command.
+					 */
+					if (check_command.size() > 0) {
+						Blueshell::insert_char(check_command, keypress);
+						//                         returned_key = 0;
+						continue;
+					}
+					// Insert ! and send command to bang function.
+					Blueshell::insert_char(check_command, keypress);
+					returned_key = Blueshell::bang(check_command);
+					continue;
 				}
 
 				// Check if backspace was pressed.
 				case 127: {
-					Blueshell::backspace(command);
+					Blueshell::backspace(check_command);
+					Blueshell::print_line(check_command);
+					returned_key = 0;
 					continue;
 				}
 
 				/* If none of the above, insert pressed key
 				 *  into command string */
 				default: {
-					command.push_back(keypress);
+					Blueshell::insert_char(check_command, keypress);
+					returned_key = 0;
 					continue;
 				}
 			}
+
 			break;
 		}
+		/* Check if a previous command was selected. Use
+		 *  that if it was, otherwise use any previously
+		 *  typed command. */
+		command = (!prev_cmd_holder.empty() ? prev_cmd_holder : check_command);
 
-		std::stringstream ss(command);
-		std::string first_command;
-		ss >> first_command;
-
-		std::string options{ss.str()};
-
-		// Check if the command is available, if not send "Unknown command".
-		if (first_command == "exit" || first_command == "quit") {
-			channel << "\nLeaving Blueshell" << IOCtrl::endl;
-			break;
-		} else {
-			// Checks if command is in stored commands.
-			auto it{stored_commands.find(command)};
-			if (it != stored_commands.end()) {
-				(it->second.second)(first_command);
-				/* Adds command to previous_commands container. If it is not
-				 *  the last command added to the deque. */
-				if (previous_commands.front().second != command) {
-					previous_commands.push_front(
-						std::pair((previous_commands.size() == 0)
-									  ? 1
-									  : previous_commands.front().first + 1,
-								  command));
-				}
-			} else {
-				channel << "\n"
-						<< command << " Unknown command" << IOCtrl::endl;
-			}
+		// If sent command is to exit or quit shell.
+		if (command == "quit" || command == "exit") {
+			channel << "\nLeaving " << shell_name << " shell." << IOCtrl::endl;
+			return;
 		}
+
+		// Process the command to break into strings if options are provided.
+		Blueshell::process_command(command);
+
+		// Reset commands to empty string.
+		check_command = std::string();
+		command = std::string();
+		prev_cmd_holder = std::string();
+
+		// Reset cursor_moves and vec_sizes to default.
+		cursor_moves = 0;
+		vec_size = 0;
+		returned_key = 0;
 	}
 }

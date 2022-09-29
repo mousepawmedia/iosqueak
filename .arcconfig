@@ -1,11 +1,12 @@
 {
 	"history.immutable" : true,
-	"phabricator.uri" : "https://phab.mousepawmedia.com",
-	"repository.callsign" : "I",
-	"load" : [
-		".arclibs/cppcheck"
-	],
-	"phutil_libraries": [
-   		 ".arclib"
-        ]
+    "phabricator.uri" : "https://phab.mousepawmedia.com",
+    "repository.callsign" : "I",
+    "load" : [
+            ".arclibs/cppcheck",
+            "clang-format-linter"
+    ],
+    "phutil_libraries": [
+            ".arclib"
+    ]
 }

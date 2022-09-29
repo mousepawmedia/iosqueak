@@ -1,5 +1,6 @@
-#include "../include/iosqueak/blueshell.hpp"
+#include <iomanip>
 
+#include "../include/iosqueak/blueshell.hpp"
 // A function to show what commands are available.
 int Blueshell::help(std::string)
 {
@@ -8,14 +9,17 @@ int Blueshell::help(std::string)
 	channel << "*                 Help                 *" << IOCtrl::n;
 	channel << "* The following commands are available *" << IOCtrl::n;
 	channel << "****************************************" << IOCtrl::n;
-	channel << "\nquit or exit to leave Blueshell" << IOCtrl::endl;
 
+	channel << IOFormatTextFG::white << "\nquit " << IOFormatTextFG::green
+			<< "or " << IOFormatTextFG::white << "exit "
+			<< IOFormatTextFG::green << "to leave " << shell_name << " shell"
+			<< IOCtrl::n << IOCtrl::endl;
 	for (auto& cmd : stored_commands) {
-		//		channel << '\t'<< cmd.first << IOCtrl::n;
-		//		channel << cmd.second.first<< IOCtrl::n<<IOCtrl::n;
-		channel << cmd.first << '\t' << cmd.second.first << IOCtrl::n;
+		// Set the command to white, and the description to green.
+		std::cout << "\033[37m" << std::setw(20) << std::left << cmd.first
+				  << "\033[38;2;0;255;0m" << cmd.second.first << '\n';
 	}
-	channel << IOCtrl::endl;
+	std::cout << "\033[37m";
 
 	return 0;
 }

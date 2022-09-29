@@ -56,12 +56,17 @@ set(FILES
 
     #Files for Blueshell
     src/blueshell/arrowpress.cpp
+    src/blueshell/backspace.cpp
     src/blueshell/bang.cpp
     src/blueshell/blueshell.cpp
+    src/blueshell/deletechar.cpp
     src/blueshell/getch.cpp
     src/blueshell/help.cpp
     src/blueshell/history.cpp
     src/blueshell/initialshell.cpp
+    src/blueshell/insertchar.cpp
+    src/blueshell/processcommand.cpp
+    src/blueshell/processoptions.cpp    
     src/blueshell/registercommand.cpp
     src/blueshell/tabpress.cpp
 

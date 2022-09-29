@@ -1,6 +1,7 @@
 #include "../include/iosqueak/testregister.hpp"
 
-TestRegister::TestRegister()
+TestRegister::TestRegister(std::string shell_name)
+: Blueshell::Blueshell(shell_name)
 {
 	std::cout << "\nTestRegister called\n";
 	_register test_attempt{std::bind(&TestRegister::test_attempt, this)};

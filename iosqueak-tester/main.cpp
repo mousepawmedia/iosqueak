@@ -61,11 +61,7 @@ void dummy_func(int, int, bool) { return; }
  * All test code that is needed long term should be
  * moved to a dedicated Goldilocks Test and TestSuite.
  */
-void test_code()
-{
-	TestRegister shell{TestRegister()};
-	shell.initial_shell();
-}
+void test_code() { Blueshell shell{"Joebob"}; }
 
 /////// WARNING: DO NOT ALTER BELOW THIS POINT! ///////
 

@@ -49,39 +49,87 @@
 #include <string>
 
 #include "iosqueak/channel.hpp"
-// #include "iosqueak/stringify.hpp"
 
-using std::cin;
+// using std::cin;
 using namespace std::placeholders;
 using _register = std::function<int(std::string)>;
 using cmd_map = std::map<std::string, std::pair<std::string, _register>>;
 
 class Blueshell
 {
-	/* Integer to set if return was pressed after
-	 *  using up/down/tab key press. */
-	size_t check_return;
+private:
+	// Name of the shell. Defaults to Blueshell.
+	std::string shell_name;
 
-public:
-	using reg_command = int (Blueshell::*)(std::string);
-	/*A map that has the stored commands that are available during
-	 * the running of Blueshell. Use the 'register' function to
-	 * add new commands to the map. */
-	cmd_map stored_commands;
+	/* Used to store the command entered. Needed here as it will
+	 *  be used in multiple cpp files. */
+	std::string command{std::string()};
 
-	/* A vector to store previously called commands. */
-	//	std::vector<std::string> previous_commands;
-	//	std::deque<std::string> previous_commands;
+	/* A string to hold value after each keypress. Testing for
+	 *  inserting chars between characters in the string.*/
+	std::string prev_cmd_holder;
+
+	// Checks if prev_cmd_holder or command should be used.
+	std::string check_command;
+
+	// Used to store location of cursor when moving left/right.
+	int cursor_moves{0};
+
+	// A container to store previously called commands.
 	std::deque<std::pair<int, std::string>> previous_commands;
 
-	Blueshell();
-	virtual ~Blueshell();
+	// This is for previous_commands vector call.
+	size_t vec_size{0};
+
+	// Returns the key that was pressed.
+	int getch(void);
+
+	// Functions for when arrow keys are pressed.
+	size_t arrow_press(std::string&);
+
+	// Function when tab key is pressed.
+	size_t tab_press(std::string&);
+
+	// Prints command on the current line in terminal.
+	void print_line(const std::string& = std::string());
+
+	// Function when backspace is pressed.
+	size_t backspace(std::string&);
+
+	// Prints history of commands on the screen.
+	int history(std::string blank = std::string());
+
+	// Function for !# history option.
+	int bang(std::string&);
+
+	// Function to insert characters typed
+	void insert_char(std::string&, int);
+
+	// Function to remove char from front of cursor.
+	size_t delete_char(std::string&);
 
 	// Just clears the screen. Is run at the beginning of Blueshell.
 	int clear_screen(std::string blank = "");
 
 	// Displays the available commands that can be run.
 	int help(std::string blank = "");
+
+	// Process the command when enter is pressed.
+	void process_command(std::string&);
+
+	// Process string for finding flags/options sent.
+	void process_options(std::string&);
+
+public:
+	using reg_command = int (Blueshell::*)(std::string);
+
+	/*A map that has the stored commands that are available during
+	 * the running of Blueshell. Use the 'register' function to
+	 * add new commands to the map. */
+	cmd_map stored_commands;
+
+	Blueshell(std::string sent_name = "Blueshell");
+	virtual ~Blueshell();
 
 	// Just starts the shell to make it interactive.
 	void initial_shell();
@@ -92,27 +140,6 @@ public:
 	 * Call using something like:
 	 * register_command("TestName", &<function>, "Optional description"); */
 	int register_command(std::string, reg_command, std::string blank = "");
-	void list_available_commands();
-
-	int getch(void);
-
-	// Functions for when arrow keys are pressed.
-	void arrow_press(std::string&);
-
-	// Function when tab key is pressed.
-	void tab_press(std::string&);
-
-	// Prints command on the current line in terminal.
-	void print_line(const std::string& = std::string());
-
-	// Function when backspace is pressed.
-	void backspace(std::string&);
-
-	// Prints history of commands on the screen.
-	int history(std::string blank = std::string());
-
-	// Function for !# history option.
-	void bang(std::string&);
 
 	// Delete when done.
 	int test(std::string blank = std::string());

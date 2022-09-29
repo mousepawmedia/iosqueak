@@ -158,6 +158,9 @@ Session.vim
 Sessionx.vim
 *.save
 *.cbp
+.cproject
+.project
+
 
 !.vscode/c_cpp_properties.json
 !.vscode/extensions.json

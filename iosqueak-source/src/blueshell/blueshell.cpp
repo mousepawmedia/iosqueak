@@ -1,6 +1,9 @@
 #include "../include/iosqueak/blueshell.hpp"
 
-Blueshell::Blueshell() {}
+Blueshell::Blueshell(std::string sent_name) : shell_name(sent_name)
+{
+	Blueshell::initial_shell();
+}
 
 Blueshell::~Blueshell()
 {
@@ -15,10 +18,19 @@ int Blueshell::clear_screen(std::string)
 }
 
 // Prints command to screen, by erasing the line first.
-void Blueshell::print_line(const std::string& command)
+void Blueshell::print_line(const std::string& sent_command)
 {
+	// Create a string to place cursor position.
+	std::string place_cursor{
+		"\x1b[" + std::to_string((sent_command.size() + 4) - cursor_moves) +
+		"C"};
+
+	/* Carriage return followed by clearing the line.
+	 * Then print >>> and the command. Set cursor position.
+	 */
 	channel << IOCtrl::r << "\x1b[2K"
-			<< ">>> " << command << IOCtrl::end;
+			<< ">>> " << sent_command << IOCtrl::r << place_cursor
+			<< IOCtrl::end;
 }
 
 // Delete when done with Blueshell code
@@ -26,12 +38,4 @@ int Blueshell::test(std::string)
 {
 	std::cout << "\nRunning test function.\n";
 	return 0;
-}
-
-void Blueshell::backspace(std::string& command)
-{
-	std::cout << "\x1b[8";
-	if (command.size() != 0) {
-		command.pop_back();
-	}
 }

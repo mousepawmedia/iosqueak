@@ -6,7 +6,7 @@
 class TestRegister : public Blueshell
 {
 public:
-	TestRegister();
+	explicit TestRegister(std::string shell_name);
 	virtual ~TestRegister();
 	int test_attempt()
 	{
