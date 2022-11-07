@@ -3,38 +3,13 @@
 // Create the initial shell when creating a Blueshell object.
 void Blueshell::initial_shell()
 {
-	Blueshell::clear_screen();
+	// Register the default commands.
+	Blueshell::registerdefaults();
 
-	// Delete when up/down arrow is working...
-	previous_commands.push_front(std::pair(1, "Diamond"));
-	previous_commands.push_front(std::pair(2, "test"));
-	previous_commands.push_front(std::pair(3, "Crazy"));
-
-	// Creates member function pointers to predefined commands.
-	_register help_cmd{std::bind(&Blueshell::help, this, _1)};
-	_register clear_cmd{std::bind(&Blueshell::clear_screen, this, _1)};
-	_register history_cmd{std::bind(&Blueshell::history, this, _1)};
-
-	// Stores the commands in the stored_commands map.
-	stored_commands["help"] = {"This menu", help_cmd};
-	stored_commands["clear"] = {"Clears the screen", clear_cmd};
-	stored_commands["history"] = {"Shows previously entered commands",
-								  history_cmd};
+	Blueshell::clear_screen(empty_container);
 
 	channel << IOFormatTextBG::black << IOFormatTextFG::green
 			<< "Now running in " << shell_name << " shell." << IOCtrl::endl;
-	// 			<< "Now running in Blueshell." << IOCtrl::endl;
-
-	// Delete after registering tests function is correct. Figure out how to
-	// pass function parameter better.
-	std::cout << "Registering test command\n";
-	// Find way to add number of arguments required warning string to commands
-	// 	register_command("test", &Blueshell::test, "Just testing out my work.
-	// You need one argument.", "number_of_circles");
-	register_command("test",
-					 &Blueshell::test,
-					 "Just testing out my work. You need one argument.");
-	register_command("teat", &Blueshell::test, "Just testing out my work");
 
 	// Keep looping until 'exit' or 'quit' is typed in, then break out of loop.
 	while (true) {
@@ -70,6 +45,8 @@ void Blueshell::initial_shell()
 
 				// If enter was pressed, break loop.
 				case 10: {
+					// Check for closed quotes in string.
+					Blueshell::check_quote(check_command);
 					break;
 				}
 
@@ -86,7 +63,6 @@ void Blueshell::initial_shell()
 					 */
 					if (check_command.size() > 0) {
 						Blueshell::insert_char(check_command, keypress);
-						//                         returned_key = 0;
 						continue;
 					}
 					// Insert ! and send command to bang function.
@@ -133,7 +109,7 @@ void Blueshell::initial_shell()
 		command = std::string();
 		prev_cmd_holder = std::string();
 
-		// Reset cursor_moves and vec_sizes to default.
+		// Reset integers to default.
 		cursor_moves = 0;
 		vec_size = 0;
 		returned_key = 0;

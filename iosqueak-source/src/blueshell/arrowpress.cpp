@@ -110,6 +110,18 @@ size_t Blueshell::arrow_press(std::string& sent_command)
 
 				continue;
 			}
+
+			// Check for end key press.
+			case 70: {
+				cursor_moves = 0;
+				return 0;
+			}
+
+			// Check for home key press
+			case 72: {
+				cursor_moves = sent_command.size();
+				return 0;
+			}
 		}
 	}
 

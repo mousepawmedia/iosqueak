@@ -45,6 +45,7 @@ set(FILES
 
     include/iosqueak/blueshell.hpp
     include/iosqueak/channel.hpp
+    include/iosqueak/cmd_map.hpp
     include/iosqueak/ioctrl.hpp
     include/iosqueak/ioformat.hpp
     include/iosqueak/stringify.hpp
@@ -59,6 +60,8 @@ set(FILES
     src/blueshell/backspace.cpp
     src/blueshell/bang.cpp
     src/blueshell/blueshell.cpp
+    src/blueshell/check_quote.cpp
+    src/blueshell/cmd_map.cpp
     src/blueshell/deletechar.cpp
     src/blueshell/getch.cpp
     src/blueshell/help.cpp
@@ -68,8 +71,9 @@ set(FILES
     src/blueshell/processcommand.cpp
     src/blueshell/processoptions.cpp    
     src/blueshell/registercommand.cpp
+    src/blueshell/registerdefaults.cpp
     src/blueshell/tabpress.cpp
-
+    src/blueshell/token.cpp
 
     src/channel.cpp
     src/ioformat.cpp

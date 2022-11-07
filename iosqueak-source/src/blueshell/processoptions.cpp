@@ -1,40 +1,58 @@
 #include "../include/iosqueak/blueshell.hpp"
 
-void Blueshell::process_options(std::string& sent_command)
+Blueshell::arguments Blueshell::process_options(std::string& sent_command)
 {
 	std::deque<std::string> options;
 
 	std::string word;
-	for (size_t ch{0}; ch <= sent_command.size(); ++ch) {
+	for (size_t ch{0}; ch < sent_command.size(); ++ch) {
 		// If there is no " or space, add letter to word.
-		if (sent_command[ch] != '"' && sent_command[ch] != ' ') {
+		if (sent_command[ch] != '"' && sent_command[ch] != '\'' &&
+			sent_command[ch] != ' ') {
 			word.push_back(sent_command[ch]);
 			continue;
 		}
-		/* If there is a ", find closing quote and check
-		 * for ' in between quotes.
+		/* If there is a " or ', find closing quote and check
+		 * for " or ' in between quotes.
 		 */
-		if (sent_command[ch] == '"') {
-			++ch;
-			while (sent_command[ch] != '"') {
-				if (sent_command[ch] == '\\' && sent_command[ch + 1] == '\\') {
-					word.push_back(sent_command[ch + 1]);
-					ch += 2;
+
+		if (sent_command[ch] == '"' || sent_command[ch] == '\'') {
+			// Check if incrementing 'ch' will cause buffer overrun.
+			int plus1{((ch + 1) < sent_command.size()) ? 1 : 0};
+			int plus2{((ch + 2) < sent_command.size())   ? 2
+					  : ((ch + 1) < sent_command.size()) ? 1
+														 : 0};
+
+			if (ch + 1 < sent_command.size())
+				++ch;
+
+			while (sent_command[ch] != '"' && sent_command[ch] != '\'' &&
+				   (ch + 1) < sent_command.size()) {
+				if (sent_command[ch] == '\\' &&
+					sent_command[ch + plus1] == '\\') {
+					word.push_back(sent_command[ch + plus1]);
+					ch += plus2;
 				}
 				if (sent_command[ch] == '\\' &&
-					(sent_command[ch + 1] == '"' ||
-					 sent_command[ch + 1] == '\'')) {
+					(sent_command[ch + plus1] == '"' ||
+					 sent_command[ch + plus1] == '\'')) {
 					// Insert " or ' into the token.
-					word.push_back(sent_command[ch + 1]);
-					ch += 2;
+					word.push_back(sent_command[ch + plus1]);
+					ch += plus2;
 					continue;
 				}
+				if (ch == sent_command.size() - 1) {
+					word.push_back(sent_command[ch]);
+				}
 				word.push_back(sent_command[ch]);
-				++ch;
+				if (ch + 1 < sent_command.size())
+					++ch;
 			}
 			// Increment to skip closing ".
-			++ch;
+			if (ch + 1 < sent_command.size())
+				++ch;
 		}
+
 		if (sent_command[ch] == ' ') {
 			options.push_back(word);
 			word = std::string();
@@ -47,7 +65,6 @@ void Blueshell::process_options(std::string& sent_command)
 	 * This will leave only the options/flags.
 	 */
 	options.pop_front();
-	// For testing only. Print out each token.
-	for (auto& token : options)
-		std::cout << token << '\n';
+
+	return options;
 }

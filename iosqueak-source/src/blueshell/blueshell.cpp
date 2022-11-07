@@ -2,7 +2,7 @@
 
 Blueshell::Blueshell(std::string sent_name) : shell_name(sent_name)
 {
-	Blueshell::initial_shell();
+	// ctor
 }
 
 Blueshell::~Blueshell()
@@ -11,7 +11,7 @@ Blueshell::~Blueshell()
 }
 
 // A function that just clears the screen.
-int Blueshell::clear_screen(std::string)
+int Blueshell::clear_screen(arguments&)
 {
 	channel << "\033[2J\033[1;1H" << IOCtrl::end;
 	return 0;
@@ -26,16 +26,22 @@ void Blueshell::print_line(const std::string& sent_command)
 		"C"};
 
 	/* Carriage return followed by clearing the line.
-	 * Then print >>> and the command. Set cursor position.
-	 */
+	 * Then print >>> and the command. Set cursor position.*/
 	channel << IOCtrl::r << "\x1b[2K"
 			<< ">>> " << sent_command << IOCtrl::r << place_cursor
 			<< IOCtrl::end;
 }
 
-// Delete when done with Blueshell code
-int Blueshell::test(std::string)
+// Lists all of the registered commands.
+int Blueshell::list_commands(arguments&)
 {
-	std::cout << "\nRunning test function.\n";
+	channel << IOFormatTextFG::green << IOCtrl::n
+			<< "These are the commands currently available:"
+			<< IOFormatTextFG::white << IOCtrl::n;
+	for (auto& cmd : stored_commands.get_set()) {
+		channel << cmd.func_name << '\t';
+	}
+	channel << IOCtrl::endl;
+
 	return 0;
 }

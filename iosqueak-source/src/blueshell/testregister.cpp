@@ -1,13 +1,17 @@
 #include "../include/iosqueak/testregister.hpp"
 
-TestRegister::TestRegister(std::string shell_name)
-: Blueshell::Blueshell(shell_name)
+TestRegister::TestRegister()
 {
-	std::cout << "\nTestRegister called\n";
-	_register test_attempt{std::bind(&TestRegister::test_attempt, this)};
-	stored_commands["test_attempt"] =
-		{"testregister test_attempt to test derived class function calls",
-		 test_attempt};
+	// Send Blueshell the name of your shell.
+	Blueshell::shell_name = name;
+
+	Blueshell::register_command(command_name,
+								command,
+								short_desc,
+								long_desc,
+								number_of_args);
+
+	TestRegister::initial_shell();
 }
 
 TestRegister::~TestRegister()

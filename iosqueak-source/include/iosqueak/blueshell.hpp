@@ -43,30 +43,30 @@
 
 #include <algorithm>
 #include <deque>
+#include <functional>
 #include <iostream>
 #include <map>
 #include <sstream>
 #include <string>
 
 #include "iosqueak/channel.hpp"
+#include "iosqueak/cmd_map.hpp"
 
-// using std::cin;
 using namespace std::placeholders;
-using _register = std::function<int(std::string)>;
-using cmd_map = std::map<std::string, std::pair<std::string, _register>>;
+using _register = std::function<int(std::deque<std::string>&)>;
 
 class Blueshell
 {
-private:
-	// Name of the shell. Defaults to Blueshell.
-	std::string shell_name;
+public:
+	using arguments = std::deque<std::string>;
 
+private:
 	/* Used to store the command entered. Needed here as it will
-	 *  be used in multiple cpp files. */
+	 * be used in multiple cpp files. */
 	std::string command{std::string()};
 
 	/* A string to hold value after each keypress. Testing for
-	 *  inserting chars between characters in the string.*/
+	 * inserting chars between characters in the string.*/
 	std::string prev_cmd_holder;
 
 	// Checks if prev_cmd_holder or command should be used.
@@ -74,6 +74,12 @@ private:
 
 	// Used to store location of cursor when moving left/right.
 	int cursor_moves{0};
+
+	// Bools for checking for open ' or " in commands.
+	bool inner_quote{false};
+	bool outer_quote{false};
+	bool inner_single{false};
+	bool outer_single{false};
 
 	// A container to store previously called commands.
 	std::deque<std::pair<int, std::string>> previous_commands;
@@ -97,7 +103,7 @@ private:
 	size_t backspace(std::string&);
 
 	// Prints history of commands on the screen.
-	int history(std::string blank = std::string());
+	int history(arguments&);
 
 	// Function for !# history option.
 	int bang(std::string&);
@@ -109,24 +115,44 @@ private:
 	size_t delete_char(std::string&);
 
 	// Just clears the screen. Is run at the beginning of Blueshell.
-	int clear_screen(std::string blank = "");
+	int clear_screen(arguments&);
 
 	// Displays the available commands that can be run.
-	int help(std::string blank = "");
+	int help(arguments&);
 
 	// Process the command when enter is pressed.
 	void process_command(std::string&);
 
 	// Process string for finding flags/options sent.
-	void process_options(std::string&);
+	arguments process_options(std::string&);
+
+	// Print out description in help command
+	void print_string(const std::string&);
+
+	// Function to load up default commands.
+	void registerdefaults();
+
+	// Function to check for closing quotes
+	void check_quote(std::string&);
+
+	/* Function to break string into tokens
+	 * that will be used in various functions.*/
+	std::deque<std::string> tokens(std::string&);
+
+	// Function to add command to stored_commands container.
+	void add_command(std::string&);
+
+	// Function to list all registered commands.
+	int list_commands(arguments&);
 
 public:
-	using reg_command = int (Blueshell::*)(std::string);
-
-	/*A map that has the stored commands that are available during
+	/* A map that has the stored commands that are available during
 	 * the running of Blueshell. Use the 'register' function to
 	 * add new commands to the map. */
-	cmd_map stored_commands;
+	Cmd_map stored_commands;
+
+	// Name of the shell. Defaults to Blueshell.
+	std::string shell_name;
 
 	Blueshell(std::string sent_name = "Blueshell");
 	virtual ~Blueshell();
@@ -136,13 +162,15 @@ public:
 
 	/*This is for registering commands. All commands MUST already meet the
 	 *  function signature before being able to be used. The signature is:
-	 *  std::string <function name>(std::string)
-	 * Call using something like:
-	 * register_command("TestName", &<function>, "Optional description"); */
-	int register_command(std::string, reg_command, std::string blank = "");
+	 *  int <function name>(arguments&)*/
+	int register_command(const std::string&,
+						 _register,
+						 const std::string& short_desc = std::string(),
+						 const std::string& long_desc = std::string(),
+						 int num_of_args = 0);
 
-	// Delete when done.
-	int test(std::string blank = std::string());
+	// Empty container for passing to functions.
+	arguments empty_container;
 
 protected:
 };
