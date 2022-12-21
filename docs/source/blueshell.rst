@@ -51,6 +51,12 @@ After including blueshell.hpp, create an object via:
 Registering and store a command to use
 ######################################
 
+It is recommended to make an alias to start:
+    code-block: C++
+    using _register = std::function<int(std::deque<std::string>&)>;
+    /* This will save typing std::function<int(std::deque<std::string>&)>
+     * all of the time when registering commands. */
+     
 To register a command:
 ..  code-block:: C++
     /* Used to register the test. Look up 'std::bind' for details

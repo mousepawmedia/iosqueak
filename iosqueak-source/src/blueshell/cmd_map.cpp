@@ -79,3 +79,9 @@ std::vector<std::pair<std::string, std::string>> Cmd_map::long_help()
 
 	return vec;
 }
+
+using func_set = std::set<details::func_info>;
+const func_set& Cmd_map::get_set()
+{
+    return commands; 
+}

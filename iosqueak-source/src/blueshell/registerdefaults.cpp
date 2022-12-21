@@ -22,10 +22,10 @@ void Blueshell::registerdefaults()
 						 "can be called up again using !# (eg. !2)",
 						 0);
 	Blueshell::
-		register_command("list",
+		register_command("list_commands",
 						 std::bind(&Blueshell::list_commands, this, _1),
-						 "Shows all available commands",
-						 "This command will show all the commands available. "
+						 "Shows all available commands (not suites).",
+						 "This command will show all the commands available (not suites). "
 						 "If not registered, they will not be listed here.",
 						 0);
 }

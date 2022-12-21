@@ -5,6 +5,8 @@
 #include <deque>
 #include <iostream>
 #include <unordered_set>
+#include <set>
+
 using _register = std::function<int(std::deque<std::string>&)>;
 
 /* Struct for the members needed in Cmd_map. Thanks to
@@ -25,8 +27,13 @@ struct func_info {
 	{
 		return first.func_name == second.func_name;
 	}
+	
+	friend bool operator<(const func_info& first, const func_info& second)
+    {
+        return first.func_name < second.func_name;
+    }
 };
-}  // namespace details
+}
 
 // Creates a hash for func_info.
 namespace std
@@ -39,13 +46,14 @@ template<> struct hash<details::func_info> {
 		return first ^ (second << 1);
 	}
 };
-}  // namespace std
+} 
 
 class Cmd_map
 {
 private:
 	using func_info = details::func_info;
-	using func_set = std::unordered_set<func_info>;
+// 	using func_set = std::unordered_set<func_info>;
+	using func_set = std::set<func_info>;
 
 	/* unordered_set to store a collection of
 	 * commands with the help descriptions. */
@@ -78,7 +86,7 @@ public:
 
 	/* Function to return reference to 'commands' for
 	 * lookups. */
-	const func_set& get_set() { return commands; }
+	const func_set& get_set(); // { return commands; }
 };
 
 #endif  // CMD_MAP_HPP
