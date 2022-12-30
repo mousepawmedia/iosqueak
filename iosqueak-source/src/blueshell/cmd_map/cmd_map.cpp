@@ -19,7 +19,7 @@ bool Cmd_map::match_args(const std::string& cmd_name, size_t sent_args)
 								return cmd.func_name == cmd_name;
 							})};
 	if (check != commands.end()) {
-		return check->number_of_args == sent_args;
+		return sent_args <= (check->number_of_args + check->number_of_options);
 	}
 	return false;
 }
@@ -28,12 +28,14 @@ void Cmd_map::add_command(const std::string& sent_name,
 						  _register& sent_command,
 						  const std::string& short_desc,
 						  const std::string& long_desc,
+                          size_t number_of_options,
 						  size_t number_of_args)
 {
 	commands.insert({func_info{sent_name,
 							   sent_command,
 							   short_desc,
 							   long_desc,
+                               number_of_options,
 							   number_of_args}});
 }
 
@@ -79,6 +81,11 @@ std::vector<std::pair<std::string, std::string>> Cmd_map::long_help()
 
 	return vec;
 }
+
+// // Function to return total of arguments and options.
+// size_t Cmd_map::total_args_opts(){
+//         return 1;
+// }
 
 using func_set = std::set<details::func_info>;
 const func_set& Cmd_map::get_set()

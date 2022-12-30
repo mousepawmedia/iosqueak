@@ -81,7 +81,10 @@ To store it in the list of available commands:
 	std::string command_name = "command_name";
     
     // The number of arguments the command will require.
-	int number_of_args = 1;
+	size_t number_of_args = 1;
+	
+	// The number of options the command can accept.
+	size_t number_of_options = 1;
     
     /* Used to register the test. Look up 'std::bind' for details
      * of how it is used.*/
@@ -91,10 +94,10 @@ To store it in the list of available commands:
     Blueshell::register_command(<command name>, <the command>, <short help description>
                 <long help description>, <number of required arguments to be passed>);
     // If the command name, descriptions and arguments are in variables:
-    Blueshell::register_command(command_name, command, short_desc, long_desc, number_of_args);
+    Blueshell::register_command(command_name, command, short_desc, long_desc, number_of_options, number_of_args);
 
     // If you want to pass them directly, with no variables:
-	eg Blueshell::register_command("test_attempt", std::bind(&TestRegister::test_attempt, this, _1), "This is short help description", "This is a longer description for the help menu", 1);
+	eg Blueshell::register_command("test_attempt", std::bind(&TestRegister::test_attempt, this, _1), "This is short help description", "This is a longer description for the help menu", 0, 1);
 	
 When you type 'help' in the shell, it will display like this:
 command_name        This is the short description of my command
@@ -147,7 +150,10 @@ Here is a test class:
         std::string command_name = "test_attempt";
         
         // The number of arguments the command will require.
-        int number_of_args = 1;
+        size_t number_of_args = 1;
+        
+        // The number of options the command can accept.
+        size_t number_of_options = 1;
         
         /* Used to register the test. Look up 'std::bind' for details
         * of how it is used.
@@ -161,6 +167,6 @@ Here is a test class:
         // Send Blueshell the name of your shell.
         Blueshell::shell_name = name;
         
-        Blueshell::register_command(command_name, command, short_desc, long_desc, number_of_args);
+        Blueshell::register_command(command_name, command, short_desc, long_desc, number_of_options, number_of_args);
         TestRegister::initial_shell();
     }

@@ -4,8 +4,8 @@
 int Blueshell::register_command(const std::string& func_name,
 								_register func,
 								const std::string& short_desc,
-								const std::string& long_desc,
-								int arguments)
+								const std::string& long_desc, size_t options,
+								size_t arguments)
 {
 	// If the function is already stored, commant and return.
 	if (stored_commands.find_match(func_name)) {
@@ -19,6 +19,7 @@ int Blueshell::register_command(const std::string& func_name,
 								func,
 								short_desc,
 								long_desc,
+                                options,
 								arguments);
 
 	return 0;

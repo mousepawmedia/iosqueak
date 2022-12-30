@@ -61,7 +61,7 @@ set(FILES
     src/blueshell/bang.cpp
     src/blueshell/blueshell.cpp
     src/blueshell/check_quote.cpp
-    src/blueshell/cmd_map.cpp
+    src/blueshell/cmd_map/cmd_map.cpp
     src/blueshell/deletechar.cpp
     src/blueshell/getch.cpp
     src/blueshell/help.cpp

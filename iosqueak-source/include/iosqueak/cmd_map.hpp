@@ -20,7 +20,7 @@ struct func_info {
 	_register func_command;
 	std::string short_desc = "nodesc";
 	std::string long_desc = "nodesc";
-
+    size_t number_of_options;
 	size_t number_of_args;
 
 	friend bool operator==(const func_info& first, const func_info& second)
@@ -52,10 +52,9 @@ class Cmd_map
 {
 private:
 	using func_info = details::func_info;
-// 	using func_set = std::unordered_set<func_info>;
 	using func_set = std::set<func_info>;
 
-	/* unordered_set to store a collection of
+	/* std::set to store a collection of
 	 * commands with the help descriptions. */
 	func_set commands;
 
@@ -70,6 +69,7 @@ public:
 					 _register&,
 					 const std::string&,
 					 const std::string&,
+                     size_t,
 					 size_t);
 
 	/* Return a container of func_info struct
@@ -86,7 +86,7 @@ public:
 
 	/* Function to return reference to 'commands' for
 	 * lookups. */
-	const func_set& get_set(); // { return commands; }
+	const func_set& get_set();
 };
 
 #endif  // CMD_MAP_HPP

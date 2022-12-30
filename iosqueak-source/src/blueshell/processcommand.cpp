@@ -24,8 +24,8 @@ void Blueshell::process_command(std::string& sent_command)
 
 		// Check that the number of arguments match required amount.
 		if (!stored_commands.match_args(it.func_name, options.size())) {
-			channel << IOCtrl::n << "Wrong number of arguments. Required: "
-					<< it.number_of_args << ". You provided " << options.size()
+			channel << IOCtrl::n << "Wrong number of arguments. Maximum required: "
+					<< (it.number_of_args + it.number_of_options)<< ". You provided " << options.size()
 					<< '.' << IOCtrl::endl;
 			return;
 		} else {

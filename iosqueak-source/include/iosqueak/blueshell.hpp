@@ -146,6 +146,7 @@ private:
 	int list_commands(arguments&);
 
 public:
+    
 	/* A map that has the stored commands that are available during
 	 * the running of Blueshell. Use the 'register' function to
 	 * add new commands to the map. */
@@ -166,8 +167,9 @@ public:
 	int register_command(const std::string&,
 						 _register,
 						 const std::string& short_desc = std::string(),
-						 const std::string& long_desc = std::string(),
-						 int num_of_args = 0);
+						 const std::string& long_desc = std::string(), 
+                         size_t number_of_options = 0,
+						 size_t num_of_args = 0);
 
 	// Empty container for passing to functions.
 	arguments empty_container;
