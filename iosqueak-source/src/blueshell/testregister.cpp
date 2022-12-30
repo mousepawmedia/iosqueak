@@ -9,7 +9,7 @@ TestRegister::TestRegister()
 								command,
 								short_desc,
 								long_desc,
-                                number_of_options,
+								number_of_options,
 								number_of_args);
 
 	TestRegister::initial_shell();

@@ -43,9 +43,9 @@ private:
 	 */
 	std::string command_name = "test_attempt";
 
-    // The number of options possible. Default is 0.
-    size_t number_of_options = 0;
-    
+	// The number of options possible. Default is 0.
+	size_t number_of_options = 0;
+
 	// The number of arguments the command will require.
 	size_t number_of_args = 1;
 

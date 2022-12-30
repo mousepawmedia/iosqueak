@@ -4,8 +4,8 @@
 #include <algorithm>
 #include <deque>
 #include <iostream>
-#include <unordered_set>
 #include <set>
+#include <unordered_set>
 
 using _register = std::function<int(std::deque<std::string>&)>;
 
@@ -20,20 +20,20 @@ struct func_info {
 	_register func_command;
 	std::string short_desc = "nodesc";
 	std::string long_desc = "nodesc";
-    size_t number_of_options;
+	size_t number_of_options;
 	size_t number_of_args;
 
 	friend bool operator==(const func_info& first, const func_info& second)
 	{
 		return first.func_name == second.func_name;
 	}
-	
+
 	friend bool operator<(const func_info& first, const func_info& second)
-    {
-        return first.func_name < second.func_name;
-    }
+	{
+		return first.func_name < second.func_name;
+	}
 };
-}
+}  // namespace details
 
 // Creates a hash for func_info.
 namespace std
@@ -46,7 +46,7 @@ template<> struct hash<details::func_info> {
 		return first ^ (second << 1);
 	}
 };
-} 
+}  // namespace std
 
 class Cmd_map
 {
@@ -69,7 +69,7 @@ public:
 					 _register&,
 					 const std::string&,
 					 const std::string&,
-                     size_t,
+					 size_t,
 					 size_t);
 
 	/* Return a container of func_info struct
