@@ -61,7 +61,6 @@ set(FILES
     src/blueshell/bang.cpp
     src/blueshell/blueshell.cpp
     src/blueshell/check_quote.cpp
-    src/blueshell/cmd_map/cmd_map.cpp
     src/blueshell/deletechar.cpp
     src/blueshell/getch.cpp
     src/blueshell/help.cpp
@@ -74,6 +73,12 @@ set(FILES
     src/blueshell/registerdefaults.cpp
     src/blueshell/tabpress.cpp
     src/blueshell/token.cpp
+    src/blueshell/cmd_map/add_command.cpp
+    src/blueshell/cmd_map/cmd_map.cpp
+    src/blueshell/cmd_map/find_match.cpp
+    src/blueshell/cmd_map/help_descriptions.cpp
+    src/blueshell/cmd_map/match_args.cpp
+    src/blueshell/cmd_map/send_element.cpp
 
     src/channel.cpp
     src/ioformat.cpp

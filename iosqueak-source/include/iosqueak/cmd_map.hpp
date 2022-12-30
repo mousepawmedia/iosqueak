@@ -65,6 +65,8 @@ public:
 	 * number of arguments required. */
 	bool match_args(const std::string&, size_t);
 
+    /*  Function to add the commands to the 'command'
+     * container. */
 	void add_command(const std::string&,
 					 _register&,
 					 const std::string&,
