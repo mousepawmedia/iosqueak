@@ -1,7 +1,7 @@
 #include "iosqueak/cmd_map.hpp"
 
 /* Return a container of func_info struct
-* to access the members. */
+ * to access the members. */
 details::func_info Cmd_map::send_element(const std::string& command)
 {
 	auto name_check{
@@ -13,4 +13,4 @@ details::func_info Cmd_map::send_element(const std::string& command)
 		send = *name_check;
 	}
 	return send;
-} 
+}

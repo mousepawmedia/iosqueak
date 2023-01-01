@@ -167,8 +167,8 @@ public:
 						 _register,
 						 const std::string& short_desc = std::string(),
 						 const std::string& long_desc = std::string(),
-						 size_t number_of_options = 0,
-						 size_t num_of_args = 0);
+						 size_t number_of_args = 0,
+						 size_t num_of_options = 0);
 
 	// Empty container for passing to functions.
 	arguments empty_container;

@@ -7,4 +7,4 @@ bool Cmd_map::find_match(const std::string& sent_command)
 					   [&sent_command](const auto& cmd) {
 						   return cmd.func_name == sent_command;
 					   });
-} 
+}

@@ -5,7 +5,6 @@
 #include <deque>
 #include <iostream>
 #include <set>
-#include <unordered_set>
 
 using _register = std::function<int(std::deque<std::string>&)>;
 
@@ -20,8 +19,8 @@ struct func_info {
 	_register func_command;
 	std::string short_desc = "nodesc";
 	std::string long_desc = "nodesc";
+	size_t number_of_args;    
 	size_t number_of_options;
-	size_t number_of_args;
 
 	friend bool operator==(const func_info& first, const func_info& second)
 	{
@@ -65,8 +64,8 @@ public:
 	 * number of arguments required. */
 	bool match_args(const std::string&, size_t);
 
-    /*  Function to add the commands to the 'command'
-     * container. */
+	/*  Function to add the commands to the 'command'
+	 * container. */
 	void add_command(const std::string&,
 					 _register&,
 					 const std::string&,

@@ -28,4 +28,4 @@ std::vector<std::pair<std::string, std::string>> Cmd_map::long_help()
 				   });
 
 	return vec;
-} 
+}
