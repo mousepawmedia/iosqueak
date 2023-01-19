@@ -10,7 +10,8 @@ bool Cmd_map::match_args(const std::string& cmd_name, size_t sent_args)
 								return cmd.func_name == cmd_name;
 							})};
 	if (check != commands.end()) {
-		return (sent_args >= check->number_of_args) && sent_args <= (check->number_of_args + check->number_of_options);
+		return (sent_args >= check->number_of_args) &&
+			   sent_args <= (check->number_of_args + check->number_of_options);
 	}
 	return false;
 }

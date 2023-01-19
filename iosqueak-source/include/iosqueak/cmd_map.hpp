@@ -19,7 +19,7 @@ struct func_info {
 	_register func_command;
 	std::string short_desc = "nodesc";
 	std::string long_desc = "nodesc";
-	size_t number_of_args;    
+	size_t number_of_args;
 	size_t number_of_options;
 
 	friend bool operator==(const func_info& first, const func_info& second)
