@@ -2,7 +2,7 @@
 
 Blueshell::arguments Blueshell::process_options(std::string& sent_command)
 {
-	std::deque<std::string> options;
+	arguments options;
 
 	std::string word;
 	for (size_t ch{0}; ch < sent_command.size(); ++ch) {

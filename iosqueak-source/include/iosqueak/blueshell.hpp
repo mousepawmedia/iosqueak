@@ -48,19 +48,21 @@
 #include <map>
 #include <sstream>
 #include <string>
+#include <vector>
 
 #include "iosqueak/channel.hpp"
 #include "iosqueak/cmd_map.hpp"
 
 using namespace std::placeholders;
-using _register = std::function<int(std::deque<std::string>&)>;
 
 class Blueshell
 {
 public:
-	using arguments = std::deque<std::string>;
+    using arguments = std::deque<std::string>;
+    using _register = std::function<int(std::deque<std::string>&)>;
 
 private:
+
 	/* Used to store the command entered. Needed here as it will
 	 * be used in multiple cpp files. */
 	std::string command{std::string()};
@@ -137,7 +139,7 @@ private:
 
 	/* Function to break string into tokens
 	 * that will be used in various functions.*/
-	std::deque<std::string> tokens(std::string&);
+	arguments tokens(std::string&);
 
 	// Function to add command to stored_commands container.
 	void add_command(std::string&);

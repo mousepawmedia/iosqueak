@@ -10,9 +10,18 @@ size_t Blueshell::tab_press(std::string& sent_command)
 	/* If tab is pressed again, and command is
 	 *  empty, display all available commands */
 	if (sent_command.empty()) {
+        size_t count{0};
 		channel << IOCtrl::n;
 		for (auto& cmd : stored_commands.get_set()) {
-			channel << cmd.func_name << '\t';
+            channel << cmd.func_name;
+            if(count < 2){
+                ++count;
+                channel << '\t';
+            }
+            else{
+                channel << IOCtrl::n;
+                count = 0;
+            }
 		}
 		channel << IOCtrl::endl;
 	}
