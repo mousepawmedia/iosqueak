@@ -62,7 +62,7 @@ public:
     using _register = std::function<int(std::deque<std::string>&)>;
 
 private:
-
+    
 	/* Used to store the command entered. Needed here as it will
 	 * be used in multiple cpp files. */
 	std::string command{std::string()};
