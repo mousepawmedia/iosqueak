@@ -157,7 +157,7 @@ public:
 	std::string shell_name;
 
 	Blueshell(std::string sent_name = "Blueshell");
-	virtual ~Blueshell();
+	virtual ~Blueshell() = default;
 
 	// Just starts the shell to make it interactive.
 	void initial_shell();

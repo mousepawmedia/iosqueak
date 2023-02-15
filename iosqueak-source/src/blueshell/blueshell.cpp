@@ -5,11 +5,6 @@ Blueshell::Blueshell(std::string sent_name) : shell_name(sent_name)
 	// ctor
 }
 
-Blueshell::~Blueshell()
-{
-	// dtor
-}
-
 // A function that just clears the screen.
 int Blueshell::clear_screen(arguments&)
 {
@@ -30,21 +25,4 @@ void Blueshell::print_line(const std::string& sent_command)
 	channel << IOCtrl::r << "\x1b[2K"
 			<< ">>> " << sent_command << IOCtrl::r << place_cursor
 			<< IOCtrl::end;
-}
-
-// Lists all of the registered commands.
-int Blueshell::list_commands(arguments&)
-{
-	channel << IOFormatTextFG::green << IOCtrl::n
-			<< "These are the commands currently available:"
-			<< IOFormatTextFG::white << IOCtrl::n << "exit"
-			<< IOFormatTextFG::green << " or " << IOFormatTextFG::white
-			<< "quit" << IOFormatTextFG::green << " to end session."
-			<< IOFormatTextFG::white << IOCtrl::n;
-	for (auto& cmd : stored_commands.get_set()) {
-		channel << cmd.func_name << '\t';
-	}
-	channel << IOCtrl::endl;
-
-	return 0;
 }

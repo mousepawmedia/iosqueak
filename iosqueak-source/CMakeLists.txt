@@ -67,6 +67,7 @@ set(FILES
     src/blueshell/history.cpp
     src/blueshell/initialshell.cpp
     src/blueshell/insertchar.cpp
+    src/blueshell/listcommands.cpp
     src/blueshell/processcommand.cpp
     src/blueshell/processoptions.cpp    
     src/blueshell/registercommand.cpp
