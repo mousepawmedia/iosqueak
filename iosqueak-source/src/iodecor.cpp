@@ -49,3 +49,16 @@ std::string IODecorRight::to_string() const
 	std::string pad_left = std::string(pad_len, fill_char);
 	return (pad_left + " " + this->str);
 }
+
+// std::string IODecorAlign::to_string() const
+// {
+
+	
+// }
+
+// std::string IODecorPad::to_string() const
+// {
+
+
+	
+// }
