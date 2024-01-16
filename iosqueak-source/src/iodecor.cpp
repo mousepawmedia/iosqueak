@@ -50,9 +50,22 @@ std::string IODecorRight::to_string() const
 	return (pad_left + " " + this->str);
 }
 
-// std::string IODecorAlign::to_string() const
+// std::string IODecorAlign
 // {
-
+// 	switch(IODecorAlign){
+// 	case IODecorAlign::Center:
+// 		IODecorCenter;
+// 		break;
+// 	case IODecorAlign::Right:
+// 		 IODecorRight;
+// 		break;
+// 	case IODecorAlign::Left:
+// 		 IODecorLeft;
+// 		break;
+// 	default:
+// 		 IODecorLeft;
+// };
+	
 	
 // }
 
