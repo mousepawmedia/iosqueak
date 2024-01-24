@@ -57,10 +57,7 @@
 void test_code()
 {
 	
-channel << IODecorPad(8) << "ITEM" << IODecorPad(10, IODecorAlign::right) << "ATTACK" << "BLOCKING" << IOCtrl::endl;
-channel << IODecorPad(8, IODecorAlign::left) << "stick" << IODecorPad(10, IODecorAlign::right) << "1" << "1" << IOCtrl::endl;
-channel << IODecorPad(8, IODecorAlign::left) << "club" << IODecorPad(10, IODecorAlign::right) << "3" << "2" << IOCtrl::endl;
-channel << IODecorPad(8, IODecorAlign::left) << "sword" << IODecorPad(10, IODecorAlign::right) << "5" << "3" << IOCtrl::endl;
+
 
 }
 

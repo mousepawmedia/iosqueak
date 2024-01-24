@@ -65,7 +65,25 @@
         "concepts": "cpp",
         "stop_token": "cpp",
         "future": "cpp",
-        "ios": "cpp"
+        "ios": "cpp",
+        "charconv": "cpp",
+        "numbers": "cpp",
+        "semaphore": "cpp",
+        "variant": "cpp",
+        "__bit_reference": "cpp",
+        "__config": "cpp",
+        "__debug": "cpp",
+        "__errc": "cpp",
+        "__hash_table": "cpp",
+        "__locale": "cpp",
+        "__mutex_base": "cpp",
+        "__node_handle": "cpp",
+        "__split_buffer": "cpp",
+        "__threading_support": "cpp",
+        "__verbose_abort": "cpp",
+        "locale": "cpp",
+        "queue": "cpp",
+        "csignal": "cpp"
     },
     "cSpell.words": [
         "decimal places",
@@ -94,5 +112,6 @@
         "textfg"
     ],
     "astyle.astylerc": "${workspaceRoot}/astylerc",
-    "cmake.configureOnOpen": false
+    "cmake.configureOnOpen": false,
+    "C_Cpp.default.compilerPath": "/usr/bin/clang++-16"
 }
