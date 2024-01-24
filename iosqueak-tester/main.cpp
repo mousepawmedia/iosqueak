@@ -56,7 +56,7 @@
  */
 void test_code()
 {
-	
+	channel << IODecorPad(8,IODecorAlign::left) <<"Item" << "CONSUME" << "Sell" << IOCtrl::endl
 
 
 }

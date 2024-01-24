@@ -49,3 +49,24 @@ std::string IODecorRight::to_string() const
 	std::string pad_left = std::string(pad_len, fill_char);
 	return (pad_left + " " + this->str);
 }
+
+std::string IODecorPad::alignToString(IODecorAlign align)
+{
+	switch(align)
+	{
+		case IODecorAlign::left:
+			return "left";
+		case IODecorAlign::right:
+			return "right";
+		case IODecorAlign::center:
+			return "center";
+		default:
+			return "left";
+	}
+}
+
+
+std::string IODecorPad::to_string() const
+{
+    return std::to_string(padding) + " " + IODecorPad::alignToString(alignment);
+}

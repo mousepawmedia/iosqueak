@@ -120,4 +120,27 @@ public:
 	std::string to_string() const override;
 };
 
+enum class IODecorAlign 
+{
+	left,
+	right,
+	center 
+};	
+
+class IODecorPad : public IODecor_Absorber
+{
+	protected:
+		uint8_t padding;
+		IODecorAlign alignment = IODecorAlign::left;
+
+	public: 
+		std::string to_string() const override;
+		IODecorPad(uint8_t padding, IODecorAlign alignment) : padding(padding), alignment(alignment) {};
+
+		static std::string alignToString(IODecorAlign align);
+};
+
+
+
+
 #endif  // IOSQUEAK_IODECOR_HPP
