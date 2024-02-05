@@ -5,6 +5,9 @@
 std::vector<std::pair<std::string, std::string>> Cmd_map::short_help()
 {
 	std::vector<std::pair<std::string, std::string>> vec;
+    
+    // Reserve space for 50 commands. Saves reallocation overhead.
+    vec.reserve(50);
 	std::transform(this->commands.begin(),
 				   this->commands.end(),
 				   std::back_inserter(vec),
@@ -20,6 +23,8 @@ std::vector<std::pair<std::string, std::string>> Cmd_map::short_help()
 std::vector<std::pair<std::string, std::string>> Cmd_map::long_help()
 {
 	std::vector<std::pair<std::string, std::string>> vec;
+    // Reserve space for 5 commands. Saves reallocation overhead.
+    vec.reserve(5);
 	std::transform(this->commands.begin(),
 				   this->commands.end(),
 				   std::back_inserter(vec),

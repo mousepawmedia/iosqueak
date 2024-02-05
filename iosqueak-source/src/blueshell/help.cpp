@@ -17,6 +17,7 @@ int Blueshell::help(arguments& search_word)
 				<< "or " << IOFormatTextFG::white << "exit "
 				<< IOFormatTextFG::green << "to leave " << shell_name
 				<< " shell" << IOCtrl::n << IOCtrl::endl;
+
 		for (auto& cmd : stored_commands.short_help()) {
 			// Set the command to white, and the description to green.
 			std::cout << "\033[37m" << std::setw(20) << std::left << cmd.first

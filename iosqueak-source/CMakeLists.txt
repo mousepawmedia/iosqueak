@@ -61,6 +61,7 @@ set(FILES
     src/blueshell/bang.cpp
     src/blueshell/blueshell.cpp
     src/blueshell/check_quote.cpp
+    src/blueshell/check_skip_list.cpp
     src/blueshell/deletechar.cpp
     src/blueshell/getch.cpp
     src/blueshell/help.cpp

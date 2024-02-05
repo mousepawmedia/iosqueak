@@ -7,15 +7,24 @@ void Blueshell::process_command(std::string& sent_command)
 
 	// Take first word from sent command to check if valid command.
 	ss >> first_command;
-
+    
 	// Check if the command is available, if not send "Unknown command".
 	auto it{stored_commands.send_element(first_command)};
 	if (it.func_name != "noname") {
 		// Break rest of sent_command into strings to process options/flags
 		arguments options{Blueshell::process_options(sent_command)};
-
-		// If function is help or history, skip argument check.
-		if (it.func_name == "help" || it.func_name == "history") {
+       
+        /* Check if front or back of the container is
+         * a blank (space bar press). Remove if it is. */
+        if(options.front() == ""){
+            options.clear();
+        }
+        if(options.back() == ""){
+            options.erase(options.end());
+        }
+        
+		// If function is in container of skipped words, skip argument check.
+		if (check_skip_list(it.func_name)) {
 			it.func_command(options);
 			// Adds command to previous_commands container.
 			Blueshell::add_command(sent_command);
@@ -49,7 +58,7 @@ void Blueshell::process_command(std::string& sent_command)
 	}
 }
 
-void Blueshell::add_command(std::string& sent_command)
+void Blueshell::add_command(const std::string& sent_command)
 {
 	/* Adds command to previous_commands container. If it is not
 	 *  the last command added to the deque. */

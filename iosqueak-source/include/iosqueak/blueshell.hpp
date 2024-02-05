@@ -1,6 +1,6 @@
 /** Blueshell [IOSqueak]
  *
- * Author(s): Jack Tolmie, Jason C. McDonald
+ * Author(s): Jack Tolmie
  */
 
 /* LICENSE (BSD-3-Clause)
@@ -46,6 +46,7 @@
 #include <functional>
 #include <iostream>
 #include <map>
+#include <set>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -62,6 +63,10 @@ public:
     using _register = std::function<int(std::deque<std::string>&)>;
 
 private:
+    
+    /* A container used to store words that need to bypass
+     * the process_command function check. */
+    std::set<std::string> skipped_words{"help", "history", "list"};
     
 	/* Used to store the command entered. Needed here as it will
 	 * be used in multiple cpp files. */
@@ -89,63 +94,68 @@ private:
 	// This is for previous_commands vector call.
 	size_t vec_size{0};
 
-	// Returns the key that was pressed.
-	int getch(void);
+	// Function to add command to stored_commands container.
+	void add_command(const std::string&);
 
 	// Functions for when arrow keys are pressed.
 	size_t arrow_press(std::string&);
+    
+    // Function when backspace is pressed.
+	size_t backspace(std::string&);
+    
+    // Function for !# history option.
+	int bang(std::string&);
+    
+    // Function to check for closing quotes
+	void check_quote(std::string&);
+    
+    /* Function to check for words that need to
+     * bypass the process_command check of proper
+     * arguments/options passed. */
+    bool check_skip_list(const std::string&);
+    
+    // Just clears the screen. Is run at the beginning of Blueshell.
+	int clear_screen(arguments&);
+    
+    // Function to remove char from front of cursor.
+	size_t delete_char(std::string&);
+    
+    // Returns the key that was pressed.
+	int getch(void);
+    
+    // Displays the available commands that can be run.
+	int help(arguments&);
+    
+    // Prints history of commands on the screen.
+	int history(arguments&);
+    
+    // Function to insert characters typed
+	void insert_char(std::string&, int);
+    
+    // Function to list all registered commands.
+	int list_commands(arguments&);
+    
+    // Prints command on the current line in terminal.
+	void print_line(const std::string& = std::string());
+    
+    // Print out description in help command
+	void print_string(const std::string&);
+    
+    // Process the command when enter is pressed.
+	void process_command(std::string&);
+    
+    // Process string for finding flags/options sent.
+	arguments process_options(std::string&);
+    
+    // Function to load up default commands.
+	void registerdefaults();
 
 	// Function when tab key is pressed.
 	size_t tab_press(std::string&);
 
-	// Prints command on the current line in terminal.
-	void print_line(const std::string& = std::string());
-
-	// Function when backspace is pressed.
-	size_t backspace(std::string&);
-
-	// Prints history of commands on the screen.
-	int history(arguments&);
-
-	// Function for !# history option.
-	int bang(std::string&);
-
-	// Function to insert characters typed
-	void insert_char(std::string&, int);
-
-	// Function to remove char from front of cursor.
-	size_t delete_char(std::string&);
-
-	// Just clears the screen. Is run at the beginning of Blueshell.
-	int clear_screen(arguments&);
-
-	// Displays the available commands that can be run.
-	int help(arguments&);
-
-	// Process the command when enter is pressed.
-	void process_command(std::string&);
-
-	// Process string for finding flags/options sent.
-	arguments process_options(std::string&);
-
-	// Print out description in help command
-	void print_string(const std::string&);
-
-	// Function to load up default commands.
-	void registerdefaults();
-
-	// Function to check for closing quotes
-	void check_quote(std::string&);
-
 	/* Function to break string into tokens
 	 * that will be used in various functions.*/
-	arguments tokens(std::string&);
-
-	// Function to add command to stored_commands container.
-	void add_command(std::string&);
-
-	// Function to list all registered commands.
-	int list_commands(arguments&);
+	arguments tokens(const std::string&);
 
 public:
 	/* A map that has the stored commands that are available during
@@ -158,6 +168,9 @@ public:
 
 	Blueshell(std::string sent_name = "Blueshell");
 	virtual ~Blueshell() = default;
+    
+    // Function to add word to skipped_words container.
+    void add_skipped_command(const std::string&);
 
 	// Just starts the shell to make it interactive.
 	void initial_shell();
