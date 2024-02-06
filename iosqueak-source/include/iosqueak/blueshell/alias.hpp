@@ -16,7 +16,6 @@ class Alias
 {
 public:
     using arguments = std::deque<std::string>;
-    // using _register = std::function<int(arguments&)>;
-    using _register = std::function<int(std::deque<std::string>&)>;
+    using _register = std::function<int(arguments&)>;
 };
 #endif // ALIAS_HPP
