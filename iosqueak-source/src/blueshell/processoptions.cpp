@@ -1,8 +1,8 @@
-#include "../include/iosqueak/blueshell.hpp"
+#include "../include/iosqueak/blueshell/blueshell.hpp"
 
-Blueshell::arguments Blueshell::process_options(std::string& sent_command)
+Alias::arguments Blueshell::process_options(std::string& sent_command)
 {
-	arguments options;
+	Alias::arguments options;
 
 	std::string word;
 	for (size_t ch{0}; ch < sent_command.size(); ++ch) {

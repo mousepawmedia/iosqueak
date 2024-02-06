@@ -2,7 +2,7 @@
 #include <termios.h>
 #include <unistd.h>
 
-#include "../include/iosqueak/blueshell.hpp"
+#include "../include/iosqueak/blueshell/blueshell.hpp"
 
 /* I found this online. I cannot remember where
  *  so I cannot give credit to whom it belongs */

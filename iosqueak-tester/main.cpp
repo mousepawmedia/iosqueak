@@ -46,10 +46,10 @@
 #include <string>
 
 // #include "goldilocks/shell.hpp"
-#include "iosqueak/blueshell.hpp"
+#include "iosqueak/blueshell/blueshell.hpp"
 #include "iosqueak/channel.hpp"
 #include "iosqueak/stringify.hpp"
-#include "iosqueak/testregister.hpp"
+#include "iosqueak/blueshell/testregister.hpp"
 #include "iosqueak/tools/memlens.hpp"
 // #include "goldilocks/coordinator.hpp"
 

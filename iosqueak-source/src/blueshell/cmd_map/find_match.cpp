@@ -1,4 +1,4 @@
-#include "iosqueak/cmd_map.hpp"
+#include "iosqueak/blueshell/cmd_map.hpp"
 
 bool Cmd_map::find_match(const std::string& sent_command)
 {

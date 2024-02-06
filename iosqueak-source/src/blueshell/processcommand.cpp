@@ -1,4 +1,4 @@
-#include "../include/iosqueak/blueshell.hpp"
+#include "../include/iosqueak/blueshell/blueshell.hpp"
 
 void Blueshell::process_command(std::string& sent_command)
 {
@@ -12,7 +12,7 @@ void Blueshell::process_command(std::string& sent_command)
 	auto it{stored_commands.send_element(first_command)};
 	if (it.func_name != "noname") {
 		// Break rest of sent_command into strings to process options/flags
-		arguments options{Blueshell::process_options(sent_command)};
+		Alias::arguments options{Blueshell::process_options(sent_command)};
        
         /* Check if front or back of the container is
          * a blank (space bar press). Remove if it is. */

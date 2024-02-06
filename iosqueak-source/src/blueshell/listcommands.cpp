@@ -1,7 +1,7 @@
-#include "../include/iosqueak/blueshell.hpp"
+#include "../include/iosqueak/blueshell/blueshell.hpp"
 
 // Lists all of the registered commands.
-int Blueshell::list_commands(arguments&)
+int Blueshell::list_commands(Alias::arguments&)
 {
     size_t count{0};
 	channel << IOFormatTextFG::green << IOCtrl::n

@@ -1,9 +1,9 @@
-#include "iosqueak/cmd_map.hpp"
+#include "iosqueak/blueshell/cmd_map.hpp"
 
 /*  Function to add the commands to the 'command'
  * container. */
 void Cmd_map::add_command(const std::string& sent_name,
-						  _register& sent_command,
+						  Alias::_register& sent_command,
 						  const std::string& short_desc,
 						  const std::string& long_desc,
 						  size_t number_of_args,

@@ -1,12 +1,7 @@
 #ifndef CMD_MAP_HPP
 #define CMD_MAP_HPP
 
-#include <algorithm>
-#include <deque>
-#include <iostream>
-#include <set>
-
-using _register = std::function<int(std::deque<std::string>&)>;
+#include "alias.hpp"
 
 /* Struct for the members needed in Cmd_map. Thanks to
  * Alipha from C++ basics for showing me how to fix
@@ -16,7 +11,7 @@ namespace details
 {
 struct func_info {
 	std::string func_name = "noname";
-	_register func_command;
+	Alias::_register func_command;
 	std::string short_desc = "nodesc";
 	std::string long_desc = "nodesc";
 	size_t number_of_args;
@@ -67,7 +62,7 @@ public:
 	/*  Function to add the commands to the 'command'
 	 * container. */
 	void add_command(const std::string&,
-					 _register&,
+					 Alias::_register&,
 					 const std::string&,
 					 const std::string&,
 					 size_t,

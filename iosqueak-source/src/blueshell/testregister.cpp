@@ -1,21 +1,27 @@
-#include "../include/iosqueak/testregister.hpp"
+#include "../include/iosqueak/blueshell/testregister.hpp"
 
 TestRegister::TestRegister()
 {
 	// Send Blueshell the name of your shell.
 	Blueshell::shell_name = name;
-
+ 
 	Blueshell::register_command(command_name,
 								command,
 								short_desc,
 								long_desc,
 								number_of_options,
 								number_of_args);
-
+ 
 	TestRegister::initial_shell();
 }
 
-TestRegister::~TestRegister()
+int TestRegister::test_attempt(const Alias::arguments& options)
 {
-	// dtor
+	std::cout << "\nRunning testregister test_attempt.\n";
+	for (const auto& cmd : options) {
+		std::cout << cmd << '\n';
+	}
+	std::cout << std::endl;
+	
+	return 0;
 }

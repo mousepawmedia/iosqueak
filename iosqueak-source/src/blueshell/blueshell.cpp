@@ -1,16 +1,14 @@
-#include "../include/iosqueak/blueshell.hpp"
+#include "../include/iosqueak/blueshell/blueshell.hpp"
 
 Blueshell::Blueshell(std::string sent_name) : shell_name(sent_name)
-{
-	// ctor
-}
+{}
 
 void Blueshell::add_skipped_command(const std::string& word)
 {
     skipped_words.insert(word);
 }
 // A function that just clears the screen.
-int Blueshell::clear_screen(arguments&)
+int Blueshell::clear_screen(Alias::arguments&)
 {
 	channel << "\033[2J\033[1;1H" << IOCtrl::end;
 	return 0;

@@ -1,4 +1,4 @@
-#include "../include/iosqueak/blueshell.hpp"
+#include "../include/iosqueak/blueshell/blueshell.hpp"
 
 size_t Blueshell::tab_press(std::string& sent_command)
 {
@@ -31,7 +31,7 @@ size_t Blueshell::tab_press(std::string& sent_command)
 	if (!sent_command.empty()) {
 		std::string token{Blueshell::tokens(sent_command).back()};
 
-		std::deque<std::string> temp_cmds;
+		Alias::arguments temp_cmds;
 
 		for (auto& cmd : stored_commands.get_set()) {
 			/* Looks for any commands that match the

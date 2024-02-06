@@ -1,4 +1,4 @@
-#include "../include/iosqueak/blueshell.hpp"
+#include "../include/iosqueak/blueshell/blueshell.hpp"
 
 size_t Blueshell::arrow_press(std::string& sent_command)
 {

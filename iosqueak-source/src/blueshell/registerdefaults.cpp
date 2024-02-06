@@ -1,4 +1,4 @@
-#include "../include/iosqueak/blueshell.hpp"
+#include "../include/iosqueak/blueshell/blueshell.hpp"
 
 void Blueshell::registerdefaults()
 {

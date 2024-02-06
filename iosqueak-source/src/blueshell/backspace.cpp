@@ -1,4 +1,4 @@
-#include "../include/iosqueak/blueshell.hpp"
+#include "../include/iosqueak/blueshell/blueshell.hpp"
 
 size_t Blueshell::backspace(std::string& sent_command)
 {

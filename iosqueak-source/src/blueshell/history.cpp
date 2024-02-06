@@ -1,6 +1,6 @@
-#include "../include/iosqueak/blueshell.hpp"
+#include "../include/iosqueak/blueshell/blueshell.hpp"
 
-int Blueshell::history(arguments& searched_word)
+int Blueshell::history(Alias::arguments& searched_word)
 {
 	channel << IOCtrl::n << IOCtrl::end;
 	/* If there is no word specified, print out

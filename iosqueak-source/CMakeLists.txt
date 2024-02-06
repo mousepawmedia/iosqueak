@@ -43,9 +43,7 @@ set(FILES
 
     include/iosqueak/utilities/bitfield.hpp
 
-    include/iosqueak/blueshell.hpp
     include/iosqueak/channel.hpp
-    include/iosqueak/cmd_map.hpp
     include/iosqueak/ioctrl.hpp
     include/iosqueak/ioformat.hpp
     include/iosqueak/stringify.hpp
@@ -53,9 +51,12 @@ set(FILES
 
     #Delete testregister after completion.
     src/blueshell/testregister.cpp
-    include/iosqueak/testregister.hpp
+    include/iosqueak/blueshell/testregister.hpp
 
     #Files for Blueshell
+    include/iosqueak/blueshell/blueshell.hpp
+    include/iosqueak/blueshell/cmd_map.hpp
+    
     src/blueshell/arrowpress.cpp
     src/blueshell/backspace.cpp
     src/blueshell/bang.cpp

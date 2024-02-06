@@ -1,10 +1,8 @@
-#include <iomanip>
-#include <sstream>
 
-#include "../include/iosqueak/blueshell.hpp"
+#include "../include/iosqueak/blueshell/blueshell.hpp"
 
 // A function to show what commands are available.
-int Blueshell::help(arguments& search_word)
+int Blueshell::help(Alias::arguments& search_word)
 {
 	if (search_word.empty()) {
 		channel << IOFormatTextFG::green << IOCtrl::n;

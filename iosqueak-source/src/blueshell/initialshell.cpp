@@ -1,4 +1,4 @@
-#include "../include/iosqueak/blueshell.hpp"
+#include "../include/iosqueak/blueshell/blueshell.hpp"
 
 // Create the initial shell when creating a Blueshell object.
 void Blueshell::initial_shell()

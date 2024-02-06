@@ -1,4 +1,4 @@
-#include "iosqueak/cmd_map.hpp"
+#include "iosqueak/blueshell/cmd_map.hpp"
 
 /* Return a container of func_info struct
  * to access the members. */

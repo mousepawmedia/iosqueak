@@ -1,4 +1,4 @@
-#include "iosqueak/cmd_map.hpp"
+#include "iosqueak/blueshell/cmd_map.hpp"
 
 /* Function to send all short descriptions of the
  * commands available. */

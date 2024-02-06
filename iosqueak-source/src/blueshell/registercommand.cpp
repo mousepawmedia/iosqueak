@@ -1,8 +1,8 @@
-#include "../include/iosqueak/blueshell.hpp"
+#include "../include/iosqueak/blueshell/blueshell.hpp"
 
 // A function that registers tests that are stored in 'available_tests' map.
 int Blueshell::register_command(const std::string& func_name,
-								_register func,
+								Alias::_register func,
 								const std::string& short_desc,
 								const std::string& long_desc,
 								size_t arguments,
