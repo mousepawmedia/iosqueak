@@ -120,4 +120,25 @@ public:
 	std::string to_string() const override;
 };
 
+enum class IODecorAlign 
+{
+	left,
+	right,
+	center 
+};	
+
+
+class IODecorPad : public IODecor_Base
+{
+	public: 
+		IODecorPad(int width, IODecorAlign align = IODecorAlign::left);
+		virtual std::string to_string() const override;
+		friend std::ostream& operator<<(std::ostream& os, const IODecorPad& decor);
+
+	private:
+		int width_;
+		IODecorAlign align_;
+
+};
+
 #endif  // IOSQUEAK_IODECOR_HPP
